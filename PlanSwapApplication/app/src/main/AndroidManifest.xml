@@ -13,7 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantSwap">
-        <activity android:name=".views.MainActivity">
+
+        <service android:name=".services.BackgroundPlantSwapService"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
