@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PlantSwap</string>
+    <string name="main_menu_btn_my_swaps">My Swaps</string>
+    <string name="main_menu_btn_mt_wish_list">Wish list</string>
+    <string name="main_menu_btn_my_profile">Profile</string>
+    <string name="main_menu_btn_browse_swaps">Browse all swaps</string>
+    <string name="main_menu_btn_browse_plants">Browse all plants</string>
 </resources>
