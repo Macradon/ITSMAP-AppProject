@@ -19,4 +19,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_my_wish">MyWishActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_browse_plant">BrowsePlantActivity</string>
 </resources>
