@@ -1,4 +1,4 @@
-package com.au564065.plantswap.browseplant;
+package com.au564065.plantswap.activities.browseplant;
 
 import android.os.Bundle;
 

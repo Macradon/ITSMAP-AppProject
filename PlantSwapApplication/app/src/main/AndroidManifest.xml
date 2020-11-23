@@ -18,7 +18,7 @@
             android:label="@string/title_activity_browse_swaps"
             android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
         <activity
-            android:name=".browseplant.BrowsePlantActivity"
+            android:name=".activities.browseplant.BrowsePlantActivity"
             android:label="@string/title_activity_browse_plant"
             android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity

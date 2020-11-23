@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.au564065.plantswap.browseplant.FirstFragment"
+        android:name="com.au564065.plantswap.activities.browseplant.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_browse_plant_first">
 
@@ -77,7 +77,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.au564065.plantswap.browseplant.SecondFragment"
+        android:name="com.au564065.plantswap.activities.browseplant.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_browse_plant_second">
 
