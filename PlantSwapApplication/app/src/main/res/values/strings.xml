@@ -20,4 +20,5 @@
     <string name="title_activity_my_wish">MyWishActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
+    <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
 </resources>

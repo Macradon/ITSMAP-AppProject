@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantSwap">
         <activity
+            android:name=".activities.browseswap.BrowseSwapsActivity"
+            android:label="@string/title_activity_browse_swaps"
+            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+        <activity
             android:name=".browseplant.BrowsePlantActivity"
             android:label="@string/title_activity_browse_plant"
-            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity
             android:name=".activities.profile.ProfileActivity"
             android:label="@string/title_activity_profile"

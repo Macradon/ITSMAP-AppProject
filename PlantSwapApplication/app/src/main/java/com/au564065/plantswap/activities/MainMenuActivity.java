@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.activities.browseswap.BrowseSwapsActivity;
 import com.au564065.plantswap.activities.myswap.MySwapActivity;
 import com.au564065.plantswap.activities.mywish.MyWishActivity;
 import com.au564065.plantswap.activities.profile.ProfileActivity;
@@ -47,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         browse_swaps = findViewById(R.id.btn_mm_browse_swaps);
         browse_swaps.setOnClickListener(view -> {
-            Intent intent = new Intent(MainMenuActivity.this, MySwapActivity.class);
+            Intent intent = new Intent(MainMenuActivity.this, BrowseSwapsActivity.class);
             startActivity(intent);
 
         });
