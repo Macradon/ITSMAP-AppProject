@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.au564065.plantswap.R;
 import com.au564065.plantswap.activities.myswap.MySwapActivity;
 import com.au564065.plantswap.activities.mywish.MyWishActivity;
+import com.au564065.plantswap.activities.profile.ProfileActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         profile = findViewById(R.id.btn_mm_my_profile);
         profile.setOnClickListener(view -> {
-            Intent intent = new Intent(MainMenuActivity.this, MySwapActivity.class);
+            Intent intent = new Intent(MainMenuActivity.this, ProfileActivity.class);
             startActivity(intent);
 
         });
