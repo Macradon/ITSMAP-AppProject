@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.au564065.plantswap.R;
+
 public class SecondFragment extends Fragment {
 
     @Override
@@ -17,7 +19,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        return inflater.inflate(R.layout.fragment_smyswap_econd, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
