@@ -2,13 +2,15 @@ package com.au564065.plantswap.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.activities.myswap.MySwapActivity;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +24,8 @@ public class MainMenu extends AppCompatActivity {
 
         my_swaps = findViewById(R.id.btn_mm_my_swaps);
         my_swaps.setOnClickListener(view -> {
-
+            Intent intent = new Intent(MainMenuActivity.this, MySwapActivity.class);
+            startActivity(intent);
         });
 
         my_wishes = findViewById(R.id.btn_mm_my_wishes);

@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantSwap">
-        <activity android:name=".activities.MainMenu">
+        <activity
+            android:name=".activities.myswap.MySwapActivity"
+            android:label="@string/title_activity_my_swap"
+            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+        <activity android:name=".activities.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,14 +29,6 @@
             android:name=".services.BackgroundPlantSwapService"
             android:enabled="true"
             android:exported="false" />
-
-        <activity android:name=".ui.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
