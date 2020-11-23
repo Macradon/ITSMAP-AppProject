@@ -10,7 +10,6 @@ import com.au564065.plantswap.R;
 import com.au564065.plantswap.activities.browseswap.BrowseSwapsActivity;
 import com.au564065.plantswap.activities.myswap.MySwapActivity;
 import com.au564065.plantswap.activities.mywish.MyWishActivity;
-import com.au564065.plantswap.activities.profile.ProfileActivity;
 import com.au564065.plantswap.activities.browseplant.BrowsePlantActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
