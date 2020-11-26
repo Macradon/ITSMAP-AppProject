@@ -5,9 +5,12 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleService;
+import androidx.lifecycle.LiveData;
 
 import com.au564065.plantswap.database.Repository;
+import com.au564065.plantswap.models.Plant;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,7 +34,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: Creating Service");
-        repos = new Repository(true, this.getApplicationContext());
+        repos = new Repository(getApplicationContext());
     }
 
     @Override
@@ -60,7 +63,8 @@ public class BackgroundPlantSwapService extends LifecycleService {
             public void run() {
                 Log.d(TAG, "run: Updating");
 
-                repos.fetchChristmastrees();
+                //repos.fetchChristmastrees();
+                repos.fetchPlantFromAPI("christmastree");
 
                 try {
                     Thread.sleep(sleepTime);
