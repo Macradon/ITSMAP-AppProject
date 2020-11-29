@@ -4,13 +4,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/plant_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/plant_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantSwap"
         android:name="androidx.multidex.MultiDexApplication">
@@ -19,13 +19,39 @@
             android:enabled="true"
             android:exported="false"></service>
 
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".activities.profile.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+        <activity
+            android:name=".activities.browseswap.BrowseSwapsActivity"
+            android:label="@string/title_activity_browse_swaps"
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
+        <activity
+            android:name=".activities.browseplant.BrowsePlantActivity"
+            android:label="@string/title_activity_browse_plant"
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
+        <activity
+            android:name=".activities.mywish.MyWishActivity"
+            android:label="@string/title_activity_my_wish"
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
+        <activity
+            android:name=".activities.myswap.MySwapActivity"
+            android:label="@string/title_activity_my_swap"
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
+        <activity android:name=".activities.MainMenuActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.BackgroundPlantSwapService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

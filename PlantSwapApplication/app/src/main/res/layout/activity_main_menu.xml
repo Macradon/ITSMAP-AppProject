@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainMenuActivity">
+
+    <Button
+        android:id="@+id/btn_mm_my_swaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/main_menu_btn_my_swaps"
+        app:layout_constraintBottom_toTopOf="@+id/btn_mm_my_wishes"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mm_my_profile"
+        app:layout_constraintStart_toStartOf="@+id/btn_mm_my_profile" />
+
+    <Button
+        android:id="@+id/btn_mm_my_wishes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/main_menu_btn_mt_wish_list"
+        app:layout_constraintBottom_toTopOf="@+id/btn_mm_my_profile"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mm_my_profile"
+        app:layout_constraintStart_toStartOf="@+id/btn_mm_my_profile" />
+
+    <Button
+        android:id="@+id/btn_mm_my_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_menu_btn_my_profile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_mm_browse_swaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/main_menu_btn_browse_swaps"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mm_my_profile"
+        app:layout_constraintStart_toStartOf="@+id/btn_mm_my_profile"
+        app:layout_constraintTop_toBottomOf="@+id/btn_mm_my_profile" />
+
+    <Button
+        android:id="@+id/btn_mm_browse_plants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/main_menu_btn_browse_plants"
+        app:layout_constraintEnd_toEndOf="@+id/btn_mm_my_profile"
+        app:layout_constraintStart_toStartOf="@+id/btn_mm_my_profile"
+        app:layout_constraintTop_toBottomOf="@+id/btn_mm_browse_swaps" />
+
+    <Button
+        android:id="@+id/btn_mm_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/main_menu_btn_exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
