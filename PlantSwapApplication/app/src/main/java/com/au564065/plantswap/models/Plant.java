@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.au564065.plantswap.models.gsonModels.GsonPlant;
+
 @Entity(tableName = "plant_table")
 public class Plant {
 
@@ -20,6 +22,13 @@ public class Plant {
         this.scientificName = scientificName;
         this.commonName = commonName;
         this.imageURL = imageURL;
+    }
+
+    //Constructor for GsonPlant to Plant object
+    public Plant(GsonPlant gsonPlantObject) {
+        this.scientificName = gsonPlantObject.getScientificName();
+        this.commonName = gsonPlantObject.getCommonName();
+        this.imageURL = gsonPlantObject.getImageUrl();
     }
 
     //Getters and setters

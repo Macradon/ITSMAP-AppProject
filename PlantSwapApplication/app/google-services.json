@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "819669778517",
+    "firebase_url": "https://plantswap-firebase-database.firebaseio.com",
+    "project_id": "plantswap-firebase-database",
+    "storage_bucket": "plantswap-firebase-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819669778517:android:d9d11c12a0e5c1da8d94dc",
+        "android_client_info": {
+          "package_name": "com.au564065.plantswap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819669778517-5iumrtl3oivb9p5fpl2jhvsp9tut9q0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIGPns7sJv3Zc6kph_bhjoCwvvjR6-hHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819669778517-5iumrtl3oivb9p5fpl2jhvsp9tut9q0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

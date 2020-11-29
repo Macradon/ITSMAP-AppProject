@@ -12,7 +12,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/plant_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PlantSwap">
+        android:theme="@style/Theme.PlantSwap"
+        android:name="androidx.multidex.MultiDexApplication">
+
+        <service android:name=".services.BackgroundPlantSwapService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".activities.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
@@ -34,6 +40,7 @@
             android:label="@string/title_activity_my_swap"
             android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity android:name=".activities.MainMenuActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
