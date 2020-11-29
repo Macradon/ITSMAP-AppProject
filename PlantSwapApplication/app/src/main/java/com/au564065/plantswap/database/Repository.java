@@ -4,6 +4,7 @@ import android.content.Context;
 import android.telecom.Call;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -17,13 +18,21 @@ import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.models.Wish;
 import com.au564065.plantswap.models.gsonModels.ApiJsonResponse;
 import com.au564065.plantswap.models.gsonModels.GsonPlant;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -35,16 +44,19 @@ public class Repository {
     //Debug logging tag
     private static final String TAG = "Repository";
 
+    //Firebase database instance
+    private FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
+
     //Singleton Repository instance
     private static Repository INSTANCE = null;
 
-    //Cached list of plants in WishList
+    //List of plants in WishList
     private LiveData<List<Plant>> WishList;
-    //Cached list of plants for swap
+    //List of plants for swap
     private LiveData<List<Swap>> SwapList;
-    //Cached Search History
+    //Search History
     private LiveData<List<Plant>> SearchHistory;
-    //Cached Search Results
+    //Search Results
     private MutableLiveData<List<Plant>> SearchResults  = new MutableLiveData<>();
 
     //Auxiliary
@@ -91,6 +103,66 @@ public class Repository {
      * THIS SECTION HANDLES THE DIFFERENT FIREBASE-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
+    public void firebaseTestMethod() {
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+
+        firebaseDatabase.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error adding document", e);
+                    }
+                });
+    }
+
+    public void firebaseTestMethod2() {
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+
+        firebaseDatabase.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error adding document", e);
+                    }
+                });
+    }
+
+    public void firebaseTestMethodElectricBoogaloo() {
+        firebaseDatabase.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, "onComplete: " + document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "onComplete: Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
 
     /**
      * API METHODS
