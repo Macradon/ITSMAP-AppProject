@@ -1,4 +1,4 @@
 package com.au564065.plantswap.models;
 
-public class User {
+public class Photo {
 }

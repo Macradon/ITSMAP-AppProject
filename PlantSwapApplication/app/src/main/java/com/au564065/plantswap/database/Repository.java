@@ -1,7 +1,6 @@
 package com.au564065.plantswap.database;
 
 import android.content.Context;
-import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.au564065.plantswap.BuildConfig;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Swap;
-import com.au564065.plantswap.models.Wish;
+import com.au564065.plantswap.models.PlantSwapUser;
 import com.au564065.plantswap.models.gsonModels.ApiJsonResponse;
 import com.au564065.plantswap.models.gsonModels.GsonPlant;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,11 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 //Singleton repository code adapted from lecture 7 Tracker application
 public class Repository {
@@ -67,7 +63,7 @@ public class Repository {
     private String baseURL = "https://trefle.io/api/v1/plants";
 
     //Empty Repository constructor that will only get called once
-    public Repository(Context context){
+    public Repository(Context context) {
         executor = Executors.newSingleThreadExecutor();
         applicationContext = context;
     }
@@ -98,19 +94,25 @@ public class Repository {
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
 
+
     /**
      * FIREBASE METHODS
      * THIS SECTION HANDLES THE DIFFERENT FIREBASE-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
-    public void firebaseTestMethod() {
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+    public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject) {
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("name", plantSwapUserObject.getName());
+        newUser.put("address", plantSwapUserObject.getAddress());
+        newUser.put("zipCode", plantSwapUserObject.getZipCode());
+        newUser.put("city", plantSwapUserObject.getCity());
+        newUser.put("email", plantSwapUserObject.getEmail());
+        newUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
+        newUser.put("plantSwaps", plantSwapUserObject.getPlantSwaps());
+        newUser.put("plantWishes", plantSwapUserObject.getPlantWishes());
 
-        firebaseDatabase.collection("users")
-                .add(user)
+        firebaseDatabase.collection(DatabaseConstants.UserCollection)
+                .add(newUser)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -125,13 +127,13 @@ public class Repository {
                 });
     }
 
-    public void firebaseTestMethod2() {
+    public void firebaseTestMethod() {
         Map<String, Object> user = new HashMap<>();
         user.put("first", "Ada");
         user.put("last", "Lovelace");
         user.put("born", 1815);
 
-        firebaseDatabase.collection("users")
+        firebaseDatabase.collection(DatabaseConstants.UserCollection)
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -148,7 +150,7 @@ public class Repository {
     }
 
     public void firebaseTestMethodElectricBoogaloo() {
-        firebaseDatabase.collection("users")
+        firebaseDatabase.collection(DatabaseConstants.UserCollection)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
