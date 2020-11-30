@@ -9,7 +9,7 @@
         android:id="@+id/FirstFragment"
         android:name="com.au564065.plantswap.activities.myswap.FirstFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_myswap_first">
+        tools:layout="@layout/fragment_myswap_list">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -19,7 +19,7 @@
         android:id="@+id/SecondFragment"
         android:name="com.au564065.plantswap.activities.myswap.SecondFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_myswap_second">
+        tools:layout="@layout/fragment_myswap_add">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.au564065.plantswap.activities.mywish.FirstFragment"
+        android:name="com.au564065.plantswap.activities.mywish.MyWishList"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_mywish_first">
 
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.au564065.plantswap.activities.mywish.SecondFragment"
+        android:name="com.au564065.plantswap.activities.mywish.AddEditWish"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_mywish_second">
 

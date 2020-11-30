@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.au564065.plantswap.R;
 
-public class SecondFragment extends Fragment {
+public class MyWishList extends Fragment {
 
     @Override
     public View onCreateView(
@@ -19,14 +19,14 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mywish_second, container, false);
+        return inflater.inflate(R.layout.fragment_mywish_first, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_second).setOnClickListener(view1 ->
-                NavHostFragment.findNavController(SecondFragment.this)
-                .navigate(R.id.action_SecondFragment_to_FirstFragment));
+        view.findViewById(R.id.button_first).setOnClickListener(view1 ->
+                NavHostFragment.findNavController(MyWishList.this)
+                .navigate(R.id.action_FirstFragment_to_SecondFragment));
     }
 }
