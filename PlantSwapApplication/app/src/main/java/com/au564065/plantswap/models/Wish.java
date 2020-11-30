@@ -25,6 +25,7 @@ public class Wish {
 
     public void setPlantName(String plantName) {
         this.plantName = plantName;
+
     }
 
     public int getRadius() {
