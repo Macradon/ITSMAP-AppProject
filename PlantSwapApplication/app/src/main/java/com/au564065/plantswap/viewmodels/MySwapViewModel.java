@@ -7,7 +7,7 @@ import com.au564065.plantswap.ui.recyclerview.MySwapAdapter;
 public class MySwapViewModel implements ListViewModel{
 
     public MySwapAdapter listAdapter;
-    public androidx.recyclerview.widget.LinearLayoutManager layoutManager;
+    public LinearLayoutManager layoutManager;
 
     @Override
     public RecyclerView.Adapter getAdapter() {
