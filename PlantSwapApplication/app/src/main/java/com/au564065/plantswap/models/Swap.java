@@ -7,25 +7,37 @@ public class Swap {
     //Status codes
     private enum statusCode {
         OPEN,
-        INPROGRESS,
+        IN_PROGRESS,
         CLOSED
     }
 
     //Attributes
+    private String swapID;
+    private String ownerID;
     private statusCode status;
     private String plantName;
     private List<Photo> plantPhotos;
     private List<Plant> wishPlants;
 
     //Constructor
-    public Swap(String plantName, List<Photo> plantPhotos, List<Plant> wishPlants) {
+    public Swap(PlantSwapUser userObject, String plantName, List<Photo> plantPhotos, List<Plant> plantWishes) {
+        this.swapID = plantName + "_" + userObject.getName() + "_" + userObject.getPlantSwaps().size();
+        this.ownerID = userObject.getEmail();
         this.status = statusCode.OPEN;
         this.plantName = plantName;
         this.plantPhotos = plantPhotos;
-        this.wishPlants = wishPlants;
+        this.wishPlants = plantWishes;
     }
 
     //Getters and setters
+    public String getSwapID() {
+        return swapID;
+    }
+
+    public void setSwapID(String swapID) {
+        this.swapID = swapID;
+    }
+
     public statusCode getStatus() {
         return status;
     }

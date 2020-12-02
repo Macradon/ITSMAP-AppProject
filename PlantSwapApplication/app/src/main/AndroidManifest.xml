@@ -7,22 +7,25 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/plant_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/plant_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PlantSwap"
-        android:name="androidx.multidex.MultiDexApplication">
+        android:theme="@style/Theme.PlantSwap">
+        <activity android:name=".activities.login.RegisterActivity"></activity>
+        <activity android:name=".activities.login.LoginActivity" />
 
-        <service android:name=".services.BackgroundPlantSwapService"
+        <service
+            android:name=".services.BackgroundPlantSwapService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".activities.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity
             android:name=".activities.browseswap.BrowseSwapsActivity"
             android:label="@string/title_activity_browse_swaps"
@@ -40,7 +43,6 @@
             android:label="@string/title_activity_my_swap"
             android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity android:name=".activities.MainMenuActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
