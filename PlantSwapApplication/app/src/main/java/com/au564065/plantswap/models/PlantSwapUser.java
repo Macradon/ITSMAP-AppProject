@@ -15,15 +15,13 @@ public class PlantSwapUser {
     private List<Wish> plantWishes;
 
     //Constructor
-    public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber, List<Swap> plantSwaps, List<Wish> plantWishes) {
+    public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.city = city;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.plantSwaps = plantSwaps;
-        this.plantWishes = plantWishes;
     }
 
     //Getters and setters
