@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.au564065.plantswap.models.gsonModels.GsonPlant;
+import com.au564065.plantswap.models.gsonPlantModels.GsonPlant;
 
 @Entity(tableName = "plant_table")
 public class Plant {
