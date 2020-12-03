@@ -21,13 +21,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +44,6 @@ public class Repository {
     //Debug logging tag
     private static final String TAG = "Repository";
 
-    //Firebase database instance
-    private FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
-
-    //Singleton Repository instance
-    private static Repository INSTANCE = null;
-
     //List of plants in WishList
     private LiveData<List<Plant>> WishList;
     //List of plants for swap
@@ -54,6 +52,8 @@ public class Repository {
     private LiveData<List<Plant>> SearchHistory;
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults  = new MutableLiveData<>();
+    //Current user
+    private PlantSwapUser currentUser;
 
     //Auxiliary
     private PlantDatabase db;
@@ -61,11 +61,15 @@ public class Repository {
     private RequestQueue queue;
     private Context applicationContext;
     private String baseURL = "https://trefle.io/api/v1/plants";
+    private FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private static Repository INSTANCE = null;
 
     //Empty Repository constructor that will only get called once
     public Repository(Context context) {
         executor = Executors.newSingleThreadExecutor();
         applicationContext = context;
+        INSTANCE = this;
     }
 
     //Method returns an instance of Repository and lazy loads the instance on first call.
@@ -100,7 +104,7 @@ public class Repository {
      * THIS SECTION HANDLES THE DIFFERENT FIREBASE-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
-    public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject) {
+    public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject, String userID) {
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("name", plantSwapUserObject.getName());
         newUser.put("address", plantSwapUserObject.getAddress());
@@ -111,12 +115,12 @@ public class Repository {
         newUser.put("plantSwaps", plantSwapUserObject.getPlantSwaps());
         newUser.put("plantWishes", plantSwapUserObject.getPlantWishes());
 
-        firebaseDatabase.collection(DatabaseConstants.UserCollection)
-                .add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot set");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -127,41 +131,51 @@ public class Repository {
                 });
     }
 
-    public void firebaseTestMethod() {
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        firebaseDatabase.collection(DatabaseConstants.UserCollection)
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Error adding document", e);
-                    }
-                });
-    }
-
-    public void firebaseTestMethodElectricBoogaloo() {
-        firebaseDatabase.collection(DatabaseConstants.UserCollection)
+    public void setCurrentUser(String userID) {
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, "onComplete: " + document.getId() + " => " + document.getData());
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "onComplete: Document loaded" + document.get("name").toString());
+                                PlantSwapUser getUser = new PlantSwapUser(document.get("name").toString(),
+                                        document.get("address").toString(),
+                                        document.get("zipCode").toString(),
+                                        document.get("city").toString(),
+                                        document.get("email").toString(),
+                                        document.get("phoneNumber").toString());
+                                currentUser = getUser;
+                            } else {
+                                Log.d(TAG, "onComplete: No document found");
                             }
                         } else {
-                            Log.w(TAG, "onComplete: Error getting documents.", task.getException());
+                            Log.d(TAG, "onComplete: failed with", task.getException());
                         }
+                    }
+                });
+    }
+
+    public void createNewSwap(Swap newSwap) {
+        Map<String, Object> swapData = new HashMap<>();
+        swapData.put("status", newSwap.getStatus());
+        swapData.put("plantName", newSwap.getPlantName());
+        swapData.put("plantPhotos", newSwap.getPlantPhotos());
+        swapData.put("wishPlants", newSwap.getWishPlants());
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(newSwap.getSwapID())
+                .set(swapData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "onComplete: Swapp added");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error writing document", e);
                     }
                 });
     }
