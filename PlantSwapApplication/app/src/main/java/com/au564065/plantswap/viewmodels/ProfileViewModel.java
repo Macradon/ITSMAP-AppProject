@@ -20,11 +20,11 @@ public class ProfileViewModel extends AndroidViewModel {
 
     public ProfileViewModel(@NonNull Application application) {
         super(application);
-        repo = 
+        repo = Repository.getInstance(application.getApplicationContext());
     }
 
     public LiveData<PlantSwapUser> getData() {
-        return userLiveData; //få en user fra firebase som man kan observe
+        return repo.getCurrentUser(); //få en user fra firebase som man kan observe
     }
 
     public void UpdateUserData(){

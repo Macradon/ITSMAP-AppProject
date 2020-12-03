@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.models.PlantSwapUser;
 import com.au564065.plantswap.viewmodels.ProfileViewModel;
 
 public class Profile_Update_fragment extends Fragment {
@@ -28,6 +29,25 @@ public class Profile_Update_fragment extends Fragment {
         updatebtn = v.findViewById(R.id.ProfileUpdate_UpdateButton);
         deletebtn = v.findViewById(R.id.ProfileWindow_EditButton);
 
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        setOnClickers();
+
+       vm = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
+        vm.getData().observe(getViewLifecycleOwner(), new Observer<PlantSwapUser>() {
+            @Override
+            public void onChanged(PlantSwapUser user) {
+                //skal indsætte værdier for user i forvejen
+            }
+        });
+    }
+
+    private void setOnClickers(){
         updatebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,21 +62,5 @@ public class Profile_Update_fragment extends Fragment {
             }
         });
 
-        return v;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-       /* vm = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
-        vm.getData().observe(getViewLifecycleOwner(), new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                //skal indsætte værdier for user i forvejen
-            }
-        });*/
-    }
-
-
 }
