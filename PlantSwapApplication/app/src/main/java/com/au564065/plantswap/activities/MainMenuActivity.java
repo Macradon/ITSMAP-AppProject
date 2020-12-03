@@ -15,6 +15,8 @@ import com.au564065.plantswap.activities.myswap.MySwapActivity;
 import com.au564065.plantswap.activities.mywish.MyWishActivity;
 import com.au564065.plantswap.activities.browseplant.BrowsePlantActivity;
 import com.au564065.plantswap.activities.profile.ProfileActivity;
+import com.au564065.plantswap.database.Repository;
+import com.au564065.plantswap.services.BackgroundPlantSwapService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,10 +27,18 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         initializeButtons();
+        startBackgroundActivity();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             navigateToLogin();
+        } else {
+            Repository.getInstance(getApplicationContext()).setCurrentUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
+    }
+
+    private void startBackgroundActivity() {
+        Intent backgroundIntent = new Intent(this, BackgroundPlantSwapService.class);
+        startService(backgroundIntent);
     }
 
     private void initializeButtons(){
