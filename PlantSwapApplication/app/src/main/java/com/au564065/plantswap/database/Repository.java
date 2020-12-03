@@ -15,8 +15,10 @@ import com.au564065.plantswap.BuildConfig;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.models.PlantSwapUser;
-import com.au564065.plantswap.models.gsonModels.ApiJsonResponse;
-import com.au564065.plantswap.models.gsonModels.GsonPlant;
+import com.au564065.plantswap.models.gsonLocationModels.LocationResult;
+import com.au564065.plantswap.models.gsonLocationModels.Result;
+import com.au564065.plantswap.models.gsonPlantModels.ApiJsonResponse;
+import com.au564065.plantswap.models.gsonPlantModels.GsonPlant;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,7 +57,8 @@ public class Repository {
     private ExecutorService executor;
     private RequestQueue queue;
     private Context applicationContext;
-    private String baseURL = "https://trefle.io/api/v1/plants";
+    private String trefleURL = "https://trefle.io/api/v1/plants";
+    private String googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=";
     private FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static Repository INSTANCE = null;
@@ -108,31 +111,6 @@ public class Repository {
      * THIS SECTION HANDLES THE DIFFERENT FIREBASE-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
-    public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject, String userID) {
-        Map<String, Object> newUser = new HashMap<>();
-        newUser.put("name", plantSwapUserObject.getName());
-        newUser.put("address", plantSwapUserObject.getAddress());
-        newUser.put("zipCode", plantSwapUserObject.getZipCode());
-        newUser.put("city", plantSwapUserObject.getCity());
-        newUser.put("email", plantSwapUserObject.getEmail());
-        newUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
-
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
-                .set(newUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot set");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Error adding document", e);
-                    }
-                });
-    }
-
     public void setCurrentUser(String userID) {
         Log.d(TAG, "setCurrentUser: Setting current user");
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
@@ -161,9 +139,77 @@ public class Repository {
                 });
     }
 
+    public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject, String userID) {
+        Log.d(TAG, "addNewUserToCloudDatabase: Adding new user to the database");
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("name", plantSwapUserObject.getName());
+        newUser.put("address", plantSwapUserObject.getAddress());
+        newUser.put("zipCode", plantSwapUserObject.getZipCode());
+        newUser.put("city", plantSwapUserObject.getCity());
+        newUser.put("email", plantSwapUserObject.getEmail());
+        newUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
+
+        executeUserVolleyQueue(plantSwapUserObject, newUser, userID);
+    }
+
+    public void updateUserInCloudDatabase(PlantSwapUser plantSwapUserObject, String userID) {
+        Map<String, Object> updateUser = new HashMap<>();
+        updateUser.put("name", plantSwapUserObject.getName());
+        updateUser.put("address", plantSwapUserObject.getAddress());
+        updateUser.put("zipCode", plantSwapUserObject.getZipCode());
+        updateUser.put("city", plantSwapUserObject.getCity());
+        updateUser.put("email", plantSwapUserObject.getEmail());
+        updateUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
+
+        executeUserVolleyQueue(plantSwapUserObject, updateUser, userID);
+    }
+
+    private void executeUserVolleyQueue(PlantSwapUser plantSwapUserObject, Map<String, Object> mapUserObject, String userID) {
+        Log.d(TAG, "executeUserVolleyQueue: Executing Volley Queue request");
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "updateUserInCloudDatabase run: Sending GET request");
+                if (queue == null) {
+                    Log.d(TAG, "updateUserInCloudDatabase: Instantiate new Volley Request Queue");
+                    queue = Volley.newRequestQueue(applicationContext);
+                }
+
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        googleURL + plantSwapUserObject.getAddress().replaceAll(" ", "%20") + "%20"
+                                + plantSwapUserObject.getZipCode() + "%20" + plantSwapUserObject.getCity()
+                                + "&key=" + BuildConfig.GOOGLE_KEY,
+                        (response) -> {
+                            handleFetchLocationFromAPI(response, mapUserObject, userID);
+                        }, (error) -> {
+                    Log.d(TAG, "run: This did not work", error);
+                });
+
+                queue.add(stringRequest);
+            }
+        });
+    }
+
+    private void postUserFirebaseRequest(Map<String, Object> newUser, String userID) {
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error adding document", e);
+                    }
+                });
+    }
+
     public void createNewSwap(Swap newSwap) {
         Map<String, Object> swapData = new HashMap<>();
-
+        swapData.put("ownerID", newSwap.getOwnerID());
         swapData.put("status", newSwap.getStatus());
         swapData.put("plantName", newSwap.getPlantName());
         swapData.put("plantPhotos", newSwap.getPlantPhotos());
@@ -185,51 +231,10 @@ public class Repository {
     }
 
     /**
-     * API METHODS
+     * TEIFLE API METHODS
      * THIS SECTION HANDLES THE DIFFERENT API-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
-    //METHOD TO TEST THE API
-    public void fetchChristmastrees() {
-        Log.d(TAG, "fetchChristmastrees: Fetching Christmastrees");
-        if (queue == null) {
-            Log.d(TAG, "fetchChristmastrees: Instantiate new Volley Request Queue");
-            queue = Volley.newRequestQueue(applicationContext);
-        }
-
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "fetchChristmastrees: Sending new String Request");
-                StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        baseURL + "/search?token=" + BuildConfig.CONSUMER_KEY + "&q=christmastree",
-                        (response) -> {
-                            Log.d(TAG, "fetchChristmastrees: Lambda Response");
-                            parseChristmasJsonResponse(response);
-                        }, (error) -> {
-                    Log.d(TAG, "run: This did not work", error);
-                });
-
-                queue.add(stringRequest);
-            }
-        });
-    }
-
-    private void parseChristmasJsonResponse(String response) {
-        Log.d(TAG, "parseJsonResponse: Parsing JSON Response");
-        Gson gson = new GsonBuilder().create();
-        ApiJsonResponse jsonResponse = gson.fromJson(response, ApiJsonResponse.class);
-        List<GsonPlant> responsePlants = jsonResponse.getData();
-
-        if (responsePlants != null) {
-            Log.d(TAG, "parseJsonResponse: Resposne is not null. Size: " + responsePlants.size());
-            for (int i = 0; i < responsePlants.size(); i++) {
-                int plantIndex = i;
-                Log.d(TAG, "parseJsonResponse: " + responsePlants.get(i).getScientificName());
-            }
-        }
-    }
-
     public void fetchPlantFromAPI(String treeName) {
         executor.execute(new Runnable() {
             @Override
@@ -241,7 +246,7 @@ public class Repository {
                 }
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        baseURL + "/search?token=" + BuildConfig.CONSUMER_KEY + "&q=" + treeName,
+                        trefleURL + "/search?token=" + BuildConfig.CONSUMER_KEY + "&q=" + treeName,
                         (response) -> {
                             Log.d(TAG, "fetchPlantFromAPI: handling response");
                             handleFetchPlantFromAPI(response);
@@ -269,6 +274,20 @@ public class Repository {
             }
             SearchResults.postValue(plantHolder);
         }
+    }
 
+    private void handleFetchLocationFromAPI(String response, Map<String, Object> mapUserObject, String userID) {
+        Gson gson = new GsonBuilder().create();
+        LocationResult locationResponse = gson.fromJson(response, LocationResult.class);
+        List<Result> results = locationResponse.getResults();
+
+        if (results!=null) {
+            Log.d(TAG, "handleFetchLocationFromAPI: Response is not null");
+            String latitude = results.get(0).getGeometry().getLocation().getLat().toString();
+            String longitude = results.get(0).getGeometry().getLocation().getLng().toString();
+            mapUserObject.put("addressGpsCoordinates", latitude + ";" + longitude);
+
+            postUserFirebaseRequest(mapUserObject, userID);
+        }
     }
 }
