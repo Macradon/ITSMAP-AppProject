@@ -69,12 +69,14 @@ public class Repository {
     public Repository(Context context) {
         executor = Executors.newSingleThreadExecutor();
         applicationContext = context;
-        INSTANCE = this;
     }
 
     //Method returns an instance of Repository and lazy loads the instance on first call.
     //Currently unavailable because of hte dependency on Application Context for Volley
-    public static Repository getInstance() {
+    public static Repository getInstance(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new Repository(context);
+        }
         return INSTANCE;
     }
 
@@ -141,13 +143,12 @@ public class Repository {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d(TAG, "onComplete: Document loaded" + document.get("name").toString());
-                                PlantSwapUser getUser = new PlantSwapUser(document.get("name").toString(),
+                                currentUser = new PlantSwapUser(document.get("name").toString(),
                                         document.get("address").toString(),
                                         document.get("zipCode").toString(),
                                         document.get("city").toString(),
                                         document.get("email").toString(),
                                         document.get("phoneNumber").toString());
-                                currentUser = getUser;
                             } else {
                                 Log.d(TAG, "onComplete: No document found");
                             }

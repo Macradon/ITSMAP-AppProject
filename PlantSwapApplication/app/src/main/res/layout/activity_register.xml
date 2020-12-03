@@ -141,7 +141,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginBottom="32dp"
         android:text="@string/register_btn_cancel"
-        app:backgroundTint="@color/plant_lightgreen"
+        app:backgroundTint="@color/plant_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -31,12 +31,13 @@ public class LoginActivity extends AppCompatActivity {
 
     //Auxiliary
     private FirebaseAuth firebaseAuthentication = FirebaseAuth.getInstance();
-    private Repository repos = Repository.getInstance();
+    private Repository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        repo = Repository.getInstance(getApplicationContext());
 
         initiateUI();
     }
@@ -77,7 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "onComplete: SignInWithEmail: Success");
                             FirebaseUser user = firebaseAuthentication.getCurrentUser();
                             Log.d(TAG, "onComplete: Person logged in: " + user.getUid());
-                            repos.setCurrentUser(user.getUid());
+                            repo.setCurrentUser(user.getUid());
+                            finishLogin();
                         } else {
                             Log.w(TAG, "signIn failure", task.getException());
                             Toast.makeText(LoginActivity.this,
@@ -101,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                 } else  {
                     finishLogin();
                 }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(LoginActivity.this,
+                        "Canceled registration.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
