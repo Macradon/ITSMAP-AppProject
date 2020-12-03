@@ -88,6 +88,10 @@ public class Repository {
         return SearchHistory;
     }
 
+    public LiveData<List<Plant>> getSearchResult() {
+        return SearchResults;
+    }
+
     public LiveData<PlantSwapUser> getCurrentUser() {
         return currentUser;
     }
