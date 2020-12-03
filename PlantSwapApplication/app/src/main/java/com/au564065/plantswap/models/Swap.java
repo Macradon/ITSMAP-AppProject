@@ -12,7 +12,6 @@ public class Swap {
     }
 
     //Attributes
-    private String swapID;
     private String ownerID;
     private statusCode status;
     private String plantName;
@@ -21,7 +20,6 @@ public class Swap {
 
     //Constructor
     public Swap(PlantSwapUser userObject, String plantName, List<Photo> plantPhotos, List<Plant> plantWishes) {
-        this.swapID = plantName + "_" + userObject.getName() + "_" + userObject.getPlantSwaps().size();
         this.ownerID = userObject.getEmail();
         this.status = statusCode.OPEN;
         this.plantName = plantName;
@@ -30,12 +28,12 @@ public class Swap {
     }
 
     //Getters and setters
-    public String getSwapID() {
-        return swapID;
+    public String getOwnerID() {
+        return ownerID;
     }
 
-    public void setSwapID(String swapID) {
-        this.swapID = swapID;
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
     }
 
     public statusCode getStatus() {

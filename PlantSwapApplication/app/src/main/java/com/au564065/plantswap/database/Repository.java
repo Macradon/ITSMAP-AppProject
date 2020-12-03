@@ -53,7 +53,7 @@ public class Repository {
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults  = new MutableLiveData<>();
     //Current user
-    private PlantSwapUser currentUser;
+    private MutableLiveData<PlantSwapUser> currentUser;
 
     //Auxiliary
     private PlantDatabase db;
@@ -92,7 +92,9 @@ public class Repository {
         return SearchHistory;
     }
 
-
+    public LiveData<PlantSwapUser> getCurrentUser() {
+        return currentUser;
+    }
 
     /**
      * DATABASE METHODS
@@ -114,8 +116,6 @@ public class Repository {
         newUser.put("city", plantSwapUserObject.getCity());
         newUser.put("email", plantSwapUserObject.getEmail());
         newUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
-        newUser.put("plantSwaps", plantSwapUserObject.getPlantSwaps());
-        newUser.put("plantWishes", plantSwapUserObject.getPlantWishes());
 
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
                 .set(newUser)
@@ -143,12 +143,12 @@ public class Repository {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d(TAG, "onComplete: Document loaded" + document.get("name").toString());
-                                currentUser = new PlantSwapUser(document.get("name").toString(),
+                                currentUser.setValue(new PlantSwapUser(document.get("name").toString(),
                                         document.get("address").toString(),
                                         document.get("zipCode").toString(),
                                         document.get("city").toString(),
                                         document.get("email").toString(),
-                                        document.get("phoneNumber").toString());
+                                        document.get("phoneNumber").toString()));
                             } else {
                                 Log.d(TAG, "onComplete: No document found");
                             }
@@ -161,11 +161,12 @@ public class Repository {
 
     public void createNewSwap(Swap newSwap) {
         Map<String, Object> swapData = new HashMap<>();
+
         swapData.put("status", newSwap.getStatus());
         swapData.put("plantName", newSwap.getPlantName());
         swapData.put("plantPhotos", newSwap.getPlantPhotos());
         swapData.put("wishPlants", newSwap.getWishPlants());
-        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(newSwap.getSwapID())
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
                 .set(swapData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
