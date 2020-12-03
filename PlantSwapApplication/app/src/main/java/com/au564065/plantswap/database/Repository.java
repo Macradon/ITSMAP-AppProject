@@ -21,17 +21,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +46,9 @@ public class Repository {
     //Search History
     private LiveData<List<Plant>> SearchHistory;
     //Search Results
-    private MutableLiveData<List<Plant>> SearchResults  = new MutableLiveData<>();
+    private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     //Current user
-    private MutableLiveData<PlantSwapUser> currentUser;
+    private MutableLiveData<PlantSwapUser> currentUser = new MutableLiveData<>();
 
     //Auxiliary
     private PlantDatabase db;
@@ -69,6 +64,7 @@ public class Repository {
     public Repository(Context context) {
         executor = Executors.newSingleThreadExecutor();
         applicationContext = context;
+
     }
 
     //Method returns an instance of Repository and lazy loads the instance on first call.
@@ -90,6 +86,10 @@ public class Repository {
 
     public LiveData<List<Plant>> getSearchHistory() {
         return SearchHistory;
+    }
+
+    public LiveData<List<Plant>> getSearchResult() {
+        return SearchResults;
     }
 
     public LiveData<PlantSwapUser> getCurrentUser() {
@@ -134,6 +134,7 @@ public class Repository {
     }
 
     public void setCurrentUser(String userID) {
+        Log.d(TAG, "setCurrentUser: Setting current user");
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -142,13 +143,14 @@ public class Repository {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.d(TAG, "onComplete: Document loaded" + document.get("name").toString());
-                                currentUser.setValue(new PlantSwapUser(document.get("name").toString(),
+                                Log.d(TAG, "onComplete: Document loaded " + document.get("name").toString());
+                                PlantSwapUser newCurrentUser = new PlantSwapUser(document.get("name").toString(),
                                         document.get("address").toString(),
                                         document.get("zipCode").toString(),
                                         document.get("city").toString(),
                                         document.get("email").toString(),
-                                        document.get("phoneNumber").toString()));
+                                        document.get("phoneNumber").toString());
+                                currentUser.postValue(newCurrentUser);
                             } else {
                                 Log.d(TAG, "onComplete: No document found");
                             }
