@@ -20,7 +20,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
 
     //Auxiliary
     private ExecutorService execService;
-    private Repository repos;
+    private Repository repo;
 
     //Variables
     private long sleepTime = 60000;
@@ -34,7 +34,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: Creating Service");
-        repos = new Repository(getApplicationContext());
+        repo = Repository.getInstance(getApplicationContext());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
                 Log.d(TAG, "run: Updating");
 
                 //repos.fetchChristmastrees();
-                repos.fetchPlantFromAPI("christmastree");
+                repo.fetchPlantFromAPI("christmastree");
 
                 try {
                     Thread.sleep(sleepTime);
