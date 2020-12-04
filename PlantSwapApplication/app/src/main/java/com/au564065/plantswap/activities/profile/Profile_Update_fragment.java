@@ -58,7 +58,7 @@ public class Profile_Update_fragment extends Fragment {
         address = v.findViewById(R.id.Profile_Update_edtTxtAddress);
         city = v.findViewById(R.id.Profile_Update_edtTxtCity);
         zipcode = v.findViewById(R.id.Profile_Update_edtTxtZipCode);
-        phone = v.findViewById(R.id.Profile_Update_edtTxtEmail);
+        phone = v.findViewById(R.id.Profile_Update_edtTxtPhone);
         mail = v.findViewById(R.id.Profile_Update_edtTxtEmail);
 
     }

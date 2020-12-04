@@ -12,6 +12,10 @@ import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.PlantSwapUser;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 public class ProfileViewModel extends AndroidViewModel {
     //insert repo
@@ -31,7 +35,22 @@ public class ProfileViewModel extends AndroidViewModel {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String user = firebaseAuth.getCurrentUser().getUid();
+
         repo.updateUserInCloudDatabase(swapUser,user);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                repo.setCurrentUser(user);
+            }
+        });
+
     }
 
     public void DeleteUserData(){
