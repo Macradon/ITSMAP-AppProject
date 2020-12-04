@@ -1,30 +1,29 @@
 package com.au564065.plantswap.activities.myswap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
 import com.au564065.plantswap.R;
-import com.au564065.plantswap.activities.myswap.dummy.DummyContent;
+import com.au564065.plantswap.activities.MainMenuActivity;
 import com.au564065.plantswap.ui.recyclerview.MySwapAdapter;
+import com.au564065.plantswap.viewmodels.MySwapViewModel;
 
-/**
- * A fragment representing a list of Items.
- */
 public class SwapListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+
+    private MySwapViewModel viewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,28 +45,37 @@ public class SwapListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+// TODO remove
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_swap_list, container, false);
+        View listView = inflater.inflate(R.layout.fragment_swap_list, container, false);
+        Context context = listView.getContext();
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MySwapAdapter(DummyContent.ITEMS));
-        }
-        return view;
+        RecyclerView swapList = container.findViewById(R.id.mySwapList);
+        swapList.setLayoutManager(new LinearLayoutManager(context));
+        swapList.setAdapter(new MySwapAdapter(context, viewModel.swapList.getValue()));
+
+        Button btnBack = container.findViewById(R.id.mySwap_list_btnBack);
+        btnBack.setOnClickListener(view -> {
+            getActivity().finish();
+        });
+
+        Button btnNew = container.findViewById(R.id.mySwap_list_btnNew);
+        btnNew.setOnClickListener(view -> {
+            FragmentManager m = getActivity().getSupportFragmentManager();
+            m.beginTransaction()
+                    .replace(R.id.mySwap_fragmentContainer, new Profile_Update_fragment())
+                    .commit();
+        });
+
+        return listView;
     }
 }
