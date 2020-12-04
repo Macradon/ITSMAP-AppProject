@@ -69,7 +69,6 @@ public class Repository {
     public Repository(Context context) {
         executor = Executors.newSingleThreadExecutor();
         applicationContext = context;
-
     }
 
     //Method returns an instance of Repository and lazy loads the instance on first call.
