@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.PlantSwapUser;
-
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ProfileViewModel extends AndroidViewModel {
@@ -27,8 +27,11 @@ public class ProfileViewModel extends AndroidViewModel {
         return repo.getCurrentUser(); //få en user fra firebase som man kan observe
     }
 
-    public void UpdateUserData(){
-        //fire base: update user til firebase
+    public void UpdateUserData(PlantSwapUser swapUser){
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String user = firebaseAuth.getCurrentUser().getUid();
+        repo.updateUserInCloudDatabase(swapUser,user);
     }
 
     public void DeleteUserData(){

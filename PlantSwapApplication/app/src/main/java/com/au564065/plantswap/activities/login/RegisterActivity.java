@@ -44,16 +44,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initiateUI() {
-        edtName = findViewById(R.id.register_edtTxtName);
-        edtAddress = findViewById(R.id.register_edtTxtAddress);
-        edtZipCode = findViewById(R.id.register_edtTxtZipCode);
-        edtCity = findViewById(R.id.register_edtTxtCity);
-        edtEmail = findViewById(R.id.register_edtTxtEmail);
-        edtPhone = findViewById(R.id.register_edtTxtPhone);
-        edtPass = findViewById(R.id.register_edtTxtPassword);
-        edtConfirm = findViewById(R.id.register_edtTxtConfirm);
+        edtName = findViewById(R.id.Profile_Update_edtTxtName);
+        edtAddress = findViewById(R.id.Profile_Update_edtTxtAddress);
+        edtZipCode = findViewById(R.id.Profile_Update_edtTxtZipCode);
+        edtCity = findViewById(R.id.Profile_Update_edtTxtCity);
+        edtEmail = findViewById(R.id.Profile_Update_edtTxtEmail);
+        edtPhone = findViewById(R.id.Profile_Update_edtTxtPhone);
+        edtPass = findViewById(R.id.Profile_Update_edtTxtPassword);
+        edtConfirm = findViewById(R.id.Profile_Update_edtTxtConfirm);
         
-        btnRegister = findViewById(R.id.register_btnRegister);
+        btnRegister = findViewById(R.id.Profile_Window_EditButton);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         
-        btnCancel = findViewById(R.id.register_btnCancel);
+        btnCancel = findViewById(R.id.Profile_Window_BackButton);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

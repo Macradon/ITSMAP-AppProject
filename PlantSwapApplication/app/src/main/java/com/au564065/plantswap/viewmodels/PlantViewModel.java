@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.Plant;
+import com.au564065.plantswap.models.Wish;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.List;
 public class PlantViewModel extends AndroidViewModel {
     //insert repo
     //LiveData<List<Plant>> plantLive; //en repo funktion
-    Repository repo;
+    public Repository repo;
+    public List<Plant> getClickedPlant;
+    public Plant onClickedPlant;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
@@ -31,10 +35,28 @@ public class PlantViewModel extends AndroidViewModel {
 
     }
 
+    public void saveAdapterList(List<Plant> plants){
+        getClickedPlant = plants;
+    }
+
+
     public void SearchPlant(String searchText){
 
         repo.fetchPlantFromAPI(searchText);
 
+    }
+
+    public void addToWish(int radius){
+        Wish wish = new Wish(onClickedPlant, radius);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String user = firebaseAuth.getCurrentUser().getUid();
+
+        repo.addWishToUserWishList(wish, user);
+    }
+
+    public void setOnClickedPlant(int index){
+        onClickedPlant = getClickedPlant.get(index);
     }
 
 

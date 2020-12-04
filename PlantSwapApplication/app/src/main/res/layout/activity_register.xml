@@ -16,7 +16,7 @@
         android:text="@string/Password"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtPassword" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtPassword" />
 
     <TextView
         android:id="@+id/register_txtConfirmPassword2"
@@ -39,10 +39,10 @@
         android:text="@string/register_confirmPassword"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtConfirm" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtConfirm" />
 
     <TextView
-        android:id="@+id/register_txtPhone1"
+        android:id="@+id/Profile_Update_txtPhone1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -50,10 +50,10 @@
         android:text="@string/register_phone"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtPhone" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtPhone" />
 
     <TextView
-        android:id="@+id/register_txtPhone"
+        android:id="@+id/Profile_Update_txtPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -61,10 +61,10 @@
         android:text="@string/register_number"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_txtPhone1" />
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_txtPhone1" />
 
     <TextView
-        android:id="@+id/register_txtCity"
+        android:id="@+id/Profile_Update_txtCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -73,10 +73,10 @@
         android:text="@string/register_city"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtCity" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtCity" />
 
     <TextView
-        android:id="@+id/register_txtEmail"
+        android:id="@+id/Profile_Update_txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -85,10 +85,10 @@
         android:text="@string/Email"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtEmail" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtEmail" />
 
     <TextView
-        android:id="@+id/register_txtHeader"
+        android:id="@+id/Profile_Window_txtHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_txtHeaderText"
@@ -107,11 +107,11 @@
         app:layout_constraintGuide_percent="0.15" />
 
     <ImageView
-        android:id="@+id/register_img"
+        android:id="@+id/Profile_Window_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/login_img_description"
-        app:layout_constraintBottom_toTopOf="@+id/register_txtHeader"
+        app:layout_constraintBottom_toTopOf="@+id/Profile_Window_txtHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +119,7 @@
         app:srcCompat="@mipmap/plant_launcher_round" />
 
     <EditText
-        android:id="@+id/register_edtTxtName"
+        android:id="@+id/Profile_Update_edtTxtName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -130,11 +130,11 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <Button
-        android:id="@+id/register_btnCancel"
+        android:id="@+id/Profile_Window_BackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -146,7 +146,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/register_btnRegister"
+        android:id="@+id/Profile_Window_EditButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -157,7 +157,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/register_edtTxtAddress"
+        android:id="@+id/Profile_Update_edtTxtAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -168,11 +168,11 @@
         android:importantForAutofill="no"
         android:inputType="textPostalAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtName" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtName" />
 
     <EditText
-        android:id="@+id/register_edtTxtZipCode"
+        android:id="@+id/Profile_Update_edtTxtZipCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -183,11 +183,11 @@
         android:importantForAutofill="no"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtAddress" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtAddress" />
 
     <EditText
-        android:id="@+id/register_edtTxtCity"
+        android:id="@+id/Profile_Update_edtTxtCity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -198,11 +198,11 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtZipCode" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtZipCode" />
 
     <EditText
-        android:id="@+id/register_edtTxtEmail"
+        android:id="@+id/Profile_Update_edtTxtEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -213,11 +213,11 @@
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtCity" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtCity" />
 
     <EditText
-        android:id="@+id/register_edtTxtPhone"
+        android:id="@+id/Profile_Update_edtTxtPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -228,11 +228,11 @@
         android:importantForAutofill="no"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtEmail" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtEmail" />
 
     <EditText
-        android:id="@+id/register_edtTxtPassword"
+        android:id="@+id/Profile_Update_edtTxtPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -246,10 +246,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/register_txtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtPhone" />
 
     <EditText
-        android:id="@+id/register_edtTxtConfirm"
+        android:id="@+id/Profile_Update_edtTxtConfirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -260,11 +260,11 @@
         android:importantForAutofill="no"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/register_edtTxtPassword" />
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtPassword" />
 
     <TextView
-        android:id="@+id/register_txtName"
+        android:id="@+id/Profile_Update_txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -273,10 +273,10 @@
         android:text="@string/Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtName" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtName" />
 
     <TextView
-        android:id="@+id/register_txtAddress"
+        android:id="@+id/Profile_Update_txtAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -285,10 +285,10 @@
         android:text="@string/register_address"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtAddress" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtAddress" />
 
     <TextView
-        android:id="@+id/register_txtZipCode"
+        android:id="@+id/Profile_Update_txtZipCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -297,6 +297,6 @@
         android:text="@string/register_ZipCode"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_edtTxtZipCode" />
+        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtZipCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,29 +47,35 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantItemVie
 
     @Override
     public void onBindViewHolder(@NonNull PlantItemViewHolder holder, int position) {
-        holder.science.setText(plants.get(position).getScientificName());
+
         holder.common.setText(plants.get(position).getCommonName());
         Glide.with(holder.imgurl.getContext())
                 .load(plants.get(position).getImageURL())
+                .centerCrop()
                 .into(holder.imgurl);
     }
 
     @Override
     public int getItemCount() {
-        return plants.size();
+        if(plants == null){
+            return 0;
+        }
+        else {
+            return plants.size();
+        }
     }
 
 
     public class PlantItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView science;
+
         TextView common;
         ImageView imgurl; // temp
         IPlantItemClickedListener list;
 
         public PlantItemViewHolder(@NonNull View itemView, IPlantItemClickedListener listener) {
             super(itemView);
-            science = itemView.findViewById(R.id.plantItem_science);
+
             common = itemView.findViewById(R.id.plantItem_common);
             imgurl = itemView.findViewById(R.id.plantItem_image);
 

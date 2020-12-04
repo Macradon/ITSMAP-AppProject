@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.activities.profile.Profile_Update_fragment;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.ui.recyclerview.PlantAdapter;
 import com.au564065.plantswap.viewmodels.PlantViewModel;
@@ -67,6 +69,7 @@ public class BrowsePlant_List_fragment extends Fragment implements PlantAdapter.
             @Override
             public void onChanged(List<Plant> plants) {
                 adapter.updateList(plants);
+                plantVM.saveAdapterList(plants);
             }
         });
 
@@ -75,7 +78,13 @@ public class BrowsePlant_List_fragment extends Fragment implements PlantAdapter.
 
     @Override
     public void onItemClicked(int index) {
-        //go to details??? i cannot see what details i should go to or stuff like that
+        plantVM.setOnClickedPlant(index);
+
+        FragmentManager m = getActivity().getSupportFragmentManager();
+        m.beginTransaction()
+                .replace(R.id.BrowsePlantLayout, new BrowsePlant_Details_fragment())
+                .commit();
+
     }
 
     public void setClickers(){
