@@ -1,4 +1,4 @@
-package com.au564065.plantswap.models.gsonModels;
+package com.au564065.plantswap.models.gsonPlantModels;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

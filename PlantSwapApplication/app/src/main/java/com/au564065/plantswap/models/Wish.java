@@ -2,7 +2,7 @@ package com.au564065.plantswap.models;
 
 public class Wish {
     private Plant wishPlant;
-    private int radius;
+    private double radius;
 
     public Wish(Plant wishPlant, int radius) {
         this.wishPlant = wishPlant;
@@ -17,11 +17,11 @@ public class Wish {
         this.wishPlant = wishPlant;
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(double radius) {
         this.radius = radius;
     }
 }
