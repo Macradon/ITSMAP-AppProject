@@ -11,19 +11,15 @@ public class PlantSwapUser {
     private String city;
     private String email;
     private String phoneNumber;
-    private List<Swap> plantSwaps;
-    private List<Wish> plantWishes;
 
     //Constructor
-    public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber, List<Swap> plantSwaps, List<Wish> plantWishes) {
+    public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.city = city;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.plantSwaps = plantSwaps;
-        this.plantWishes = plantWishes;
     }
 
     //Getters and setters
@@ -73,21 +69,5 @@ public class PlantSwapUser {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<Swap> getPlantSwaps() {
-        return plantSwaps;
-    }
-
-    public void setPlantSwaps(List<Swap> plantSwaps) {
-        this.plantSwaps = plantSwaps;
-    }
-
-    public List<Wish> getPlantWishes() {
-        return plantWishes;
-    }
-
-    public void setPlantWishes(List<Wish> plantWishes) {
-        this.plantWishes = plantWishes;
     }
 }

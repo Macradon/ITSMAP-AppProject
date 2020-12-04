@@ -9,18 +9,28 @@
 
 
     <string name="title_activity_my_swap">MySwapActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_my_wish">MyWishActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
     <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="Email">E-mail</string>
+    <string name="Password">Password</string>
+    <string name="Login_text">Login to PlantSwap</string>
+    <string name="login_txtNoUser">Not registered? Register an account:</string>
+    <string name="login_btnLogin">Login</string>
+    <string name="login_btnRegister">Register</string>
+    <string name="login_txt_hint_email">Insert your email for login</string>
+    <string name="login_txt_hint_password">Insert your password for login></string>
+    <string name="login_img_description">App logo</string>
+    <string name="register_txtHeaderText">Register an account</string>
+    <string name="Name">Name</string>
+    <string name="register_name_description">Name</string>
+    <string name="register_btn_cancel">Cancel</string>
+    <string name="register_address">Address</string>
+    <string name="register_ZipCode">Zip Code</string>
+    <string name="register_city">City</string>
+    <string name="register_phone">Phone</string>
+    <string name="register_number">Number</string>
+    <string name="register_confirmPassword">Confirm</string>
 </resources>

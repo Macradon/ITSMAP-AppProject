@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.Plant;
+import com.au564065.plantswap.models.PlantSwapUser;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,10 +21,10 @@ public class BackgroundPlantSwapService extends LifecycleService {
 
     //Auxiliary
     private ExecutorService execService;
-    private Repository repos;
+    private Repository repo;
 
     //Variables
-    private long sleepTime = 60000;
+    private long sleepTime = 120000;
 
     //Constructor
     public BackgroundPlantSwapService() {
@@ -34,7 +35,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: Creating Service");
-        repos = new Repository(getApplicationContext());
+        repo = Repository.getInstance(getApplicationContext());
     }
 
     @Override
@@ -63,8 +64,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
             public void run() {
                 Log.d(TAG, "run: Updating");
 
-                //repos.fetchChristmastrees();
-                repos.fetchPlantFromAPI("christmastree");
+                repo.fetchPlantFromAPI("christmastree");
 
                 try {
                     Thread.sleep(sleepTime);

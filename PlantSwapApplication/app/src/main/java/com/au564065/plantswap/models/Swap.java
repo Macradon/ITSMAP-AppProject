@@ -7,25 +7,45 @@ public class Swap {
     //Status codes
     private enum statusCode {
         OPEN,
-        INPROGRESS,
+        IN_PROGRESS,
         CLOSED
     }
 
     //Attributes
+    private String ownerID;
+    private String ownerAddressGpsCoordinates;
     private statusCode status;
     private String plantName;
     private List<Photo> plantPhotos;
-    private List<Plant> wishPlants;
+    private List<Plant> ownerWishes;
 
     //Constructor
-    public Swap(String plantName, List<Photo> plantPhotos, List<Plant> wishPlants) {
+    public Swap(PlantSwapUser userObject, String ownerCoordinates, String plantName, List<Photo> plantPhotos, List<Plant> plantWishes) {
+        this.ownerID = userObject.getEmail();
+        this.ownerAddressGpsCoordinates = ownerCoordinates;
         this.status = statusCode.OPEN;
         this.plantName = plantName;
         this.plantPhotos = plantPhotos;
-        this.wishPlants = wishPlants;
+        this.ownerWishes = plantWishes;
     }
 
     //Getters and setters
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
+    }
+
+    public String getOwnerAddressGpsCoordinates() {
+        return ownerAddressGpsCoordinates;
+    }
+
+    public void setOwnerAddressGpsCoordinates(String ownerAddressGpsCoordinates) {
+        this.ownerAddressGpsCoordinates = ownerAddressGpsCoordinates;
+    }
+
     public statusCode getStatus() {
         return status;
     }
@@ -51,10 +71,18 @@ public class Swap {
     }
 
     public List<Plant> getWishPlants() {
-        return wishPlants;
+        return ownerWishes;
     }
 
     public void setWishPlants(List<Plant> wishPlants) {
-        this.wishPlants = wishPlants;
+        this.ownerWishes = wishPlants;
+    }
+
+    public List<Plant> getOwnerWishes() {
+        return ownerWishes;
+    }
+
+    public void setOwnerWishes(List<Plant> ownerWishes) {
+        this.ownerWishes = ownerWishes;
     }
 }
