@@ -309,6 +309,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: DocumentSnapshot set");
+                        setCurrentUser(userID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -27,11 +27,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:ems="10"
+        android:hint="@string/Name"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/browsePlantCycler"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/BrowsePlant_SearchButton"
@@ -41,7 +42,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Button"
+        android:text="@string/Search"
         app:layout_constraintBottom_toTopOf="@+id/browsePlantCycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

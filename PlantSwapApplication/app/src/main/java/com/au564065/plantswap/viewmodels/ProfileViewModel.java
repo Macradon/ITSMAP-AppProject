@@ -34,23 +34,9 @@ public class ProfileViewModel extends AndroidViewModel {
     public void UpdateUserData(PlantSwapUser swapUser){
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String user = firebaseAuth.getCurrentUser().getUid();
+        String userId = firebaseAuth.getCurrentUser().getUid();
 
-        repo.updateUserInCloudDatabase(swapUser,user);
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                repo.setCurrentUser(user);
-            }
-        });
-
+        repo.updateUserInCloudDatabase(swapUser,userId);
     }
 
     public void DeleteUserData(){
