@@ -7,6 +7,8 @@
     <string name="main_menu_btn_browse_plants">Browse all plants</string>
     <string name="main_menu_btn_exit">Exit</string>
 
+    <string name="btn_back">Back</string>
+    <string name="btn_new">New</string>
 
     <string name="title_activity_my_swap">MySwapActivity</string>
     <string name="title_activity_my_wish">MyWishActivity</string>
@@ -33,4 +35,5 @@
     <string name="register_phone">Phone</string>
     <string name="register_number">Number</string>
     <string name="register_confirmPassword">Confirm</string>
+    <string name="swapListItem_imageDescription">Plant Picture</string>
 </resources>
