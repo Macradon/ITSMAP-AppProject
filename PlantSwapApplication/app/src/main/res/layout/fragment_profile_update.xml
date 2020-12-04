@@ -6,40 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activities.login.RegisterActivity">
 
-    <TextView
-        android:id="@+id/register_txtPassword"
+    <Button
+        android:id="@+id/Profile_Update_DeleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/Password"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtPassword" />
-
-    <TextView
-        android:id="@+id/register_txtConfirmPassword2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:text="@string/Password"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_txtConfirmPassword1" />
-
-    <TextView
-        android:id="@+id/register_txtConfirmPassword1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:singleLine="false"
-        android:text="@string/register_confirmPassword"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Profile_Update_edtTxtConfirm" />
+        android:layout_marginBottom="32dp"
+        android:text="@string/Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Profile_Window_EditButton"
+        app:layout_constraintStart_toEndOf="@+id/Profile_Window_BackButton" />
 
     <TextView
         android:id="@+id/Profile_Update_txtPhone1"
@@ -91,7 +66,7 @@
         android:id="@+id/Profile_Window_txtHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register_txtHeaderText"
+        android:text="@string/Update_Profile_Header"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -130,7 +105,7 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPhone"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <Button
@@ -152,7 +127,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/login_btnRegister"
+        android:text="@string/Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -168,7 +143,7 @@
         android:importantForAutofill="no"
         android:inputType="textPostalAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPhone"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtName" />
 
     <EditText
@@ -183,7 +158,7 @@
         android:importantForAutofill="no"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPhone"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtAddress" />
 
     <EditText
@@ -198,7 +173,7 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPhone"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtZipCode" />
 
     <EditText
@@ -213,12 +188,12 @@
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
+        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPhone"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtCity" />
 
     <EditText
         android:id="@+id/Profile_Update_edtTxtPhone"
-        android:layout_width="0dp"
+        android:layout_width="252dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
@@ -228,40 +203,7 @@
         android:importantForAutofill="no"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtEmail" />
-
-    <EditText
-        android:id="@+id/Profile_Update_edtTxtPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:ems="10"
-        android:hint="@string/Password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/register_txtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtPhone" />
-
-    <EditText
-        android:id="@+id/Profile_Update_edtTxtConfirm"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:ems="10"
-        android:hint="@string/Password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/Profile_Update_edtTxtPassword"
-        app:layout_constraintTop_toBottomOf="@+id/Profile_Update_edtTxtPassword" />
 
     <TextView
         android:id="@+id/Profile_Update_txtName"
