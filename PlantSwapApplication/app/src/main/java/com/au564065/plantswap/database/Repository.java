@@ -12,6 +12,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.au564065.plantswap.BuildConfig;
+import com.au564065.plantswap.GlobalConstants;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.models.PlantSwapUser;
@@ -26,8 +27,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -44,11 +49,11 @@ public class Repository {
     private static final String TAG = "Repository";
 
     //List of plants in WishList
-    private LiveData<List<Wish>> WishList;
+    private MutableLiveData<List<Wish>> WishList = new MutableLiveData<>();
     //List of plants for swap
-    private LiveData<List<Swap>> SwapList;
+    private MutableLiveData<List<Swap>> SwapList = new MutableLiveData<>();
     //Search History
-    private LiveData<List<Plant>> SearchHistory;
+    private MutableLiveData<List<Plant>> SearchHistory = new MutableLiveData<>();
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     //Current user
@@ -79,7 +84,6 @@ public class Repository {
         return INSTANCE;
     }
 
-    //get all wishes
     public LiveData<List<Wish>> getWishList() {
         return WishList;
     }
@@ -204,8 +208,52 @@ public class Repository {
     }
 
     //Method to read a user's wishes
-    public void readUserWishList() {
-        //TODO Implement this
+    public void readUserWishList(String userId) {
+        Log.d(TAG, "readUserWishList: Reading wishlist from user: " + userId);
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Wish> wishListHolder = new ArrayList();
+                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                 Map<String, Object> docRef = document.getData();
+
+                                 //Remove object artifacts and make comma separated string array
+                                 String[] wishPlant = docRef.get("wishPlant").toString()
+                                         .replaceAll("\\{", "")
+                                         .replaceAll("\\}", "")
+                                         .replaceAll(" ", "")
+                                         .split(",");
+
+                                 //For each element, split it and use it to map to a new map
+                                 Map<String, String> wishPlantMap = new HashMap<>();
+                                 for (int i=0; i<wishPlant.length;i++) {
+                                     String[] wishPlantSplit = wishPlant[i].split("=");
+                                     wishPlantMap.put(wishPlantSplit[0],wishPlantSplit[1]);
+                                 }
+
+                                 //Take the new map and use all of its data to create the plant object
+                                 Plant newWishPlant = new Plant(
+                                         wishPlantMap.get("scientificName"),
+                                         wishPlantMap.get("commonName"),
+                                         wishPlantMap.get("imageURL"),
+                                         wishPlantMap.get("genus"),
+                                         wishPlantMap.get("family")
+                                 );
+                                 Log.d(TAG, "onComplete: Plant from Wish List: " + newWishPlant.getScientificName());
+
+                                 //Make new wish with the plant object and document radius
+                                 Wish wishListWish = new Wish(newWishPlant,Integer.parseInt(docRef.get("radius").toString()));
+                                 //Add it to the temporary holder list
+                                 wishListHolder.add(wishListWish);
+                             }
+                             WishList.postValue(wishListHolder);
+                        }
+                    }
+                });
     }
 
     //Method to delete wish from a user's wish list

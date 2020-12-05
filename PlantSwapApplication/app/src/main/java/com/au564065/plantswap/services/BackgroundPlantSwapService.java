@@ -48,6 +48,8 @@ public class BackgroundPlantSwapService extends LifecycleService {
         super.onStartCommand(intent, flags, startId);
         Log.d(TAG, "onStartCommand: Starting Background Service");
 
+        //repo.readUserWishList("s2AA3JjujIgupcsRB5bMGUBLLnq2");
+
         recursiveUpdate();
 
         return START_STICKY;
@@ -64,7 +66,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
             public void run() {
                 Log.d(TAG, "run: Updating");
 
-                repo.fetchPlantFromAPI("christmastree");
+                //repo.fetchPlantFromAPI("christmastree");
 
                 try {
                     Thread.sleep(sleepTime);
