@@ -68,13 +68,13 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
         layoutMan = new LinearLayoutManager(getContext());
 
         swapVM = new ViewModelProvider(getActivity()).get(BrowseSwapViewModel.class);
-        /*swapVM.getSwapList().observe(getViewLifecycleOwner(), new Observer<List<Swap>>() {
+        swapVM.getSwapList().observe(getViewLifecycleOwner(), new Observer<List<Swap>>() {
             @Override
             public void onChanged(List<Swap> list) {
                 swapVM.saveAdapterList(list);
                 adapter.updateList(list);
             }
-        });*/
+        });
 
     }
 

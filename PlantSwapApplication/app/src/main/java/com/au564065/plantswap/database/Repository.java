@@ -44,11 +44,11 @@ public class Repository {
     private static final String TAG = "Repository";
 
     //List of plants in WishList
-    private LiveData<List<Plant>> WishList;
+    private LiveData<List<Plant>> WishList = new MutableLiveData<>();
     //List of plants for swap
-    private LiveData<List<Swap>> SwapList;
+    private LiveData<List<Swap>> SwapList = new MutableLiveData<>();
     //Search History
-    private LiveData<List<Plant>> SearchHistory;
+    private LiveData<List<Plant>> SearchHistory = new MutableLiveData<>();
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     //Current user
