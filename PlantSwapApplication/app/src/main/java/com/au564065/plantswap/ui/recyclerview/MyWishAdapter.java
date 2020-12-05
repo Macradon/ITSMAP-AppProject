@@ -65,7 +65,7 @@ public class MyWishAdapter extends RecyclerView.Adapter<MyWishAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Wish tempWish = wishList.get(position);
         for(int i = 0; i < wishList.size(); i++) {
-            holder.txtName.setText(wishList.get(position).getPlantName());
+            holder.txtName.setText(wishList.get(position).getWishPlant().getCommonName());
             holder.txtRadius.setText(String.valueOf(tempWish.getRadius()));
         }
     }

@@ -4,29 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.room.PrimaryKey;
 
 public class Wish {
+    private Plant wishPlant;
+        private int radius;
 
-    @PrimaryKey
-    @NonNull
-    private String plantName;
+    public Wish(Plant wishPlant, int radius) {
+            this.wishPlant = wishPlant;
+            this.radius = radius;
+        }
 
-    private int radius;
+        public Plant getWishPlant() {
+            return wishPlant;
+        }
 
-    //Constructor
-    public Wish(@NonNull String plantName, int radius) {
-        this.plantName = plantName;
-        this.radius = radius;
-    }
-
-
-    //Getters and setters
-    public String getPlantName() {
-        return plantName;
-    }
-
-    public void setPlantName(String plantName) {
-        this.plantName = plantName;
-
-    }
+        public void setWishPlant(Plant wishPlant) {
+            this.wishPlant = wishPlant;
+        }
 
     public int getRadius() {
         return radius;
