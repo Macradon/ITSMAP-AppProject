@@ -35,15 +35,14 @@ public class MyWishViewModel extends AndroidViewModel {
 
     //get all
     public LiveData<List<Wish>> getAllWishes() {
-        readWishes();
-        return repo.getWishList();
-    }
-
-    public void readWishes()
-    {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String user = firebaseAuth.getCurrentUser().getUid();
         repo.readUserWishList(user);
+        return repo.getWishList();
+    }
+
+    public void saveList(List<Wish> wishes){
+        getClickedWish = wishes;
     }
 
     public void updateWish()
@@ -54,10 +53,6 @@ public class MyWishViewModel extends AndroidViewModel {
     public void deleteWish()
     {
 
-    }
-
-    public void saveAdapterList(List<Wish> wishes){
-        getClickedWish = wishes;
     }
 
     //enter edit view

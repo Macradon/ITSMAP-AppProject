@@ -262,8 +262,12 @@ public class Repository {
     }
 
     //Method to delete wish from a user's wish list
-    public void deleteWishFromUserWishList() {
+    public void deleteWishFromUserWishList(Wish newWish, String userID) {
         //TODO Implement this
+        Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
+        /*firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
+                .collection(DatabaseConstants.WishCollection)
+                .document(String.valueOf(newWish))*/
     }
 
     /**

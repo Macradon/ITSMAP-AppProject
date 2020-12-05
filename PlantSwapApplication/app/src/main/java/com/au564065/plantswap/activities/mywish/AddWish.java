@@ -43,23 +43,14 @@ public class AddWish extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_mywish_add, container, false);
         findUiId(v);
-        setListeners();
-
+        //setListeners();
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
-        wvm.getAllWishes().observe(getViewLifecycleOwner(), new Observer<List<Wish>>() {
-            @Override
-            public void onChanged(List<Wish> wish) {
-                updateUI();
-            }
-        });
-
     }
 
     private void findUiId(View v){
@@ -72,6 +63,9 @@ public class AddWish extends Fragment {
         //buttons
         cancelBtn = v.findViewById(R.id.cancel_addwish);
         saveBtn = v.findViewById(R.id.save_addwish);
+
+        name.setText(R.string.notifyMe);
+        distance.setText(R.string.distance);
     }
     private void setListeners(){
 

@@ -75,12 +75,11 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         listRecycler.setAdapter(adapter);
         listRecycler.setLayoutManager(layoutMan);
         wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
-        // DET GÅR GALT HER
         wvm.getAllWishes().observe(getViewLifecycleOwner(), new Observer<List<Wish>>() {
             @Override
             public void onChanged(List<Wish> wishes) {
                 adapter.updateList(wishes);
-                wvm.saveAdapterList(wishes);
+                wvm.saveList(wishes);
             }
         });
     }
