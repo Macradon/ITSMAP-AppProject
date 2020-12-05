@@ -22,10 +22,4 @@
 
     <include layout="@layout/content_my_swap" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/swap_frag"
-        android:name="com.au564065.plantswap.activities.myswap.FirstFragment"
-        android:layout_width="match_parent"
-        android:layout_height="721dp" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

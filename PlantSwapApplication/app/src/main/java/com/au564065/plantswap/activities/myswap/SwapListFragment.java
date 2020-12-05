@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.au564065.plantswap.R;
 import com.au564065.plantswap.activities.MainMenuActivity;
+import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.ui.recyclerview.MySwapAdapter;
 import com.au564065.plantswap.viewmodels.MySwapViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SwapListFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-
     private MySwapViewModel viewModel;
+    private MySwapAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -36,21 +37,25 @@ public class SwapListFragment extends Fragment {
     @SuppressWarnings("unused")
     public static SwapListFragment newInstance(int columnCount) {
         SwapListFragment fragment = new SwapListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-// TODO remove
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
 
+        ViewModelProvider viewModelProvider= new ViewModelProvider(getViewModelStore(), ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()));
+        viewModel = viewModelProvider.get(MySwapViewModel.class);
+        // adapter = new MySwapAdapter(getContext(), viewModel.swapList.getValue());
+        adapter = new MySwapAdapter(getContext(), new ArrayList<Swap>() {
+        });
 
+//        viewModel.swapList.observe(this, new Observer<List<Swap>>() {
+//            @Override
+//            public void onChanged(List<Swap> swaps) {
+//                adapter.setSwapList(swaps);
+//            }
+//        });
     }
 
     @Override
@@ -59,20 +64,20 @@ public class SwapListFragment extends Fragment {
         View listView = inflater.inflate(R.layout.fragment_swap_list, container, false);
         Context context = listView.getContext();
 
-        RecyclerView swapList = container.findViewById(R.id.mySwapList);
+        RecyclerView swapList = listView.findViewById(R.id.mySwapList);
         swapList.setLayoutManager(new LinearLayoutManager(context));
-        swapList.setAdapter(new MySwapAdapter(context, viewModel.swapList.getValue()));
+        swapList.setAdapter(adapter);
 
-        Button btnBack = container.findViewById(R.id.mySwap_list_btnBack);
+        Button btnBack = listView.findViewById(R.id.mySwap_list_btnBack);
         btnBack.setOnClickListener(view -> {
             getActivity().finish();
         });
 
-        Button btnNew = container.findViewById(R.id.mySwap_list_btnNew);
+        Button btnNew = listView.findViewById(R.id.mySwap_list_btnNew);
         btnNew.setOnClickListener(view -> {
             FragmentManager m = getActivity().getSupportFragmentManager();
             m.beginTransaction()
-                    .replace(R.id.mySwap_fragmentContainer, new Profile_Update_fragment())
+                    .replace(R.id.mySwap_fragmentContainer, new SwapEditFragment())
                     .commit();
         });
 

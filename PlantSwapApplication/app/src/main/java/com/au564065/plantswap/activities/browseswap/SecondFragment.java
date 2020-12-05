@@ -26,7 +26,7 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.button_second).setOnClickListener(view1 ->
-                NavHostFragment.findNavController(SecondFragment.this)
-                .navigate(R.id.action_SecondFragment_to_FirstFragment));
+        {
+        });
     }
 }
