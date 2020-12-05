@@ -2,6 +2,7 @@ package com.au564065.plantswap.activities.profile;
 
 import android.os.Bundle;
 
+import com.au564065.plantswap.activities.browseplant.BrowsePlant_List_fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -14,14 +15,12 @@ import com.au564065.plantswap.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.main_menu_btn_my_profile);
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()

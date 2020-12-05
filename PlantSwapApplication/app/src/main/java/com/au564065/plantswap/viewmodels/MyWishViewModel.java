@@ -48,16 +48,12 @@ public class MyWishViewModel extends AndroidViewModel {
 
     public void updateWish()
     {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String user = firebaseAuth.getCurrentUser().getUid();
-        repo.readUserWishList(user);
+
     }
 
     public void deleteWish()
     {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String user = firebaseAuth.getCurrentUser().getUid();
-        repo.readUserWishList(user);
+
     }
 
     public void saveAdapterList(List<Wish> wishes){
