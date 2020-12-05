@@ -18,9 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.au564065.plantswap.R;
 import com.au564065.plantswap.activities.browseplant.BrowsePlant_Details_fragment;
+import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Wish;
 import com.au564065.plantswap.ui.recyclerview.MyWishAdapter;
+import com.au564065.plantswap.ui.recyclerview.PlantAdapter;
 import com.au564065.plantswap.viewmodels.MyWishViewModel;
+import com.au564065.plantswap.viewmodels.PlantViewModel;
 
 import java.util.List;
 
@@ -36,7 +39,6 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -45,7 +47,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_mywish_add, container, false);
+        View v = inflater.inflate(R.layout.fragment_wishlist, container, false);
         listRecycler = v.findViewById(R.id.wishList);
         addBtn = v.findViewById(R.id.addWishButton);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,26 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         });
         return v;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        adapter = new MyWishAdapter(this);
+        layoutMan = new LinearLayoutManager(getContext());
+        listRecycler.setAdapter(adapter);
+        listRecycler.setLayoutManager(layoutMan);
+        wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
+        // DET GÅR GALT HER
+        wvm.getAllWishes().observe(getViewLifecycleOwner(), new Observer<List<Wish>>() {
+            @Override
+            public void onChanged(List<Wish> wishes) {
+                adapter.updateList(wishes);
+                wvm.saveAdapterList(wishes);
+            }
+        });
+    }
+
 
 
     @Override
@@ -85,22 +107,5 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
                 .commit();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        adapter = new MyWishAdapter(this);
-        layoutMan = new LinearLayoutManager(getContext());
-        listRecycler.setAdapter(adapter);
-        listRecycler.setLayoutManager(layoutMan);
-        wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
-        wvm.getAllWishes().observe(getViewLifecycleOwner(), new Observer<List<Wish>>() {
-            @Override
-            public void onChanged(List<Wish> wishes) {
-                adapter.updateList(wishes);
-                wvm.saveAdapterList(wishes);
-            }
-        });
-    }
 }
 

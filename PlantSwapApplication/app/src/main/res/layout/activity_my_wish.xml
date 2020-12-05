@@ -20,5 +20,5 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_wishlist" />
+    <include layout="@layout/content_my_wish" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -14,22 +14,19 @@ import com.au564065.plantswap.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.main_menu_btn_my_profile);
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.ProfileLayout,new Profile_Window_fragment())
                     .commitNow();
         }
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
     }
 }

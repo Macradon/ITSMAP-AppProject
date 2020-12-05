@@ -30,9 +30,10 @@ public class MyWishActivity extends AppCompatActivity {
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.wishList, new MyWishList())
+                    .replace(R.id.WishPlantLayout, new MyWishList())
                     .commitNow();
         }
 
     }
 }
+

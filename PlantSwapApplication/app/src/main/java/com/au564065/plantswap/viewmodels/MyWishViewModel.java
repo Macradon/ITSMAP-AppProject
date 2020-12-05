@@ -1,6 +1,8 @@
 package com.au564065.plantswap.viewmodels;
 
 import android.app.Application;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,8 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.Plant;
+import com.au564065.plantswap.models.PlantSwapUser;
 import com.au564065.plantswap.models.Wish;
 import com.au564065.plantswap.ui.recyclerview.MyWishAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.List;
 
@@ -30,11 +35,30 @@ public class MyWishViewModel extends AndroidViewModel {
 
     //get all
     public LiveData<List<Wish>> getAllWishes() {
-
+        readWishes();
         return repo.getWishList();
-
     }
 
+    public void readWishes()
+    {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String user = firebaseAuth.getCurrentUser().getUid();
+        repo.readUserWishList(user);
+    }
+
+    public void updateWish()
+    {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String user = firebaseAuth.getCurrentUser().getUid();
+        repo.readUserWishList(user);
+    }
+
+    public void deleteWish()
+    {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String user = firebaseAuth.getCurrentUser().getUid();
+        repo.readUserWishList(user);
+    }
 
     public void saveAdapterList(List<Wish> wishes){
         getClickedWish = wishes;

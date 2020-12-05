@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.mywish.MyWishActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wishList"
@@ -12,8 +13,7 @@
         android:paddingBottom="4dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:listitem="@layout/content_wishlist" />
+        tools:layout_editor_absoluteY="-16dp" />
 
     <Button
         android:id="@+id/addWishButton"
@@ -22,20 +22,21 @@
         android:layout_marginTop="625dp"
         android:text="@string/addWish"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/exitWishButton"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/exitWishButton"
         app:layout_constraintTop_toTopOf="@+id/wishList"
-        app:layout_constraintVertical_bias="0.637" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/exitWishButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_marginTop="625dp"
+        android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addWishButton"
         app:layout_constraintTop_toTopOf="@+id/wishList"
-        app:layout_constraintVertical_bias="0.969" />
+        app:layout_constraintVertical_bias="0.976" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
