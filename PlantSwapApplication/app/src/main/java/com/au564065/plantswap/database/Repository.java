@@ -261,13 +261,42 @@ public class Repository {
                 });
     }
 
-    //Method to delete wish from a user's wish list
-    public void deleteWishFromUserWishList(Wish newWish, String userID) {
+    //Method to find a specific wish from a user's wish list
+    public void readUserWish(String wishID) {
         //TODO Implement this
+        Log.d(TAG, "readUserWish: Reading a specific wish from user's wishlist");
+        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            // value to be parsed here
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //Method to delete wish from a user's wish list
+    public void deleteWishFromUserList(String wishID) {
         Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
-        /*firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
-                .collection(DatabaseConstants.WishCollection)
-                .document(String.valueOf(newWish))*/
+        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Errore deleting document", e);
+                    }
+                });
     }
 
     /**
