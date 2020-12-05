@@ -12,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.au564065.plantswap.BuildConfig;
-import com.au564065.plantswap.GlobalConstants;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.models.PlantSwapUser;
@@ -27,8 +26,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,14 +45,17 @@ public class Repository {
     //Debug logging tag
     private static final String TAG = "Repository";
 
-    //List of plants in WishList
+    //WishList
     private MutableLiveData<List<Wish>> WishList = new MutableLiveData<>();
-    //List of plants for swap
+    private MutableLiveData<List<Wish>> SwapWishList = new MutableLiveData<>();
+    //Swaps
     private MutableLiveData<List<Swap>> SwapList = new MutableLiveData<>();
+    private MutableLiveData<Swap> SpecificSwap = new MutableLiveData<>();
     //Search History
-    private MutableLiveData<List<Plant>> SearchHistory = new MutableLiveData<>();
+    //private MutableLiveData<List<Plant>> SearchHistory = new MutableLiveData<>();
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
+    private MutableLiveData<Plant> SpecificPlant = new MutableLiveData<>();
     //Current user
     private MutableLiveData<PlantSwapUser> currentUser = new MutableLiveData<>();
 
@@ -84,20 +84,32 @@ public class Repository {
         return INSTANCE;
     }
 
-    public LiveData<List<Wish>> getWishList() {
+    public LiveData<List<Wish>> getCurrentUserWishList() {
         return WishList;
     }
 
-    public LiveData<List<Swap>> getSwapList() {
+    public LiveData<List<Wish>> getSwapOwnerWishList() {
+        return SwapWishList;
+    }
+
+    public LiveData<List<Swap>> getAllSwaps() {
         return SwapList;
     }
 
-    public LiveData<List<Plant>> getSearchHistory() {
-        return SearchHistory;
+    public LiveData<Swap> getSwap() {
+        return SpecificSwap;
     }
+
+    /**public LiveData<List<Plant>> getSearchHistory() {
+        return SearchHistory;
+    }**/
 
     public LiveData<List<Plant>> getSearchResult() {
         return SearchResults;
+    }
+
+    public LiveData<Plant> getSpecificPlant() {
+        return SpecificPlant;
     }
 
     public LiveData<PlantSwapUser> getCurrentUser() {
@@ -180,17 +192,80 @@ public class Repository {
         //TODO Implement this
     }
 
+    //Helper method to execute volley user requests
+    private void executeUserVolleyQueue(PlantSwapUser plantSwapUserObject, Map<String, Object> mapUserObject, String userID) {
+        Log.d(TAG, "executeUserVolleyQueue: Executing Volley Queue request");
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "updateUserInCloudDatabase run: Sending GET request");
+                if (queue == null) {
+                    Log.d(TAG, "updateUserInCloudDatabase: Instantiate new Volley Request Queue");
+                    queue = Volley.newRequestQueue(applicationContext);
+                }
+
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                        googleURL + plantSwapUserObject.getAddress().replaceAll(" ", "%20") + "%20"
+                                + plantSwapUserObject.getZipCode() + "%20" + plantSwapUserObject.getCity()
+                                + "&key=" + BuildConfig.GOOGLE_KEY,
+                        (response) -> {
+                            handleFetchLocationFromAPI(response, mapUserObject, userID);
+                        }, (error) -> {
+                    Log.d(TAG, "run: This did not work", error);
+                });
+
+                queue.add(stringRequest);
+            }
+        });
+    }
+
+    //Helper method to retrieve address coordinates
+    private void handleFetchLocationFromAPI(String response, Map<String, Object> mapUserObject, String userID) {
+        Gson gson = new GsonBuilder().create();
+        LocationResult locationResponse = gson.fromJson(response, LocationResult.class);
+        List<Result> results = locationResponse.getResults();
+
+        if (results!=null) {
+            Log.d(TAG, "handleFetchLocationFromAPI: Response is not null");
+            String latitude = results.get(0).getGeometry().getLocation().getLat().toString();
+            String longitude = results.get(0).getGeometry().getLocation().getLng().toString();
+            mapUserObject.put("addressGpsCoordinates", latitude + ";" + longitude);
+
+            postUserFirebaseRequest(mapUserObject, userID);
+        }
+    }
+
+    //Helper method to post user data to the firebase database
+    private void postUserFirebaseRequest(Map<String, Object> newUser, String userID) {
+        Log.d(TAG, "postUserFirebaseRequest: Posting to Firebase");
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot set");
+                        setCurrentUser(userID);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error adding document", e);
+                    }
+                });
+    }
+
     /**
      *  Wish Methods
      */
     //Method to create wish in a user's wish list
-    public void addWishToUserWishList(Wish newWish, String userID) {
+    public void addWishToUserWishList(Wish newWish) {
         Log.d(TAG, "addWishToUserWishList: Adding new wish to user's wish list");
         Map<String, Object> wishData = new HashMap<>();
         wishData.put("wishPlant",  newWish.getWishPlant());
         wishData.put("radius", newWish.getRadius());
 
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(firebaseAuth.getUid())
                 .collection(DatabaseConstants.WishCollection).document()
                 .set(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -208,7 +283,7 @@ public class Repository {
     }
 
     //Method to read a user's wishes
-    public void readUserWishList(String userId) {
+    public void readUserWishList(String userId, Boolean swap) {
         Log.d(TAG, "readUserWishList: Reading wishlist from user: " + userId);
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
                 .collection(DatabaseConstants.WishCollection)
@@ -250,7 +325,11 @@ public class Repository {
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
-                             WishList.postValue(wishListHolder);
+                             if (swap) {
+                                 SwapWishList.postValue(wishListHolder);
+                             } else {
+                                 WishList.postValue(wishListHolder);
+                             }
                         }
                     }
                 });
@@ -261,18 +340,21 @@ public class Repository {
         //TODO Implement this
     }
 
+    //Method to delete all wishes from a user's wish list
+    //TODO IMPLEMENT THIS
+
     /**
      *  Swap Methods
      */
     //Method to create a swap in the database
     public void createNewSwap(Swap newSwap) {
         Map<String, Object> swapData = new HashMap<>();
-        swapData.put("ownerID", newSwap.getOwnerID());
+        swapData.put("ownerID", firebaseAuth.getUid());
         swapData.put("ownerAddressGpsCoordinates", newSwap.getOwnerAddressGpsCoordinates());
         swapData.put("status", newSwap.getStatus());
         swapData.put("plantName", newSwap.getPlantName());
-        swapData.put("plantPhotos", newSwap.getPlantPhotos());
-        swapData.put("wishPlants", newSwap.getWishPlants());
+
+        getSwapCoordinates(swapData)
 
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
                 .set(swapData)
@@ -290,17 +372,92 @@ public class Repository {
                 });
     }
 
+    //Helper method to get location coordinates form address
+    private void
+
+    //Method to read all swaps
+    public void readAllSwaps() {
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Swap> swapHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapHolder.add(parseSwapDocument(document));
+                            }
+                            SwapList.postValue(swapHolder);
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //Method to read specific swap
+    public void readSpecificSwap(String swapID) {
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            SpecificSwap.postValue(parseSwapDocument(document));
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //Method to read all user's swaps
+    public void readAllSwapsFromUser(String userId) {
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection)
+                .whereEqualTo("ownerID", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Swap> swapHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapHolder.add(parseSwapDocument(document));
+                            }
+                            SwapList.postValue(swapHolder);
+
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
     //Method to delete swap from the database
     //TODO Implement this
+
+    //Helper method to parse swap document
+    private Swap parseSwapDocument(DocumentSnapshot document) {
+        Swap getSwap = new Swap(
+                document.get("ownerID").toString(),
+                document.get("ownerAddressGpsCoordinates").toString(),
+                document.get("plantName").toString()
+        );
+        getSwap.setStatus(document.get("status").toString());
+        getSwap.setSwapID(document.getId());
+
+        return getSwap;
+    }
 
     //Method to create an offer to a swap
     public void addOfferToSwap(SwapOffer newSwapOfferObject, String swapID) {
         Map<String, Object> newOffer = new HashMap<>();
+        newOffer.put("swapID", swapID);
         newOffer.put("swapOfferUserID", newSwapOfferObject.getSwapOfferUserID());
         newOffer.put("plantsOffered", newSwapOfferObject.getPlantsOffered());
 
-        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapID)
-                .collection(DatabaseConstants.OfferCollection).document()
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document()
                 .set(newOffer)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -316,74 +473,11 @@ public class Repository {
                 });
     }
 
+    //Method to read offers to a swap
+    //TODO IMPLEMENT THIS
+
     //Method to delete swap offer from a swap
     //TODO Implement this
-
-    /**
-     *  Helper Methods
-     */
-    //Helper method to execute volley user requests
-    private void executeUserVolleyQueue(PlantSwapUser plantSwapUserObject, Map<String, Object> mapUserObject, String userID) {
-        Log.d(TAG, "executeUserVolleyQueue: Executing Volley Queue request");
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "updateUserInCloudDatabase run: Sending GET request");
-                if (queue == null) {
-                    Log.d(TAG, "updateUserInCloudDatabase: Instantiate new Volley Request Queue");
-                    queue = Volley.newRequestQueue(applicationContext);
-                }
-
-                StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                        googleURL + plantSwapUserObject.getAddress().replaceAll(" ", "%20") + "%20"
-                                + plantSwapUserObject.getZipCode() + "%20" + plantSwapUserObject.getCity()
-                                + "&key=" + BuildConfig.GOOGLE_KEY,
-                        (response) -> {
-                            handleFetchLocationFromAPI(response, mapUserObject, userID);
-                        }, (error) -> {
-                    Log.d(TAG, "run: This did not work", error);
-                });
-
-                queue.add(stringRequest);
-            }
-        });
-    }
-
-    //Helper method to post user data to the firebase database
-    private void postUserFirebaseRequest(Map<String, Object> newUser, String userID) {
-        Log.d(TAG, "postUserFirebaseRequest: Posting to Firebase");
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
-                .set(newUser)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot set");
-                        setCurrentUser(userID);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Error adding document", e);
-                    }
-                });
-    }
-
-    //Helper method to retrieve address coordinates
-    private void handleFetchLocationFromAPI(String response, Map<String, Object> mapUserObject, String userID) {
-        Gson gson = new GsonBuilder().create();
-        LocationResult locationResponse = gson.fromJson(response, LocationResult.class);
-        List<Result> results = locationResponse.getResults();
-
-        if (results!=null) {
-            Log.d(TAG, "handleFetchLocationFromAPI: Response is not null");
-            String latitude = results.get(0).getGeometry().getLocation().getLat().toString();
-            String longitude = results.get(0).getGeometry().getLocation().getLng().toString();
-            mapUserObject.put("addressGpsCoordinates", latitude + ";" + longitude);
-
-            postUserFirebaseRequest(mapUserObject, userID);
-        }
-    }
 
     /**
      *  Message Methods
@@ -398,6 +492,8 @@ public class Repository {
      * THIS SECTION HANDLES THE DIFFERENT API-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
      */
+    //Method to fetch all plants that associate with tree name.
+    //Tree name can be of common name, scientific name, and for specific plants use slug.
     public void fetchPlantFromAPI(String treeName) {
         executor.execute(new Runnable() {
             @Override
@@ -422,6 +518,7 @@ public class Repository {
         });
     }
 
+    //Helper method to handle API response
     private void handleFetchPlantFromAPI(String response) {
         Gson gson = new GsonBuilder().create();
         ApiJsonResponse jsonResponse = gson.fromJson(response, ApiJsonResponse.class);
@@ -437,5 +534,10 @@ public class Repository {
             }
             SearchResults.postValue(plantHolder);
         }
+    }
+
+    //Central method to convert scientific name to slug
+    public String convertScientificNameToSlug(String scientificName) {
+        return scientificName.toLowerCase().replaceAll(" ", "-");
     }
 }

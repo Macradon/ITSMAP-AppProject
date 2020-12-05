@@ -11,6 +11,7 @@ public class PlantSwapUser {
     private String city;
     private String email;
     private String phoneNumber;
+    private String addressCoordinates;
 
     //Constructor
     public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber) {
@@ -69,5 +70,13 @@ public class PlantSwapUser {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddressCoordinates() {
+        return addressCoordinates;
+    }
+
+    public void setAddressCoordinates(String addressCoordinates) {
+        this.addressCoordinates = addressCoordinates;
     }
 }

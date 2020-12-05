@@ -12,24 +12,27 @@ public class Swap {
     }
 
     //Attributes
+    private String swapID;
     private String ownerID;
     private String ownerAddressGpsCoordinates;
     private statusCode status;
     private String plantName;
-    private List<Photo> plantPhotos;
-    private List<Plant> ownerWishes;
 
     //Constructor
-    public Swap(PlantSwapUser userObject, String ownerCoordinates, String plantName, List<Photo> plantPhotos, List<Plant> plantWishes) {
-        this.ownerID = userObject.getEmail();
-        this.ownerAddressGpsCoordinates = ownerCoordinates;
+    public Swap(String userID, String ownerCoordinates, String plantName) {
         this.status = statusCode.OPEN;
         this.plantName = plantName;
-        this.plantPhotos = plantPhotos;
-        this.ownerWishes = plantWishes;
     }
 
     //Getters and setters
+    public String getSwapID() {
+        return swapID;
+    }
+
+    public void setSwapID(String swapID) {
+        this.swapID = swapID;
+    }
+
     public String getOwnerID() {
         return ownerID;
     }
@@ -50,8 +53,18 @@ public class Swap {
         return status;
     }
 
-    public void setStatus(statusCode status) {
-        this.status = status;
+    public void setStatus(String status) {
+        switch (status) {
+            case "OPEN":
+                this.status = statusCode.OPEN;
+                break;
+            case "IN_PROGRESS":
+                this.status = statusCode.IN_PROGRESS;
+                break;
+            case "CLOSED":
+                this.status = statusCode.CLOSED;
+                break;
+        }
     }
 
     public String getPlantName() {
@@ -62,27 +75,5 @@ public class Swap {
         this.plantName = plantName;
     }
 
-    public List<Photo> getPlantPhotos() {
-        return plantPhotos;
-    }
 
-    public void setPlantPhotos(List<Photo> plantPhotos) {
-        this.plantPhotos = plantPhotos;
-    }
-
-    public List<Plant> getWishPlants() {
-        return ownerWishes;
-    }
-
-    public void setWishPlants(List<Plant> wishPlants) {
-        this.ownerWishes = wishPlants;
-    }
-
-    public List<Plant> getOwnerWishes() {
-        return ownerWishes;
-    }
-
-    public void setOwnerWishes(List<Plant> ownerWishes) {
-        this.ownerWishes = ownerWishes;
-    }
 }
