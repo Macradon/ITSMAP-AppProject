@@ -246,7 +246,8 @@ public class Repository {
                                  Log.d(TAG, "onComplete: Plant from Wish List: " + newWishPlant.getScientificName());
 
                                  //Make new wish with the plant object and document radius
-                                 Wish wishListWish = new Wish(newWishPlant,Integer.parseInt(docRef.get("radius").toString()));
+                                 Wish wishListWish = new Wish(newWishPlant,
+                                         new Double(docRef.get("radius").toString()));
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
