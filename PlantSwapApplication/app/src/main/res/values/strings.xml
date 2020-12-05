@@ -43,4 +43,8 @@
     <string name="register_phone">Phone</string>
     <string name="register_number">Number</string>
     <string name="register_confirmPassword">Confirm</string>
+    <string name="Delete">Delete</string>
+    <string name="Update_Profile_Header">Update Profile</string>
+    <string name="Update">Update</string>
+    <string name="Search">Search</string>
 </resources>

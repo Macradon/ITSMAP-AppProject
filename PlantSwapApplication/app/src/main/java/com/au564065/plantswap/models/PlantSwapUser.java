@@ -11,8 +11,6 @@ public class PlantSwapUser {
     private String city;
     private String email;
     private String phoneNumber;
-    private List<Swap> plantSwaps;
-    private List<Wish> plantWishes;
 
     //Constructor
     public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber) {
@@ -71,21 +69,5 @@ public class PlantSwapUser {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<Swap> getPlantSwaps() {
-        return plantSwaps;
-    }
-
-    public void setPlantSwaps(List<Swap> plantSwaps) {
-        this.plantSwaps = plantSwaps;
-    }
-
-    public List<Wish> getPlantWishes() {
-        return plantWishes;
-    }
-
-    public void setPlantWishes(List<Wish> plantWishes) {
-        this.plantWishes = plantWishes;
     }
 }

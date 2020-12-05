@@ -1,4 +1,4 @@
-package com.au564065.plantswap.models.gsonModels;
+package com.au564065.plantswap.models.gsonPlantModels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
