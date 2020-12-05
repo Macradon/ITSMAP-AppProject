@@ -45,4 +45,5 @@
     <string name="Update_Profile_Header">Update Profile</string>
     <string name="Update">Update</string>
     <string name="Search">Search</string>
+    <string name="btn_add_photo">Add photo</string>
 </resources>
