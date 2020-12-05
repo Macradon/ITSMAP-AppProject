@@ -83,6 +83,7 @@ public class Repository {
         return INSTANCE;
     }
 
+    //Methods to get the LiveData
     public LiveData<List<Wish>> getCurrentUserWishList() {
         return WishList;
     }
@@ -120,9 +121,11 @@ public class Repository {
     }
 
     /**
+     *
      * FIREBASE METHODS
      * THIS SECTION HANDLES THE DIFFERENT FIREBASE-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
+     *
      */
     /**
      *  User Methods
@@ -183,50 +186,6 @@ public class Repository {
         updateUser.put("phoneNumber", plantSwapUserObject.getPhoneNumber());
 
         executeUserVolleyQueue(plantSwapUserObject, updateUser, userID);
-    }
-
-    /**
-     *
-     * DELETE USER CHAIN
-     *
-     */
-    public void deleteUserInCloudDatabase(String userId) {
-        deleteAllConversationsWithUser(userId);
-    }
-
-    private void deleteAllConversationsWithUser(String userId) {
-        //TODO USE DELETE ALL CONVERSATIONS FROM USER WHEN IMPLEMENTED
-        deleteAllSwapOffersFromUser(userId);
-    }
-
-    private void deleteAllSwapOffersFromUser(String userId) {
-        deleteAllUserSwapOffers(userId);
-    }
-
-    private void deleteAllSwapsFromUser(String userId) {
-        deleteAllUserSwaps(userId);
-    }
-
-    private void deleteWishListFromUser(String userId) {
-        //TODO USE DELETE ALL WISH LIST ELEMENTS FROM USER WHEN IMPLEMENTED
-        deletePlantSwapUser(userId);
-    }
-
-    private void deletePlantSwapUser(String userId) {
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted.");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Error deleting document", e);
-                    }
-                });
     }
 
     //Helper method to execute volley user requests
@@ -293,7 +252,51 @@ public class Repository {
     }
 
     /**
-     *  Wish Methods
+     * DELETE USER CHAIN
+     */
+    public void deleteUserInCloudDatabase(String userId) {
+        deleteAllConversationsWithUser(userId);
+    }
+
+    private void deleteAllConversationsWithUser(String userId) {
+        //TODO USE DELETE ALL CONVERSATIONS FROM USER WHEN IMPLEMENTED
+        deleteAllSwapOffersFromUser(userId);
+    }
+
+    private void deleteAllSwapOffersFromUser(String userId) {
+        deleteAllUserSwapOffers(userId);
+    }
+
+    private void deleteAllSwapsFromUser(String userId) {
+        deleteAllUserSwaps(userId);
+    }
+
+    private void deleteWishListFromUser(String userId) {
+        //TODO USE DELETE ALL WISH LIST ELEMENTS FROM USER WHEN IMPLEMENTED
+        deletePlantSwapUser(userId);
+    }
+
+    private void deletePlantSwapUser(String userId) {
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error deleting document", e);
+                    }
+                });
+    }
+
+    /**
+     *
+     *  WISH METHODS
+     *
      */
     //Method to create wish in a user's wish list
     public void addWishToUserWishList(Wish newWish) {
@@ -382,7 +385,9 @@ public class Repository {
     //TODO IMPLEMENT THIS
 
     /**
-     *  Swap Methods
+     *
+     *  SWAP METHODS
+     *
      */
     //Method to create a swap in the database
     public void createNewSwap(Swap newSwap) {
@@ -529,6 +534,11 @@ public class Repository {
         return getSwap;
     }
 
+    /**
+     *
+     * SWAP OFFER METHODS
+     *
+     */
     //Method to create an offer to a swap
     public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId) {
         Map<String, Object> newOffer = new HashMap<>();
@@ -637,7 +647,9 @@ public class Repository {
     }
 
     /**
-     *  Message Methods
+     *
+     *  MESSAGE METHODS
+     *
      */
     //TODO Implement this
     //TODO Implement this
@@ -645,9 +657,19 @@ public class Repository {
     //TODO Implement this
 
     /**
-     * TEIFLE API METHODS
+     *
+     * FIREBASE STORAGE METHODS
+     *
+     */
+    //TODO UPLOAD IMAGE TO STORAGE
+    //TODO FETCH IMAGE FROM STORAGE
+
+    /**
+     *
+     * TREFLE API METHODS
      * THIS SECTION HANDLES THE DIFFERENT API-RELATED
      * CALLS THAT IS NEEDED BY THE APPLICATION
+     *
      */
     //Method to fetch all plants that associate with tree name.
     //Tree name can be of common name, scientific name, and for specific plants use slug.
