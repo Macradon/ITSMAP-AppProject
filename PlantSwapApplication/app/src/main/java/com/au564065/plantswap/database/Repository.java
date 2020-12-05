@@ -1,7 +1,9 @@
 package com.au564065.plantswap.database;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -30,9 +32,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +73,7 @@ public class Repository {
     private final String googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=";
     private final FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private final StorageReference photoStorageReference = FirebaseStorage.getInstance().getReference();
     private static Repository INSTANCE = null;
 
     //Repository constructor that will only get called once
@@ -83,7 +90,7 @@ public class Repository {
         return INSTANCE;
     }
 
-    //Methods to get the LiveData
+    //region Methods to get the LiveData
     public LiveData<List<Wish>> getCurrentUserWishList() {
         return WishList;
     }
@@ -119,6 +126,7 @@ public class Repository {
     public LiveData<PlantSwapUser> getCurrentUser() {
         return currentUser;
     }
+    //endregion
 
     /**
      *
@@ -130,6 +138,7 @@ public class Repository {
     /**
      *  User Methods
      */
+    //region User Methods
     //Method to create a new user to the database
     public void addNewUserToCloudDatabase(PlantSwapUser plantSwapUserObject, String userID) {
         Log.d(TAG, "addNewUserToCloudDatabase: Adding new user to the database");
@@ -254,6 +263,7 @@ public class Repository {
     /**
      * DELETE USER CHAIN
      */
+    //region Delete-User Chain
     public void deleteUserInCloudDatabase(String userId) {
         deleteAllConversationsWithUser(userId);
     }
@@ -292,12 +302,15 @@ public class Repository {
                     }
                 });
     }
+    //endregion
+    //endregion
 
     /**
      *
      *  WISH METHODS
      *
      */
+    //region Wish Methods
     //Method to create wish in a user's wish list
     public void addWishToUserWishList(Wish newWish) {
         Log.d(TAG, "addWishToUserWishList: Adding new wish to user's wish list");
@@ -384,13 +397,16 @@ public class Repository {
     //Method to delete all wishes from a user's wish list
     //TODO IMPLEMENT THIS
 
+    //endregion
+
     /**
      *
      *  SWAP METHODS
      *
      */
+    //region Swap Methods
     //Method to create a swap in the database
-    public void createNewSwap(Swap newSwap) {
+    public void createNewSwap(Swap newSwap, Uri uri) {
         Map<String, Object> swapData = new HashMap<>();
         swapData.put("ownerID", currentUser.getValue().getUserId());
         swapData.put("ownerAddressGpsCoordinates", currentUser.getValue().getAddressCoordinates());
@@ -398,20 +414,38 @@ public class Repository {
         swapData.put("plantName", newSwap.getPlantName());
         swapData.put("swapWishes", newSwap.getSwapWishes());
 
-        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
-                .set(swapData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        Log.d(TAG, "onSuccess: Uploading images to Storage");
+        StorageReference photoRef = photoStorageReference.child("photos/" + uri.getLastPathSegment());
+        photoRef.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: Swap added");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Error writing document", e);
+                    public void onSuccess(Uri uri) {
+                        swapData.put("photo", uri);
+                        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
+                                .set(swapData)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "onSuccess: Swap added");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "onFailure: Error writing document", e);
+                                    }
+                                });
                     }
                 });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(applicationContext, "Image upload failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //Method to read all swaps
@@ -533,12 +567,14 @@ public class Repository {
 
         return getSwap;
     }
+    //endregion
 
     /**
      *
      * SWAP OFFER METHODS
      *
      */
+    //region Swap Offer Methods
     //Method to create an offer to a swap
     public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId) {
         Map<String, Object> newOffer = new HashMap<>();
@@ -645,24 +681,19 @@ public class Repository {
                     }
                 });
     }
+    //endregion
 
     /**
      *
      *  MESSAGE METHODS
      *
      */
+    //region Message Methods
     //TODO Implement this
     //TODO Implement this
     //TODO Implement this
     //TODO Implement this
-
-    /**
-     *
-     * FIREBASE STORAGE METHODS
-     *
-     */
-    //TODO UPLOAD IMAGE TO STORAGE
-    //TODO FETCH IMAGE FROM STORAGE
+    //endregion
 
     /**
      *
@@ -671,6 +702,7 @@ public class Repository {
      * CALLS THAT IS NEEDED BY THE APPLICATION
      *
      */
+    //region Trefle API Methods
     //Method to fetch all plants that associate with tree name.
     //Tree name can be of common name, scientific name, and for specific plants use slug.
     public void fetchPlantFromAPI(String treeName) {
@@ -719,4 +751,5 @@ public class Repository {
     public String convertScientificNameToSlug(String scientificName) {
         return scientificName.toLowerCase().replaceAll(" ", "-");
     }
+    //endregion
 }
