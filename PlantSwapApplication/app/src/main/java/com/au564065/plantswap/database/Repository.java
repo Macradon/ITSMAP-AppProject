@@ -44,7 +44,7 @@ public class Repository {
     private static final String TAG = "Repository";
 
     //List of plants in WishList
-    private LiveData<List<Plant>> WishList;
+    private LiveData<List<Wish>> WishList;
     //List of plants for swap
     private LiveData<List<Swap>> SwapList;
     //Search History
@@ -79,7 +79,8 @@ public class Repository {
         return INSTANCE;
     }
 
-    public LiveData<List<Plant>> getWishList() {
+    //get all wishes
+    public LiveData<List<Wish>> getWishList() {
         return WishList;
     }
 

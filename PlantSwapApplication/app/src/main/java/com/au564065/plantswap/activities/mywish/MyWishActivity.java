@@ -2,6 +2,7 @@ package com.au564065.plantswap.activities.mywish;
 
 import android.os.Bundle;
 
+import com.au564065.plantswap.activities.browseplant.BrowsePlant_List_fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -23,13 +24,15 @@ public class MyWishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wish);
 
-        setupUI();
-    }
-
-    private void setupUI(){
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.title_activity_my_wish);
+
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.wishList, new MyWishList())
+                    .commitNow();
+        }
 
     }
 }

@@ -11,21 +11,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.au564065.plantswap.database.Repository;
+import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Wish;
 import com.au564065.plantswap.R;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 public class MyWishAdapter extends RecyclerView.Adapter<MyWishAdapter.ViewHolder> {
-    private Repository repos;
     private List<Wish> wishList;
-    private Context context;
 
     public interface ItemClickedListener{
         void onWishClicked(int index);
     }
-
     private ItemClickedListener listener;
+
+    public void updateList(List<Wish> wishes){
+        this.wishList = wishes;
+        notifyDataSetChanged();
+    }
 
     public MyWishAdapter(ItemClickedListener listener) {
         this.listener = listener;
@@ -56,7 +60,7 @@ public class MyWishAdapter extends RecyclerView.Adapter<MyWishAdapter.ViewHolder
     @Override
     public MyWishAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = (View) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_my_wish, parent, false);
+                .inflate(R.layout.content_wishlist, parent, false);
         ViewHolder vh = new ViewHolder(v, listener);
         return vh;
     }
@@ -72,7 +76,9 @@ public class MyWishAdapter extends RecyclerView.Adapter<MyWishAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return wishList.size();
+        if(wishList == null) return 0;
+        else return wishList.size();
     }
 
 }
+

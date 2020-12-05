@@ -20,16 +20,5 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_my_wish" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wishList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        android:layout_marginBottom="120dp"
-        android:layout_marginTop="58dp"
-        android:paddingBottom="4dp"
-        tools:listitem="@layout/content_my_wish"
-        tools:ignore="MissingConstraints"/>
+    <include layout="@layout/content_wishlist" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

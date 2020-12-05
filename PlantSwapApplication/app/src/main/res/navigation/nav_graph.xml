@@ -29,7 +29,7 @@
         android:id="@+id/FirstFragment"
         android:name="com.au564065.plantswap.activities.mywish.MyWishList"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_mywish_first">
+        tools:layout="@layout/fragment_mywish_add">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -37,9 +37,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.au564065.plantswap.activities.mywish.AddEditWish"
+        android:name="com.au564065.plantswap.activities.mywish.AddWish"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_mywish_second">
+        tools:layout="@layout/fragment_mywish_edit">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
