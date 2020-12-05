@@ -3,12 +3,21 @@ package com.au564065.plantswap.models;
 import java.util.List;
 
 public class SwapOffer {
+    private String swapID;
     private String swapOfferUserID;
-    private List<Plant> plantsOffered;
+    private String plantsOffered;
 
-    public SwapOffer(String swapOfferUserID, List<Plant> plantsOffered) {
-        this.swapOfferUserID = swapOfferUserID;
+    public SwapOffer(String swapID, String plantsOffered) {
+        this.swapID = swapID;
         this.plantsOffered = plantsOffered;
+    }
+
+    public String getSwapID() {
+        return swapID;
+    }
+
+    public void setSwapID(String swapID) {
+        this.swapID = swapID;
     }
 
     public String getSwapOfferUserID() {
@@ -19,11 +28,11 @@ public class SwapOffer {
         this.swapOfferUserID = swapOfferUserID;
     }
 
-    public List<Plant> getPlantsOffered() {
+    public String getPlantsOffered() {
         return plantsOffered;
     }
 
-    public void setPlantsOffered(List<Plant> plantsOffered) {
+    public void setPlantsOffered(String plantsOffered) {
         this.plantsOffered = plantsOffered;
     }
 }

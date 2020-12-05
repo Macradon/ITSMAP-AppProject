@@ -51,8 +51,6 @@ public class Repository {
     //Swaps
     private MutableLiveData<List<Swap>> SwapList = new MutableLiveData<>();
     private MutableLiveData<Swap> SpecificSwap = new MutableLiveData<>();
-    //Search History
-    //private MutableLiveData<List<Plant>> SearchHistory = new MutableLiveData<>();
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     private MutableLiveData<Plant> SpecificPlant = new MutableLiveData<>();
@@ -60,14 +58,13 @@ public class Repository {
     private MutableLiveData<PlantSwapUser> currentUser = new MutableLiveData<>();
 
     //Auxiliary
-    private PlantDatabase db;
-    private ExecutorService executor;
+    private final ExecutorService executor;
     private RequestQueue queue;
-    private Context applicationContext;
-    private String trefleURL = "https://trefle.io/api/v1/plants";
-    private String googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=";
-    private FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private final Context applicationContext;
+    private final String trefleURL = "https://trefle.io/api/v1/plants";
+    private final String googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=";
+    private final FirebaseFirestore firebaseDatabase = FirebaseFirestore.getInstance();
+    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static Repository INSTANCE = null;
 
     //Repository constructor that will only get called once
@@ -163,6 +160,8 @@ public class Repository {
                                         document.get("city").toString(),
                                         document.get("email").toString(),
                                         document.get("phoneNumber").toString());
+                                newCurrentUser.setUserID(userID);
+                                newCurrentUser.setAddressCoordinates(document.get("addressGpsCoordinates").toString());
                                 currentUser.postValue(newCurrentUser);
                             } else {
                                 Log.d(TAG, "onComplete: No document found");
@@ -190,6 +189,44 @@ public class Repository {
     //Method to delete user from the database
     public void deleteUserInCloudDatabase(String userId) {
         //TODO Implement this
+        deleteAllConversationsWithUser(userId);
+    }
+
+    private void deleteAllConversationsWithUser(String userId) {
+        //TODO USE DELETE ALL CONVERSATIONS FROM USER WHEN IMPLEMENTED
+        deleteAllSwapOffersFromUser(userId);
+    }
+
+    private void deleteAllSwapOffersFromUser(String userId) {
+        //TODO USE DELETE ALL SWAP OFFER ELEMENTS FROM USER WHEN IMPLEMENTED
+        deleteAllSwapsFromUser(userId);
+    }
+
+    private void deleteAllSwapsFromUser(String userId) {
+        //TODO USE DELETE ALL SWAP ELEMENTS FROM USER WHEN IMPLEMENTED
+        deleteUserWishlist(userId);
+    }
+
+    private void deleteUserWishlist(String userId) {
+        //TODO USE DELETE ALL WISH LIST ELEMENTS FROM USER WHEN IMPLEMENTED
+        deletePlantSwapUser(userId);
+    }
+
+    private void deletePlantSwapUser(String userId) {
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error deleting document", e);
+                    }
+                });
     }
 
     //Helper method to execute volley user requests
@@ -198,9 +235,9 @@ public class Repository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "updateUserInCloudDatabase run: Sending GET request");
+                Log.d(TAG, "executeUserVolleyQueue run: Sending GET request");
                 if (queue == null) {
-                    Log.d(TAG, "updateUserInCloudDatabase: Instantiate new Volley Request Queue");
+                    Log.d(TAG, "executeUserVolleyQueue: Instantiate new Volley Request Queue");
                     queue = Volley.newRequestQueue(applicationContext);
                 }
 
@@ -265,7 +302,8 @@ public class Repository {
         wishData.put("wishPlant",  newWish.getWishPlant());
         wishData.put("radius", newWish.getRadius());
 
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(firebaseAuth.getUid())
+        Log.d(TAG, "addWishToUserWishList: Adding with");
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserID())
                 .collection(DatabaseConstants.WishCollection).document()
                 .set(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -349,12 +387,11 @@ public class Repository {
     //Method to create a swap in the database
     public void createNewSwap(Swap newSwap) {
         Map<String, Object> swapData = new HashMap<>();
-        swapData.put("ownerID", firebaseAuth.getUid());
-        swapData.put("ownerAddressGpsCoordinates", newSwap.getOwnerAddressGpsCoordinates());
+        swapData.put("ownerID", currentUser.getValue().getUserID());
+        swapData.put("ownerAddressGpsCoordinates", currentUser.getValue().getAddressCoordinates());
         swapData.put("status", newSwap.getStatus());
         swapData.put("plantName", newSwap.getPlantName());
-
-        getSwapCoordinates(swapData)
+        swapData.put("swapWishes", newSwap.getSwapWishes());
 
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
                 .set(swapData)
@@ -371,9 +408,6 @@ public class Repository {
                     }
                 });
     }
-
-    //Helper method to get location coordinates form address
-    private void
 
     //Method to read all swaps
     public void readAllSwaps() {
@@ -435,17 +469,60 @@ public class Repository {
     }
 
     //Method to delete swap from the database
-    //TODO Implement this
+    public void deleteSwap(String swapId) {
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Errore deleting document", e);
+                    }
+                });
+    }
+
+    //Method to delete all swaps assocciated with a user
+    public void deleteAllUserSwaps() {
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection)
+                .whereEqualTo("ownerID", currentUser.getValue().getUserID())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Swap> swapHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapHolder.add(parseSwapDocument(document));
+                            }
+                            deleteListOfSwaps(swapHolder);
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //Helper method to delete a list of swaps
+    private void deleteListOfSwaps(List<Swap> swapHolder) {
+        for (int i=0; i<swapHolder.size(); i++) {
+            deleteSwap(swapHolder.get(i).getSwapID());
+        }
+    }
 
     //Helper method to parse swap document
     private Swap parseSwapDocument(DocumentSnapshot document) {
         Swap getSwap = new Swap(
-                document.get("ownerID").toString(),
-                document.get("ownerAddressGpsCoordinates").toString(),
-                document.get("plantName").toString()
+                document.get("plantName").toString(),
+                document.get("swapWishes").toString()
         );
         getSwap.setStatus(document.get("status").toString());
         getSwap.setSwapID(document.getId());
+        getSwap.setOwnerAddressGpsCoordinates(document.get("ownerAddressGpsCoordinates").toString());
 
         return getSwap;
     }

@@ -17,11 +17,13 @@ public class Swap {
     private String ownerAddressGpsCoordinates;
     private statusCode status;
     private String plantName;
+    private String swapWishes;
 
     //Constructor
-    public Swap(String userID, String ownerCoordinates, String plantName) {
+    public Swap(String plantName, String swapWishes) {
         this.status = statusCode.OPEN;
         this.plantName = plantName;
+        this.swapWishes = swapWishes;
     }
 
     //Getters and setters
@@ -75,5 +77,11 @@ public class Swap {
         this.plantName = plantName;
     }
 
+    public String getSwapWishes() {
+        return swapWishes;
+    }
 
+    public void setSwapWishes(String swapWishes) {
+        this.swapWishes = swapWishes;
+    }
 }
