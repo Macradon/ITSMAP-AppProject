@@ -1,7 +1,5 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class Swap {
 
     //Status codes
@@ -12,8 +10,8 @@ public class Swap {
     }
 
     //Attributes
-    private String swapID;
-    private String ownerID;
+    private String swapId;
+    private String ownerId;
     private String ownerAddressGpsCoordinates;
     private statusCode status;
     private String plantName;
@@ -27,20 +25,20 @@ public class Swap {
     }
 
     //Getters and setters
-    public String getSwapID() {
-        return swapID;
+    public String getSwapId() {
+        return swapId;
     }
 
-    public void setSwapID(String swapID) {
-        this.swapID = swapID;
+    public void setSwapId(String swapId) {
+        this.swapId = swapId;
     }
 
-    public String getOwnerID() {
-        return ownerID;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getOwnerAddressGpsCoordinates() {

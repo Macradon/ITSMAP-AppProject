@@ -1,31 +1,29 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class SwapOffer {
-    private String swapID;
-    private String swapOfferUserID;
+    private String swapId;
+    private String swapOfferUserId;
     private String plantsOffered;
 
-    public SwapOffer(String swapID, String plantsOffered) {
-        this.swapID = swapID;
+    public SwapOffer(String swapId, String plantsOffered) {
+        this.swapId = swapId;
         this.plantsOffered = plantsOffered;
     }
 
-    public String getSwapID() {
-        return swapID;
+    public String getSwapId() {
+        return swapId;
     }
 
-    public void setSwapID(String swapID) {
-        this.swapID = swapID;
+    public void setSwapId(String swapId) {
+        this.swapId = swapId;
     }
 
-    public String getSwapOfferUserID() {
-        return swapOfferUserID;
+    public String getSwapOfferUserId() {
+        return swapOfferUserId;
     }
 
-    public void setSwapOfferUserID(String swapOfferUserID) {
-        this.swapOfferUserID = swapOfferUserID;
+    public void setSwapOfferUserId(String swapOfferUserId) {
+        this.swapOfferUserId = swapOfferUserId;
     }
 
     public String getPlantsOffered() {

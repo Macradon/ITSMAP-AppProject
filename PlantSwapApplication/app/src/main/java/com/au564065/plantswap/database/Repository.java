@@ -51,6 +51,8 @@ public class Repository {
     //Swaps
     private MutableLiveData<List<Swap>> SwapList = new MutableLiveData<>();
     private MutableLiveData<Swap> SpecificSwap = new MutableLiveData<>();
+    private MutableLiveData<List<SwapOffer>> SwapOfferList = new MutableLiveData<>();
+    private MutableLiveData<SwapOffer> SpecificSwapOffer = new MutableLiveData<>();
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     private MutableLiveData<Plant> SpecificPlant = new MutableLiveData<>();
@@ -97,9 +99,13 @@ public class Repository {
         return SpecificSwap;
     }
 
-    /**public LiveData<List<Plant>> getSearchHistory() {
-        return SearchHistory;
-    }**/
+    public LiveData<List<SwapOffer>> getSwapOfferList() {
+        return SwapOfferList;
+    }
+
+    public LiveData<SwapOffer> getSpecificSwapOffer() {
+        return SpecificSwapOffer;
+    }
 
     public LiveData<List<Plant>> getSearchResult() {
         return SearchResults;
@@ -112,13 +118,6 @@ public class Repository {
     public LiveData<PlantSwapUser> getCurrentUser() {
         return currentUser;
     }
-
-    /**
-     * DATABASE METHODS
-     * THIS SECTION HANDLES THE DIFFERENT DATABASE-RELATED
-     * CALLS THAT IS NEEDED BY THE APPLICATION
-     */
-
 
     /**
      * FIREBASE METHODS
@@ -160,7 +159,7 @@ public class Repository {
                                         document.get("city").toString(),
                                         document.get("email").toString(),
                                         document.get("phoneNumber").toString());
-                                newCurrentUser.setUserID(userID);
+                                newCurrentUser.setUserId(userID);
                                 newCurrentUser.setAddressCoordinates(document.get("addressGpsCoordinates").toString());
                                 currentUser.postValue(newCurrentUser);
                             } else {
@@ -186,9 +185,12 @@ public class Repository {
         executeUserVolleyQueue(plantSwapUserObject, updateUser, userID);
     }
 
-    //Method to delete user from the database
+    /**
+     *
+     * DELETE USER CHAIN
+     *
+     */
     public void deleteUserInCloudDatabase(String userId) {
-        //TODO Implement this
         deleteAllConversationsWithUser(userId);
     }
 
@@ -198,16 +200,14 @@ public class Repository {
     }
 
     private void deleteAllSwapOffersFromUser(String userId) {
-        //TODO USE DELETE ALL SWAP OFFER ELEMENTS FROM USER WHEN IMPLEMENTED
-        deleteAllSwapsFromUser(userId);
+        deleteAllUserSwapOffers(userId);
     }
 
     private void deleteAllSwapsFromUser(String userId) {
-        //TODO USE DELETE ALL SWAP ELEMENTS FROM USER WHEN IMPLEMENTED
-        deleteUserWishlist(userId);
+        deleteAllUserSwaps(userId);
     }
 
-    private void deleteUserWishlist(String userId) {
+    private void deleteWishListFromUser(String userId) {
         //TODO USE DELETE ALL WISH LIST ELEMENTS FROM USER WHEN IMPLEMENTED
         deletePlantSwapUser(userId);
     }
@@ -303,7 +303,7 @@ public class Repository {
         wishData.put("radius", newWish.getRadius());
 
         Log.d(TAG, "addWishToUserWishList: Adding with");
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserID())
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
                 .collection(DatabaseConstants.WishCollection).document()
                 .set(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -387,7 +387,7 @@ public class Repository {
     //Method to create a swap in the database
     public void createNewSwap(Swap newSwap) {
         Map<String, Object> swapData = new HashMap<>();
-        swapData.put("ownerID", currentUser.getValue().getUserID());
+        swapData.put("ownerID", currentUser.getValue().getUserId());
         swapData.put("ownerAddressGpsCoordinates", currentUser.getValue().getAddressCoordinates());
         swapData.put("status", newSwap.getStatus());
         swapData.put("plantName", newSwap.getPlantName());
@@ -486,10 +486,10 @@ public class Repository {
                 });
     }
 
-    //Method to delete all swaps assocciated with a user
-    public void deleteAllUserSwaps() {
+    //Method to delete all swaps associated with a user
+    public void deleteAllUserSwaps(String userId) {
         firebaseDatabase.collection(DatabaseConstants.SwapCollection)
-                .whereEqualTo("ownerID", currentUser.getValue().getUserID())
+                .whereEqualTo("ownerID", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -500,6 +500,7 @@ public class Repository {
                                 swapHolder.add(parseSwapDocument(document));
                             }
                             deleteListOfSwaps(swapHolder);
+                            deleteWishListFromUser(userId);
                         } else {
                             Log.d(TAG, "onComplete: Error getting documents", task.getException());
                         }
@@ -509,8 +510,9 @@ public class Repository {
 
     //Helper method to delete a list of swaps
     private void deleteListOfSwaps(List<Swap> swapHolder) {
+        Log.d(TAG, "deleteListOfSwaps: Swaps to be deleted: " + swapHolder.size());
         for (int i=0; i<swapHolder.size(); i++) {
-            deleteSwap(swapHolder.get(i).getSwapID());
+            deleteSwap(swapHolder.get(i).getSwapId());
         }
     }
 
@@ -521,17 +523,17 @@ public class Repository {
                 document.get("swapWishes").toString()
         );
         getSwap.setStatus(document.get("status").toString());
-        getSwap.setSwapID(document.getId());
+        getSwap.setSwapId(document.getId());
         getSwap.setOwnerAddressGpsCoordinates(document.get("ownerAddressGpsCoordinates").toString());
 
         return getSwap;
     }
 
     //Method to create an offer to a swap
-    public void addOfferToSwap(SwapOffer newSwapOfferObject, String swapID) {
+    public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId) {
         Map<String, Object> newOffer = new HashMap<>();
-        newOffer.put("swapID", swapID);
-        newOffer.put("swapOfferUserID", newSwapOfferObject.getSwapOfferUserID());
+        newOffer.put("swapId", swapId);
+        newOffer.put("swapOfferUserId", newSwapOfferObject.getSwapOfferUserId());
         newOffer.put("plantsOffered", newSwapOfferObject.getPlantsOffered());
 
         firebaseDatabase.collection(DatabaseConstants.OfferCollection).document()
@@ -551,10 +553,88 @@ public class Repository {
     }
 
     //Method to read offers to a swap
-    //TODO IMPLEMENT THIS
+    public void readSpecificSwapOffer(String offerIi) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document(offerIi)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            SwapOffer getOffer = new SwapOffer(document.get("swapID").toString(),
+                                    document.get("plantsOffered").toString());
+                            getOffer.setSwapOfferUserId(document.get("swapOfferUserID").toString());
+                            SpecificSwapOffer.postValue(getOffer);
+                        }
+                    }
+                });
+    }
 
     //Method to delete swap offer from a swap
-    //TODO Implement this
+    public void deleteSwapOffer(String offerId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document(offerId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Errore deleting document", e);
+                    }
+                });
+    }
+
+    //Method to delete all swap offers associated to a swap
+    private void deleteAllSwapSwapOffers(String swapId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
+                .whereEqualTo("swapId", swapId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> swapOfferIdHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapOfferIdHolder.add(document.getId());
+                            }
+                            deleteListOfSwapOffers(swapOfferIdHolder);
+                        }
+                    }
+                });
+    }
+
+    private void deleteListOfSwapOffers(List<String> swapOfferIdHolder) {
+        Log.d(TAG, "deleteListOfSwapOffers: Swap Offers to be deleted: " + swapOfferIdHolder.size());
+        for (int i=0; i<swapOfferIdHolder.size(); i++) {
+            deleteSwapOffer(swapOfferIdHolder.get(i));
+        }
+    }
+
+    //Method to delete all swap offers associated with a user
+    private void deleteAllUserSwapOffers(String userId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
+                .whereEqualTo("swapOfferUserId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> swapOfferIdHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapOfferIdHolder.add(document.getId());
+                            }
+                            deleteListOfSwapOffers(swapOfferIdHolder);
+                            deleteAllSwapsFromUser(userId);
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
 
     /**
      *  Message Methods

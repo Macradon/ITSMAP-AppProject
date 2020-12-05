@@ -1,11 +1,9 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class PlantSwapUser {
 
     //Attributes
-    private String userID;
+    private String userId;
     private String name;
     private String address;
     private String zipCode;
@@ -25,12 +23,12 @@ public class PlantSwapUser {
     }
 
     //Getters and setters
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {

@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import com.au564065.plantswap.database.Repository;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.PlantSwapUser;
+import com.au564065.plantswap.models.Swap;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -48,8 +49,6 @@ public class BackgroundPlantSwapService extends LifecycleService {
         super.onStartCommand(intent, flags, startId);
         Log.d(TAG, "onStartCommand: Starting Background Service");
 
-        //repo.readUserWishList("s2AA3JjujIgupcsRB5bMGUBLLnq2");
-
         recursiveUpdate();
 
         return START_STICKY;
@@ -65,8 +64,6 @@ public class BackgroundPlantSwapService extends LifecycleService {
             @Override
             public void run() {
                 Log.d(TAG, "run: Updating");
-
-                //repo.fetchPlantFromAPI("christmastree");
 
                 try {
                     Thread.sleep(sleepTime);
