@@ -28,7 +28,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         initializeButtons();
-        //startBackgroundActivity();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             navigateToLogin();
