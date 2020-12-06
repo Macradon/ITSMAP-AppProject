@@ -20,8 +20,7 @@ public class BrowseSwapViewModel extends AndroidViewModel {
     private List<Swap> currentSwapList;
     private LiveData<List<Swap>> allSwaps;
     private MutableLiveData<Integer> count;
-    private String commaSep;
-    private List<String> wishes;
+
 
     public BrowseSwapViewModel(@NonNull Application application) {
         super(application);
@@ -44,8 +43,6 @@ public class BrowseSwapViewModel extends AndroidViewModel {
 
     public Swap getOnClickedSwap(int index) {
         onClickedSwap = currentSwapList.get(index);
-        getWishes();
-        getCommaSep();
         return onClickedSwap;
     }
 
@@ -85,7 +82,6 @@ public class BrowseSwapViewModel extends AndroidViewModel {
     public List<String> Wishes(){
         return wishes;
     }
-
     public void addMoreSpinners(){
         count.setValue(count.getValue()+1);
     }

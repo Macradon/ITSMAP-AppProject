@@ -90,7 +90,7 @@ public class BrowseSwaps_Details_fragment extends Fragment {
     }
 
     private void updateUI(){
-        wishes.setText(SwapVM.comma());
+        wishes.setText(SwapVM.getSwap().getSwapWishes());
         name.setText(SwapVM.getSwap().getPlantName());
 
         Glide.with(img).load(SwapVM.getSwap().getImageURL()).into(img);
