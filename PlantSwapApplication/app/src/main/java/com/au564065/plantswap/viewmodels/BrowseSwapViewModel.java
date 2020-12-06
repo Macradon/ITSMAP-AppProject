@@ -23,7 +23,7 @@ public class BrowseSwapViewModel extends AndroidViewModel {
     public BrowseSwapViewModel(@NonNull Application application) {
         super(application);
         repo = Repository.getInstance(application.getApplicationContext());
-        allSwaps = repo.getSwapList();
+        allSwaps = repo.getAllSwaps();
     }
 
     public Swap getSwap(){
