@@ -23,6 +23,7 @@ public class Swap {
         this.status = statusCode.OPEN;
         this.plantName = plantName;
         this.swapWishes = swapWishes;
+        imageURL = "";
     }
 
     //Getters and setters

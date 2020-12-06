@@ -44,16 +44,9 @@ public class SwapListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ViewModelProvider viewModelProvider= new ViewModelProvider(getViewModelStore(), ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()));
+        ViewModelProvider viewModelProvider= new ViewModelProvider(getActivity());
         viewModel = viewModelProvider.get(MySwapViewModel.class);
-        adapter = new MySwapAdapter(getContext(), viewModel.swapList.getValue());
-
-          viewModel.swapList.observe(this, new Observer<List<Swap>>() {
-           @Override
-           public void onChanged(List<Swap> swaps) {
-                adapter.setSwapList(swaps);
-           }
-        });
+        adapter = new MySwapAdapter(getContext(), viewModel.swapList);
     }
 
     @Override

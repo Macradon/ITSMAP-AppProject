@@ -2,6 +2,7 @@ package com.au564065.plantswap.activities.myswap;
 
 import android.os.Bundle;
 
+import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.viewmodels.MySwapViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,14 +32,12 @@ public class MySwapActivity extends AppCompatActivity {
         ViewModelProvider viewModelProvider= new ViewModelProvider(getViewModelStore(), ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
         viewModel =  viewModelProvider.get(MySwapViewModel.class);
 
-        FragmentManager m = getSupportFragmentManager();
-        m.beginTransaction()
-                .add(R.id.mySwap_fragmentContainer, new SwapListFragment())
-                .commit();
-
-    }
-
-    public MySwapViewModel getViewModel(){
-        return viewModel;
+        viewModel.getSwaps().observe(this, swaps -> {
+            viewModel.swapList = swaps;
+            FragmentManager m = getSupportFragmentManager();
+            m.beginTransaction()
+                    .replace(R.id.mySwap_fragmentContainer, new SwapListFragment())
+                    .commit();
+        });
     }
 }

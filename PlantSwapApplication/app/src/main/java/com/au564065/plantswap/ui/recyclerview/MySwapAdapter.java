@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.au564065.plantswap.R;
 import com.au564065.plantswap.activities.myswap.SwapEditActivity;
 import com.au564065.plantswap.models.Swap;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -45,9 +46,8 @@ public class MySwapAdapter extends RecyclerView.Adapter<MySwapAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Swap swap = swapList.get(position);
         holder.plantName.setText(swap.getPlantName());
-
-        //needs updated db
-     //   holder.swapId = swap.getId();
+        Glide.with(holder.photo.getContext()).load(swap.getImageURL()).into(holder.photo);
+        holder.swapId = swap.getSwapId();
     }
 
     @Override

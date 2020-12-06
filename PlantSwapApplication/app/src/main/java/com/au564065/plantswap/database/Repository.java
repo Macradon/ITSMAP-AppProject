@@ -573,7 +573,7 @@ public class Repository {
         swapData.put("swapWishes", swapObject.getSwapWishes());
 
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapObject.getSwapId())
-                .set(swapData)
+                .update(swapData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

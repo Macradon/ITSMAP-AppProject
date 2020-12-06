@@ -130,7 +130,7 @@ public class SwapEditActivity extends AppCompatActivity {
 
         Button btnSave = findViewById(R.id.swap_edit_btn_save);
         btnSave.setOnClickListener(view -> {
-            if(viewModel.isNew && viewModel.photoURI != null) {
+            if(!viewModel.swap.getImageURL().isEmpty() || (viewModel.isNew && viewModel.photoURI != null)) {
                 viewModel.swap.setPlantName(plantName.getText().toString());
                 String wishString = String.format("%s,%s,%s,%s",
                         wish1.getSelectedItem(),
@@ -139,8 +139,7 @@ public class SwapEditActivity extends AppCompatActivity {
                         wish4.getSelectedItem());
                 viewModel.swap.setSwapWishes(wishString);
                 viewModel.saveSwap();
-                Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
-                startActivity(intent);
+                finish();
             } else {
                 View rootView = findViewById(android.R.id.content);
                 Snackbar.make(rootView, "Must add a photo", Snackbar.LENGTH_LONG)
@@ -156,7 +155,7 @@ public class SwapEditActivity extends AppCompatActivity {
 
     private void updateViews(Swap swap){
         plantName.setText(swap.getPlantName());
-     //   Glide.with(plantPhoto.getContext()).load(swap.get()).into(plantPhoto);
+        Glide.with(plantPhoto.getContext()).load(swap.getImageURL()).into(plantPhoto);
     }
 
     private void initializeSpinners(List<String> list) {

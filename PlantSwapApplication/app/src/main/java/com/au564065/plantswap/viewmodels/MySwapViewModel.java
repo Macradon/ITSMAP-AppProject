@@ -17,14 +17,19 @@ import java.util.List;
 public class MySwapViewModel extends AndroidViewModel {
     private Repository repo;
 
-    public LiveData<List<Swap>> swapList;
+    public List<Swap> swapList;
 
 
     public MySwapViewModel(@NonNull Application application) {
         super(application);
         repo = Repository.getInstance(application);
-        repo.readAllSwapsFromUser();
-        swapList = repo.getAllSwaps();
+
     }
+
+    public LiveData<List<Swap>> getSwaps(){
+        repo.readAllSwapsFromUser();
+        return repo.getAllSwaps();
+    }
+
 }
 
