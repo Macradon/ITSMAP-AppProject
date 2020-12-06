@@ -41,7 +41,7 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+       this.setHasOptionsMenu(true);
 
     }
 
@@ -53,6 +53,17 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
 
         swapCycler = v.findViewById(R.id.Browse_Swap_Cycler);
         backBtn = v.findViewById(R.id.Browse_Swaps_BackButton);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+
+
+        adapter = new BrowseSwapAdapter(this);
+        layoutMan = new LinearLayoutManager(getContext());
+
 
 
         return v;
@@ -61,11 +72,8 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         swapCycler.setAdapter(adapter);
         swapCycler.setLayoutManager(layoutMan);
-        adapter = new BrowseSwapAdapter(this);
-        layoutMan = new LinearLayoutManager(getContext());
 
         swapVM = new ViewModelProvider(getActivity()).get(BrowseSwapViewModel.class);
         swapVM.getSwapList().observe(getViewLifecycleOwner(), new Observer<List<Swap>>() {
@@ -92,7 +100,7 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
+        menu.clear();
         inflater.inflate(R.menu.search_menu,menu);
         MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) item.getActionView();

@@ -20,6 +20,7 @@ import com.au564065.plantswap.activities.browseplant.BrowsePlant_Details_fragmen
 import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.ui.recyclerview.BrowseSwapAdapter;
 import com.au564065.plantswap.viewmodels.BrowseSwapViewModel;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -89,7 +90,9 @@ public class BrowseSwaps_Details_fragment extends Fragment {
     }
 
     private void updateUI(){
-        //wishes.setText(SwapVM.getSwap().getWishPlants());
-        //name.setText(SwapVM.getSwap().getPlantName());
+        wishes.setText(SwapVM.comma());
+        name.setText(SwapVM.getSwap().getPlantName());
+
+        Glide.with(img).load(SwapVM.getSwap().getImageURL()).into(img);
     }
 }

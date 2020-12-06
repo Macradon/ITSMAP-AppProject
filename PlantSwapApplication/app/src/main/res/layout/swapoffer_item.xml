@@ -7,25 +7,13 @@
 
     <Spinner
         android:id="@+id/swapOfferSpinner"
-        android:layout_width="255dp"
-        android:layout_height="29dp"
+        android:layout_width="371dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toTopOf="@+id/swapOffer_edittext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/swapOfferDeleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/swapOffer_deletebtn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211" />
 
     <EditText
         android:id="@+id/swapOffer_edittext"

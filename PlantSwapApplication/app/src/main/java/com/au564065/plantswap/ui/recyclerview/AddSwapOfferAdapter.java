@@ -89,6 +89,7 @@ public class AddSwapOfferAdapter extends RecyclerView.Adapter<AddSwapOfferAdapte
             public void afterTextChanged(Editable editable) {
                 if (holder.wishes.getSelectedItem().equals("other")) {
                     savedStrings.set(position, holder.customWish.getText().toString());
+
                 }
             }
         });
@@ -110,15 +111,6 @@ public class AddSwapOfferAdapter extends RecyclerView.Adapter<AddSwapOfferAdapte
         });
 
 
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                savedStrings.remove(position);
-                theList.remove(position);
-                notifyDataSetChanged();
-            }
-        });
-
     }
 
     @Override
@@ -129,7 +121,6 @@ public class AddSwapOfferAdapter extends RecyclerView.Adapter<AddSwapOfferAdapte
 
     public class SwapOfferHolder extends RecyclerView.ViewHolder{
 
-        private Button delete;
         private Spinner wishes;
         private EditText customWish;
 
@@ -138,7 +129,6 @@ public class AddSwapOfferAdapter extends RecyclerView.Adapter<AddSwapOfferAdapte
             super(itemView);
 
             wishes = itemView.findViewById(R.id.swapOfferSpinner);
-            delete = itemView.findViewById(R.id.swapOfferDeleteButton);
             customWish = itemView.findViewById(R.id.swapOffer_edittext);
 
             //placeholder = itemView.findViewById(R.id.swapItem_img);

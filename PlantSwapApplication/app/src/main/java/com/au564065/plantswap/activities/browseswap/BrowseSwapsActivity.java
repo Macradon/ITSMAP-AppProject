@@ -20,10 +20,13 @@ public class BrowseSwapsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_swaps);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.main_menu_btn_browse_swaps);
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.BrowseSwapLayout,new BrowseSwaps_MakeOffer_fragment())
+                    .replace(R.id.BrowseSwapLayout,new BrowseSwaps_Search_fragment())
                     .commitNow();
         }
 

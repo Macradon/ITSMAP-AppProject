@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.au564065.plantswap.R;
 import com.au564065.plantswap.models.Swap;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.Sw
     public void onBindViewHolder(@NonNull SwapsHolder holder, int position) {
         Swap currentSwap = swaps.get(position);
         holder.name.setText(currentSwap.getPlantName());
+        Glide.with(holder.placeholder).load(currentSwap.getImageURL()).into(holder.placeholder);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.Sw
             super(itemView);
 
             name = itemView.findViewById(R.id.swapItem_name);
-            //placeholder = itemView.findViewById(R.id.swapItem_img);
+            placeholder = itemView.findViewById(R.id.swapItem_img);
             listener = itemClickedListener;
 
             itemView.setOnClickListener(this);
