@@ -1,26 +1,18 @@
 package com.au564065.plantswap.models;
 
-import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.au564065.plantswap.models.gsonPlantModels.GsonPlant;
 
-@Entity(tableName = "plant_table")
 public class Plant {
 
     //Attributes
-    @PrimaryKey
-    @NonNull
     private String scientificName;
-
     private String commonName;
     private String imageURL;
     private String genus;
     private String family;
 
     //Constructor
-    public Plant(@NonNull String scientificName, String commonName, String imageURL, String genus, String family) {
+    public Plant(String scientificName, String commonName, String imageURL, String genus, String family) {
         this.scientificName = scientificName;
         this.commonName = commonName;
         this.imageURL = imageURL;

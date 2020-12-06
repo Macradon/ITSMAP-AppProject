@@ -14,6 +14,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.au564065.plantswap.BuildConfig;
+import com.au564065.plantswap.models.Chatroom;
+import com.au564065.plantswap.models.Message;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.models.PlantSwapUser;
@@ -38,7 +40,6 @@ import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,10 @@ public class Repository {
     //Search Results
     private MutableLiveData<List<Plant>> SearchResults = new MutableLiveData<>();
     private MutableLiveData<Plant> SpecificPlant = new MutableLiveData<>();
+    //Chat data
+    private MutableLiveData<List<Chatroom>> chatRoomList = new MutableLiveData<>();
+    private MutableLiveData<Chatroom> specificChatRoom = new MutableLiveData<>();
+    private MutableLiveData<List<Message>> messageList = new MutableLiveData<>();
     //Current user
     private MutableLiveData<PlantSwapUser> currentUser = new MutableLiveData<>();
 
@@ -91,6 +96,7 @@ public class Repository {
         return INSTANCE;
     }
 
+    //region Getters
     public  LiveData<List<Wish>> getWishList() {
         return WishList;
     }
@@ -125,6 +131,18 @@ public class Repository {
 
     public LiveData<Plant> getSpecificPlant() {
         return SpecificPlant;
+    }
+
+    public LiveData<List<Chatroom>> getChatRoomList() {
+        return chatRoomList;
+    }
+
+    public LiveData<Chatroom> getSpecificChatRoom() {
+        return specificChatRoom;
+    }
+
+    public LiveData<List<Message>> getMessageList() {
+        return messageList;
     }
 
     public LiveData<PlantSwapUser> getCurrentUser() {
@@ -269,25 +287,8 @@ public class Repository {
      */
     //region Delete-User Chain
     public void deleteUserInCloudDatabase(String userId) {
-        deleteAllConversationsWithUser(userId);
-    }
-
-    private void deleteAllConversationsWithUser(String userId) {
-        //TODO USE DELETE ALL CONVERSATIONS FROM USER WHEN IMPLEMENTED
-        deleteAllSwapOffersFromUser(userId);
-    }
-
-    private void deleteAllSwapOffersFromUser(String userId) {
-        deleteAllUserSwapOffers(userId);
-    }
-
-    private void deleteAllSwapsFromUser(String userId) {
-        deleteAllUserSwaps(userId);
-    }
-
-    private void deleteWishListFromUser(String userId) {
-        //TODO USE DELETE ALL WISH LIST ELEMENTS FROM USER WHEN IMPLEMENTED
-        deletePlantSwapUser(userId);
+        Log.d(TAG, "deleteUserInCloudDatabase: Initiating delete user");
+        deleteAllChatRoomsAssociatedWithUserOwner(userId);
     }
 
     private void deletePlantSwapUser(String userId) {
@@ -296,7 +297,9 @@ public class Repository {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted.");
+                        Log.d(TAG, "onSuccess: User data successfully deleted.");
+
+                        FirebaseAuth.getInstance().getCurrentUser().delete();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -330,6 +333,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Wish added");
+                        readUserWish(currentUser.getValue().getUserId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -386,12 +390,7 @@ public class Repository {
                                  wishListHolder.add(wishListWish);
                              }
 
-/*                             if (swap) {
-                                SwapWishList.postValue(wishListHolder);
-                             } else {
-                                WishList.postValue(wishListHolder);
-                             }*/
-                             WishList.setValue(wishListHolder);
+                             WishList.postValue(wishListHolder);
                         }
                         else {
                             Log.d(TAG, "Error getting wishes: ", task.getException());
@@ -423,7 +422,7 @@ public class Repository {
     }
 
     //Method to delete wish from a user's wish list
-    public void deleteWishFromUserList(String wishID) {
+    public void deleteWishFromUserList(String wishID, boolean userDelete) {
         Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getCurrentUser().getUid();
@@ -433,7 +432,10 @@ public class Repository {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        Log.d(TAG, "onSuccess: Wish successfully deleted");
+                        if (userDelete) {
+                            deletePlantSwapUser(currentUser.getValue().getUserId());
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -450,12 +452,13 @@ public class Repository {
         Map<String, Object> wishData = new HashMap<>();
         wishData.put("radius", updatedWish.getRadius());
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
-                .collection(DatabaseConstants.WishCollection).document()
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .update(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        readUserWishList(currentUser.getValue().getUserId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -467,7 +470,22 @@ public class Repository {
     }
 
     //Method to delete all wishes from a user's wish list
-    //TODO IMPLEMENT THIS
+    public void deleteAllUserWishes(String userId) {
+        Log.d(TAG, "deleteAllUserWishes: deleting all wishes from user " + userId);
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                deleteWishFromUserList(document.getId(), true);
+                            }
+                        }
+                    }
+                });
+    }
 
     //endregion
 
@@ -592,6 +610,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Swap successfully updated");
+                        readAllSwapsFromUser();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -602,26 +621,20 @@ public class Repository {
                 });
     }
 
-    //Method to delete swap from the database
+    //Method to delete swap from the database, calls delete swap offers
     public void deleteSwap(String swapId) {
-        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Errore deleting document", e);
-                    }
-                });
+        deleteAllSwapSwapOffers(swapId);
     }
 
+    /**
+     * Chain used when deleting user
+     * Delete all Swaps associated with user
+     */
+    //region Delete all Swaps associated with user
     //Method to delete all swaps associated with a user
     public void deleteAllUserSwaps(String userId) {
+        Log.d(TAG, "deleteAllUserSwaps: deleting all swaps from " + userId);
+        deleteAllUserSwapOffers(userId);
         firebaseDatabase.collection(DatabaseConstants.SwapCollection)
                 .whereEqualTo("ownerID", userId)
                 .get()
@@ -634,7 +647,6 @@ public class Repository {
                                 swapHolder.add(parseSwapDocument(document));
                             }
                             deleteListOfSwaps(swapHolder);
-                            deleteWishListFromUser(userId);
                         } else {
                             Log.d(TAG, "onComplete: Error getting documents", task.getException());
                         }
@@ -648,7 +660,9 @@ public class Repository {
         for (int i=0; i<swapHolder.size(); i++) {
             deleteSwap(swapHolder.get(i).getSwapId());
         }
+        deleteAllUserWishes(currentUser.getValue().getUserId());
     }
+    //endregion
 
     //Helper method to parse swap document
     private Swap parseSwapDocument(DocumentSnapshot document) {
@@ -659,6 +673,7 @@ public class Repository {
         getSwap.setStatus(document.get("status").toString());
         getSwap.setImageURL(document.get("photo").toString());
         getSwap.setSwapId(document.getId());
+        getSwap.setOwnerId(document.get("ownerID").toString());
         getSwap.setOwnerAddressGpsCoordinates(document.get("ownerAddressGpsCoordinates").toString());
 
         return getSwap;
@@ -699,9 +714,10 @@ public class Repository {
     }
 
     //Method to create an offer to a swap
-    public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId) {
+    public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId, String swapOwnerId) {
         Map<String, Object> newOffer = new HashMap<>();
         newOffer.put("swapId", swapId);
+        newOffer.put("swapOwnerId", swapOwnerId);
         newOffer.put("swapOfferUserId", newSwapOfferObject.getSwapOfferUserId());
         newOffer.put("plantsOffered", newSwapOfferObject.getPlantsOffered());
 
@@ -721,9 +737,9 @@ public class Repository {
                 });
     }
 
-    //Method to read offers to a swap
-    public void readSpecificSwapOffer(String offerIi) {
-        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document(offerIi)
+    //Method to read a specific offer
+    public void readSpecificSwapOffer(String offerId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document(offerId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -738,6 +754,122 @@ public class Repository {
                     }
                 });
     }
+
+    //Method to read all  offers to a swap
+    public void readAllSwapSwapOffers(String swapId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
+                .whereEqualTo("swapId", swapId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<SwapOffer> swapOfferHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                SwapOffer getSwapOffer = new SwapOffer(document.get("swapId").toString(),
+                                        document.get("plantsOffered").toString());
+                                getSwapOffer.setSwapOfferUserId(document.get("swapOfferUserId").toString());
+                                getSwapOffer.setSwapOfferId(document.getId());
+                            }
+                        }
+                    }
+                });
+    }
+
+    //Method to update swap offer
+    public void updateSpecificSwapOffer(SwapOffer swapOfferObject) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection).document(swapOfferObject.getSwapOfferId())
+                .update("plantsOffered", swapOfferObject.getPlantsOffered())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: Swap offer updated");
+                            readAllSwapSwapOffers(swapOfferObject.getSwapId());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Chain used when deleting swap
+     * Delete all Swap Offers from Swap
+     * Finalize delete Swap
+     */
+    //region Delete all Swap Offers from Swap
+    //Method to delete all swap offers associated to a swap
+    private void deleteAllSwapSwapOffers(String swapId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
+                .whereEqualTo("swapId", swapId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> swapOfferIdHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapOfferIdHolder.add(document.getId());
+                            }
+                            deleteListOfSwapOffers(swapId, swapOfferIdHolder);
+                        }
+                    }
+                });
+    }
+    //Helper method to delete a list of swap offers, finalize by deleting the swap
+    private void deleteListOfSwapOffers(String swapId, List<String> swapOfferIdHolder) {
+        Log.d(TAG, "deleteListOfSwapOffers: Swap Offers to be deleted: " + swapOfferIdHolder.size());
+        for (int i=0; i<swapOfferIdHolder.size(); i++) {
+            deleteSwapOffer(swapOfferIdHolder.get(i));
+        }
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error deleting document", e);
+                    }
+                });
+    }
+    //endregion
+
+    /**
+     * Chain used when deleting user
+     * Delete all Swap Offers from User
+     */
+    //region Delete All User Swap Offers
+    //Method to delete all swap offers associated with a user
+    private void deleteAllUserSwapOffers(String userId) {
+        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
+                .whereEqualTo("swapOfferUserId", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> swapOfferIdHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                swapOfferIdHolder.add(document.getId());
+                            }
+                            deleteListOfSwapOffersFromUser(userId, swapOfferIdHolder);
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+    //Method to delete all swap offers in a list associated with a user
+    private void deleteListOfSwapOffersFromUser(String userId, List<String> swapOfferIdHolder) {
+        for (int i=0; i<swapOfferIdHolder.size(); i++) {
+            deleteSwapOffer(swapOfferIdHolder.get(i));
+        }
+    }
+    //endregion
 
     //Method to delete swap offer from a swap
     public void deleteSwapOffer(String offerId) {
@@ -756,54 +888,6 @@ public class Repository {
                     }
                 });
     }
-
-    //Method to delete all swap offers associated to a swap
-    private void deleteAllSwapSwapOffers(String swapId) {
-        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
-                .whereEqualTo("swapId", swapId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<String> swapOfferIdHolder = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                swapOfferIdHolder.add(document.getId());
-                            }
-                            deleteListOfSwapOffers(swapOfferIdHolder);
-                        }
-                    }
-                });
-    }
-
-    private void deleteListOfSwapOffers(List<String> swapOfferIdHolder) {
-        Log.d(TAG, "deleteListOfSwapOffers: Swap Offers to be deleted: " + swapOfferIdHolder.size());
-        for (int i=0; i<swapOfferIdHolder.size(); i++) {
-            deleteSwapOffer(swapOfferIdHolder.get(i));
-        }
-    }
-
-    //Method to delete all swap offers associated with a user
-    private void deleteAllUserSwapOffers(String userId) {
-        firebaseDatabase.collection(DatabaseConstants.OfferCollection)
-                .whereEqualTo("swapOfferUserId", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<String> swapOfferIdHolder = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                swapOfferIdHolder.add(document.getId());
-                            }
-                            deleteListOfSwapOffers(swapOfferIdHolder);
-                            deleteAllSwapsFromUser(userId);
-                        } else {
-                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
-                        }
-                    }
-                });
-    }
     //endregion
 
     /**
@@ -811,11 +895,295 @@ public class Repository {
      *  MESSAGE METHODS
      *
      */
-    //region Message Methods
-    //TODO Implement this
-    //TODO Implement this
-    //TODO Implement this
-    //TODO Implement this
+    //region Chat rooms
+    //Method to create a new chat room
+    public void createNewChatRoom(SwapOffer swapOfferObject) {
+        Map<String, Object> newChatRoom = new HashMap<>();
+        newChatRoom.put("ownerUserId", swapOfferObject.getSwapOwnerId());
+        newChatRoom.put("offerUserId", swapOfferObject.getSwapOfferUserId());
+        newChatRoom.put("swapId", swapOfferObject.getSwapId());
+        newChatRoom.put("offerId", swapOfferObject.getSwapOfferId());
+
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document()
+                .set(newChatRoom)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: Chat Room created");
+                        readAllChatRoomsAssociatedWithUserAsOwner();
+                    }
+                });
+    }
+
+    //Method to read a specific chat room
+    public void readSpecificChatRoom(String chatRoomId) {
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            Chatroom specificRoom = new Chatroom(
+                                    document.get("ownerUserId").toString(),
+                                    document.get("offerUserId").toString(),
+                                    document.get("swapId").toString(),
+                                    document.get("offerId").toString()
+                            );
+                            specificRoom.setChatId(document.getId());
+
+                            specificChatRoom.postValue(specificRoom);
+
+                            readAllChatMessages(document.getId());
+                        }
+                    }
+                });
+    }
+
+    //Method to read all chat rooms associated with the user as owner
+    //this method also calls the next method to also get all the rooms
+    //associated with the user as offer
+    public void readAllChatRoomsAssociatedWithUserAsOwner() {
+        List<Chatroom> chatRoomListHolder = new ArrayList<>();
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection)
+                .whereEqualTo("ownerId", currentUser.getValue().getUserId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Chatroom getChatRoom = new Chatroom(
+                                        document.get("ownerUserId").toString(),
+                                        document.get("offerUserId").toString(),
+                                        document.get("swapId").toString(),
+                                        document.get("offerId").toString()
+                                );
+                                getChatRoom.setChatId(document.getId());
+
+                                chatRoomListHolder.add(getChatRoom);
+                            }
+                            readAllChatRoomsAssociatedWithUserAsOffer(chatRoomListHolder);
+                        }
+                    }
+                });
+    }
+    private void readAllChatRoomsAssociatedWithUserAsOffer(List<Chatroom> chatRoomListHolder) {
+        List<Chatroom> chatRoomListHolderElectricBoogaloo = chatRoomListHolder;
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection)
+                .whereEqualTo("offerId", currentUser.getValue().getUserId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Chatroom getChatRoom = new Chatroom(
+                                        document.get("ownerUserId").toString(),
+                                        document.get("offerUserId").toString(),
+                                        document.get("swapId").toString(),
+                                        document.get("offerId").toString()
+                                );
+                                getChatRoom.setChatId(document.getId());
+
+                                chatRoomListHolder.add(getChatRoom);
+                            }
+                            chatRoomList.postValue(chatRoomListHolderElectricBoogaloo);
+                        }
+                    }
+                });
+    }
+
+    //Method to delete a specific chat room
+    public void deleteSpecificChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteSpecificChatRoom: Initiating delete all messages in chat");
+        deleteAllMessagesInChatRoom(chatRoomId);
+    }
+
+    private void deleteChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteChatRoom: Deleting chat room");
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: Chat Room successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: Error deleting document", e);
+                    }
+                });
+    }
+
+    //Method to delete all chat rooms associated with Swap
+    private void deleteAllChatRoomsAssociatedWithSwap(String swapId) {
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection)
+                .whereEqualTo("swapId", swapId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: Deleting chat rooms");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                deleteSpecificChatRoom(document.getId());
+                            }
+                        }
+                    }
+                });
+    }
+
+    //Method to delete all chat rooms associated with User
+    private void deleteAllChatRoomsAssociatedWithUserOwner(String userId) {
+        Log.d(TAG, "deleteAllChatRoomsAssociatedWithUserOwner: Deleting all chatrooms and their messages");
+        List<Chatroom> chatRoomListHolder = new ArrayList<>();
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection)
+                .whereEqualTo("ownerId", currentUser.getValue().getUserId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Chatroom getChatRoom = new Chatroom(
+                                        document.get("ownerUserId").toString(),
+                                        document.get("offerUserId").toString(),
+                                        document.get("swapId").toString(),
+                                        document.get("offerId").toString()
+                                );
+                                getChatRoom.setChatId(document.getId());
+
+                                chatRoomListHolder.add(getChatRoom);
+                            }
+                            deleteAllChatRoomsAssociatedWithUserOffer(chatRoomListHolder);
+                        }
+                    }
+                });
+    }
+
+    private void deleteAllChatRoomsAssociatedWithUserOffer(List<Chatroom> chatRoomListHolder) {
+        Log.d(TAG, "deleteAllChatRoomsAssociatedWithUserOffer: Deleting all chatrooms and their messages");
+        List<Chatroom> chatRoomListHolderElectricBoogaloo = chatRoomListHolder;
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection)
+                .whereEqualTo("offerId", currentUser.getValue().getUserId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Chatroom getChatRoom = new Chatroom(
+                                        document.get("ownerUserId").toString(),
+                                        document.get("offerUserId").toString(),
+                                        document.get("swapId").toString(),
+                                        document.get("offerId").toString()
+                                );
+                                getChatRoom.setChatId(document.getId());
+
+                                chatRoomListHolderElectricBoogaloo.add(getChatRoom);
+                            }
+
+                            //deleting all chat rooms in chatRoomListHolderElectricBoogaloo
+                            for (int i=0; i<chatRoomListHolderElectricBoogaloo.size(); i++) {
+                                deleteSpecificChatRoom(chatRoomListHolderElectricBoogaloo.get(i).getChatId());
+                            }
+                            deleteAllUserSwaps(currentUser.getValue().getUserId());
+                        }
+                    }
+                });
+    }
+    //endregion
+
+    //region Messages
+    //Method to create a new message
+    public void createNewMessage(String chatRoomId, Message messageObject) {
+        Map<String, Object> newMessage = new HashMap<>();
+        newMessage.put("name", messageObject.getName());
+        newMessage.put("senderId", messageObject.getSenderId());
+        newMessage.put("message", messageObject.getMessage());
+
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .collection(DatabaseConstants.MessageCollection).document()
+                .set(newMessage)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: Message added");
+                        readAllChatMessages(chatRoomId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: Error writing document");
+                    }
+                });
+    }
+
+    //Method to read all messages in a chat room
+    public void readAllChatMessages(String chatRoomId) {
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .collection(DatabaseConstants.MessageCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Message> messageListHolder = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Message getMessage = new Message(
+                                        document.get("name").toString(),
+                                        document.get("senderId").toString(),
+                                        document.get("message").toString()
+                                );
+                                messageListHolder.add(getMessage);
+                            }
+                            messageList.postValue(messageListHolder);
+                        }
+                    }
+                });
+    }
+
+    private void deleteSpecificMessage(String chatRoomId, String messageId) {
+        Log.d(TAG, "deleteSpecificMessage: Deleting message " + messageId);
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .collection(DatabaseConstants.MessageCollection).document(messageId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: Error deleting document", e);
+                    }
+                });
+    }
+
+    //Method to delete all messages in chat room
+    private void deleteAllMessagesInChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteAllMessagesInChatRoom: deleting all messages from room " + chatRoomId);
+        firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
+                .collection(DatabaseConstants.MessageCollection)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                deleteSpecificMessage(chatRoomId, document.getId());
+                            }
+                            deleteChatRoom(chatRoomId);
+                        }
+                    }
+                });
+    }
     //endregion
 
     /**

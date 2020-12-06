@@ -3,14 +3,16 @@ package com.au564065.plantswap.models;
 import java.util.List;
 
 public class Chatroom {
+
+    //Attributes
     private String chatId;
-    private String chatName;
     private String ownerUserId;
     private String offerUserId;
     private String swapId;
     private String offerId;
     private List<Message> messageList;
 
+    //Constructor
     public Chatroom(String ownerUserId, String offerUserId, String swapId, String offerId) {
         this.ownerUserId = ownerUserId;
         this.offerUserId = offerUserId;
@@ -18,20 +20,13 @@ public class Chatroom {
         this.offerId = offerId;
     }
 
+    //Getters and setters
     public String getChatId() {
         return chatId;
     }
 
     public void setChatId(String chatId) {
         this.chatId = chatId;
-    }
-
-    public String getChatName() {
-        return chatName;
-    }
-
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
     }
 
     public String getOwnerUserId() {
@@ -70,7 +65,7 @@ public class Chatroom {
         return messageList;
     }
 
-    public void addMessageToMessageList(Message message) {
-        this.messageList.add(message);
+    public void setMessageList(List<Message> messageList) {
+        this.messageList = messageList;
     }
 }
