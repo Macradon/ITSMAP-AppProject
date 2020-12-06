@@ -1,14 +1,15 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class Chatroom {
+
+    //Attributes
     private String chatId;
     private String ownerUserId;
     private String offerUserId;
     private String swapId;
     private String offerId;
 
+    //Constructor
     public Chatroom(String ownerUserId, String offerUserId, String swapId, String offerId) {
         this.ownerUserId = ownerUserId;
         this.offerUserId = offerUserId;
@@ -16,6 +17,7 @@ public class Chatroom {
         this.offerId = offerId;
     }
 
+    //Getters and setters
     public String getChatId() {
         return chatId;
     }
