@@ -25,8 +25,7 @@ public class BackgroundPlantSwapService extends LifecycleService {
     private Repository repo;
 
     //Variables
-    private long sleepTime = 60000;
-    private int tempInt = 0;
+    private long sleepTime = 120000;
 
     //Constructor
     public BackgroundPlantSwapService() {
@@ -61,10 +60,6 @@ public class BackgroundPlantSwapService extends LifecycleService {
             execService = Executors.newSingleThreadExecutor();
         }
 
-        if (tempInt==1){
-            repo.deleteUserInCloudDatabase("s2AA3JjujIgupcsRB5bMGUBLLnq2");
-        }
-
         execService.submit(new Runnable() {
             @Override
             public void run() {
@@ -76,7 +71,6 @@ public class BackgroundPlantSwapService extends LifecycleService {
                     e.printStackTrace();
                 }
 
-                tempInt++;
                 recursiveUpdate();
             }
         });
