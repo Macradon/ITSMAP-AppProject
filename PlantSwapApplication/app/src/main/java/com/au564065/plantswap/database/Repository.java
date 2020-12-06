@@ -333,6 +333,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Wish added");
+                        readUserWish(currentUser.getValue().getUserId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -451,12 +452,13 @@ public class Repository {
         Map<String, Object> wishData = new HashMap<>();
         wishData.put("radius", updatedWish.getRadius());
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
-                .collection(DatabaseConstants.WishCollection).document()
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .update(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        readUserWishList(currentUser.getValue().getUserId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
