@@ -1,21 +1,30 @@
 package com.au564065.plantswap.viewmodels;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.au564065.plantswap.database.Repository;
+import com.au564065.plantswap.models.Swap;
 import com.au564065.plantswap.ui.recyclerview.MySwapAdapter;
 
-public class MySwapViewModel implements ListViewModel{
+import java.util.List;
 
-    public MySwapAdapter listAdapter;
-    public androidx.recyclerview.widget.LinearLayoutManager layoutManager;
+public class MySwapViewModel extends AndroidViewModel {
+    private Repository repo;
 
-    @Override
-    public RecyclerView.Adapter getAdapter() {
-        return listAdapter;
-    }
+    public LiveData<List<Swap>> swapList;
 
-    @Override
-    public RecyclerView.LayoutManager getLayoutManager() {
-        return layoutManager;
+
+    public MySwapViewModel(@NonNull Application application) {
+        super(application);
+        repo = Repository.getInstance(application);
+        repo.readAllSwapsFromUser();
+        swapList = repo.getAllSwaps();
     }
 }
+

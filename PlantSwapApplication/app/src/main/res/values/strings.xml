@@ -7,13 +7,13 @@
     <string name="main_menu_btn_browse_plants">Browse all plants</string>
     <string name="main_menu_btn_exit">Exit</string>
 
+    <string name="btn_back">Back</string>
+    <string name="btn_new">New</string>
 
     <string name="title_activity_my_swap">MySwapActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+
+    <string name="title_activity_my_wish">My Wishlist</string>
+
     <string name="back">Go Back</string>
     <string name="save">Save</string>
     <string name="addWish">Add new wish</string>
@@ -21,13 +21,10 @@
 
     <string name="notifyMe">Notify me when</string>
     <string name="distance">Is up for swaps within</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_my_wish">My Wishlist</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
     <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
+    <string name="title_activity_swap_edit">SwapEditActivity</string>
 
     <string name="Email">E-mail</string>
     <string name="Password">Password</string>
@@ -48,8 +45,18 @@
     <string name="register_phone">Phone</string>
     <string name="register_number">Number</string>
     <string name="register_confirmPassword">Confirm</string>
+    <string name="swapListItem_imageDescription">Plant Picture</string>
+    <string name="btn_save">Save</string>
+    <string name="select_plant_to_swap">Select plant to swap</string>
+    <string name="swap_edit_photos_title">Photos</string>
+    <string name="swap_edit_request_title">Select plants from your wishlist you want in return</string>
+    <string name="btn_cancel">Cancel</string>
     <string name="Delete">Delete</string>
     <string name="Update_Profile_Header">Update Profile</string>
     <string name="Update">Update</string>
     <string name="Search">Search</string>
+    <string name="btn_add_change_photo">Add/Change photo</string>
+    <string name="swap_edit_plant_name_hint">Type plant name</string>
+
+
 </resources>
