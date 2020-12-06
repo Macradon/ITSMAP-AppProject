@@ -384,7 +384,10 @@ public class Repository {
     //Method to find a specific wish from a user's wish list
     public void readUserWish(String wishID) {
         Log.d(TAG, "readUserWish: Reading a specific wish from user's wishlist");
-        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -402,7 +405,10 @@ public class Repository {
     //Method to delete wish from a user's wish list
     public void deleteWishFromUserList(String wishID) {
         Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
-        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -421,9 +427,12 @@ public class Repository {
     //Method to update a wish from a user's wish list
     public void updateWishFromUserList(String wishID, Wish updatedWish) {
         Log.d(TAG, "updateWishFromUserWishList: Updating a wish from user's wish list");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
         Map<String, Object> wishData = new HashMap<>();
         wishData.put("radius", updatedWish.getRadius());
-        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .update(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

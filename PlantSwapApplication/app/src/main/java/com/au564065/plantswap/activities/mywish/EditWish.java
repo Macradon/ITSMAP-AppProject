@@ -61,7 +61,6 @@ public class EditWish extends Fragment {
                 updateUI();
             }
         });
-
     }
 
 
@@ -76,6 +75,9 @@ public class EditWish extends Fragment {
         cancelBtn = v.findViewById(R.id.cancel_editwish);
         saveBtn = v.findViewById(R.id.save_editwish);
         deleteBtn = v.findViewById(R.id.delete_editwish);
+
+        name.setText(R.string.notifyMe);
+        distance.setText(R.string.distance);
     }
     private void setListeners(){
 
@@ -124,10 +126,7 @@ public class EditWish extends Fragment {
     }
 
     private void updateUI(){
-        name.setText(R.string.notifyMe);
-        distance.setText(R.string.distance);
-        //hvorfor fuck virker det her ikke??
-        plantName.setText(chosenWish.getWishPlant().getCommonName());
+        plantName.setText(wvm.onClickedWish.getWishPlant().getCommonName());
         radius.setText((int) wvm.onClickedWish.getRadius());
     }
 }

@@ -76,8 +76,8 @@ public class AddWish extends Fragment {
         cancelBtn = v.findViewById(R.id.cancel_addwish);
         saveBtn = v.findViewById(R.id.save_addwish);
 
-        name.setText(R.string.notifyMe);
-        distance.setText(R.string.distance);
+      /*  name.setText(R.string.notifyMe);
+        distance.setText(R.string.distance);*/
     }
     private void setListeners() {
 
@@ -97,17 +97,18 @@ public class AddWish extends Fragment {
             @Override
             public void onClick(View view) {
                 int temp;
+                String wishPlantName;
                 try {
                     temp = Integer.parseInt(radius.getText().toString());
                 } catch (NumberFormatException e) {
                     temp = 0;
                 }
                 if (temp != 0 && plantName != null) {
-                   /* Toast.makeText(getActivity().getApplicationContext(), chosenWish.getWishPlant().getCommonName() + " has been added to wishlist", Toast.LENGTH_SHORT).show();
-                    wvm.updateWish(chosenWish.getWishId(), chosenWish);
+                    Toast.makeText(getActivity().getApplicationContext(), plantName + " has been added to wishlist", Toast.LENGTH_SHORT).show();
+                   // tilføjer en wish til DB
                     m.beginTransaction()
                             .replace(R.id.WishPlantLayout, new MyWishList())
-                            .commit();*/
+                            .commit();
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Invalid input", Toast.LENGTH_SHORT).show();
                 }
