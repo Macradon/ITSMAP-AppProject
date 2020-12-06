@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.au564065.plantswap">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -14,7 +19,11 @@
         android:roundIcon="@mipmap/plant_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlantSwap">
-        <activity android:name=".activities.login.RegisterActivity"></activity>
+        <activity
+            android:name=".activities.myswap.SwapEditActivity"
+            android:label="@string/title_activity_swap_edit"
+            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+        <activity android:name=".activities.login.RegisterActivity" />
         <activity android:name=".activities.login.LoginActivity" />
 
         <service

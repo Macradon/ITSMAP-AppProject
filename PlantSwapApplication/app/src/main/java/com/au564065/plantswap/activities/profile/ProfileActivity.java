@@ -26,10 +26,5 @@ public class ProfileActivity extends AppCompatActivity {
                     .replace(R.id.ProfileLayout,new Profile_Window_fragment())
                     .commitNow();
         }
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
     }
 }

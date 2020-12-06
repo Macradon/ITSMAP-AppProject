@@ -15,6 +15,7 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
     <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
+    <string name="title_activity_swap_edit">SwapEditActivity</string>
 
     <string name="Email">E-mail</string>
     <string name="Password">Password</string>
@@ -45,5 +46,8 @@
     <string name="Update_Profile_Header">Update Profile</string>
     <string name="Update">Update</string>
     <string name="Search">Search</string>
-    <string name="btn_add_photo">Add photo</string>
+    <string name="btn_add_change_photo">Add/Change photo</string>
+    <string name="swap_edit_plant_name_hint">Type plant name</string>
+
+
 </resources>

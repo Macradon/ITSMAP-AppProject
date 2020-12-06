@@ -75,10 +75,9 @@ public class SwapListFragment extends Fragment {
 
         Button btnNew = listView.findViewById(R.id.mySwap_list_btnNew);
         btnNew.setOnClickListener(view -> {
-            FragmentManager m = getActivity().getSupportFragmentManager();
-            m.beginTransaction()
-                    .replace(R.id.mySwap_fragmentContainer, new SwapEditFragment())
-                    .commit();
+            Intent intent = new Intent(getActivity(), SwapEditActivity.class);
+            intent.putExtra(SwapEditActivity.SWAP_EDIT_NEW, true);
+            startActivity(intent);
         });
 
         return listView;

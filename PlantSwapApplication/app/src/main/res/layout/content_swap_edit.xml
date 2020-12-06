@@ -25,7 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/Delete"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/swap_edit_btn_save"
                 app:layout_constraintStart_toEndOf="@+id/swap_edit_btn_cancel"
                 app:layout_constraintTop_toBottomOf="@+id/swap_edit_spinner_wish4" />
@@ -37,7 +39,9 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/btn_save"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/swap_edit_spinner_wish4" />
 
@@ -48,7 +52,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/btn_cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/swap_edit_spinner_wish4" />
 
@@ -119,31 +125,20 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/swap_edit_photo_title"
-                app:layout_constraintTop_toBottomOf="@+id/swap_edit_photo_title" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
             <TextView
                 android:id="@+id/swap_edit_photo_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/swap_edit_photos_title"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/swap_edit_spinner_swap"
-                app:layout_constraintTop_toBottomOf="@+id/swap_edit_spinner_swap" />
+                app:layout_constraintStart_toStartOf="@+id/my_swap_edit_plant_name"
+                app:layout_constraintTop_toBottomOf="@+id/my_swap_edit_plant_name" />
 
             <TextView
-                android:id="@+id/swap_edit_plant_name"
+                android:id="@+id/swap_edit_plant_name_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -154,29 +149,42 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/swap_edit_spinner_swap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/swap_edit_plant_name" />
-
             <Button
                 android:id="@+id/swap_edit_add_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:text="@string/btn_add_photo"
+                android:text="@string/btn_add_change_photo"
                 app:layout_constraintBottom_toBottomOf="@+id/swap_edit_photo_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/swap_edit_photo_title" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="24dp"
+                android:contentDescription="@string/swapListItem_imageDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/swap_edit_photo_title"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <EditText
+                android:id="@+id/my_swap_edit_plant_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:ems="10"
+                android:hint="@string/swap_edit_plant_name_hint"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/swap_edit_plant_name_title"
+                app:layout_constraintTop_toBottomOf="@+id/swap_edit_plant_name_title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
