@@ -86,7 +86,7 @@ public class BrowseSwaps_MakeOffer_fragment extends Fragment {
         SwapVM = new ViewModelProvider(getActivity()).get(BrowseSwapViewModel.class);
         list = new ArrayList<String>();
         list.add("Select Plant");
-        List<String> temp = SwapVM.Wishes();
+        List<String> temp = Arrays.asList(SwapVM.getSwap().getSwapWishes().split(","));
         for (String s : temp){
             list.add(s);
         }
