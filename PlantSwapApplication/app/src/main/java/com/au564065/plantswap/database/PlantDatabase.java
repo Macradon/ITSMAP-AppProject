@@ -14,7 +14,6 @@ import com.au564065.plantswap.models.Wish;
 @Database(entities = {Plant.class}, version = 1, exportSchema = false)
 public abstract class PlantDatabase extends RoomDatabase {
 
-    public abstract PlantDAO dao();
     private static PlantDatabase INSTANCE;
 
     public static PlantDatabase getDatabase(final Context context) {

@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,10 +33,12 @@ import java.util.List;
 public class AddWish extends Fragment {
 
     private TextView name, distance;
-    private Spinner spinnerName, spinnerDistance;
+    private EditText radius, plantName;
     private Button cancelBtn, saveBtn;
 
     private MyWishViewModel wvm;
+    private PlantViewModel pvm;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -43,7 +47,7 @@ public class AddWish extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_mywish_add, container, false);
         findUiId(v);
-        //setListeners();
+        setListeners();
         return v;
     }
 
@@ -51,15 +55,23 @@ public class AddWish extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
+        pvm = new ViewModelProvider(getActivity()).get(PlantViewModel.class);
+        pvm.getPlants().observe(getViewLifecycleOwner(), new Observer<List<Plant>>() {
+            @Override
+            public void onChanged(List<Plant> plants) {
+                updateUI();
+            }
+        });
     }
+
 
     private void findUiId(View v){
         //textviews
         name = v.findViewById(R.id.wishPlantNameText);
         distance = v.findViewById(R.id.wishPlantRadiusText);
         //spinners
-        spinnerDistance = v.findViewById(R.id.wishPlantRadiusSpinner);
-        spinnerName = v.findViewById(R.id.wishPlantNamepinner);
+        radius = v.findViewById(R.id.wishPlantRadiusSpinner);
+        plantName = v.findViewById(R.id.wishPlantNamepinner);
         //buttons
         cancelBtn = v.findViewById(R.id.cancel_addwish);
         saveBtn = v.findViewById(R.id.save_addwish);
@@ -67,7 +79,7 @@ public class AddWish extends Fragment {
         name.setText(R.string.notifyMe);
         distance.setText(R.string.distance);
     }
-    private void setListeners(){
+    private void setListeners() {
 
         FragmentManager m = getActivity().getSupportFragmentManager();
 
@@ -84,8 +96,23 @@ public class AddWish extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int temp;
+                try {
+                    temp = Integer.parseInt(radius.getText().toString());
+                } catch (NumberFormatException e) {
+                    temp = 0;
+                }
+                if (temp != 0 && plantName != null) {
+                   /* Toast.makeText(getActivity().getApplicationContext(), chosenWish.getWishPlant().getCommonName() + " has been added to wishlist", Toast.LENGTH_SHORT).show();
+                    wvm.updateWish(chosenWish.getWishId(), chosenWish);
+                    m.beginTransaction()
+                            .replace(R.id.WishPlantLayout, new MyWishList())
+                            .commit();*/
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Invalid input", Toast.LENGTH_SHORT).show();
+                }
                 m.beginTransaction()
-                        .replace(R.id.WishPlantLayout, new BrowsePlant_AddingPlant_fragment())
+                        .replace(R.id.WishPlantLayout, new MyWishList())
                         .commit();
             }
         });
@@ -96,8 +123,6 @@ public class AddWish extends Fragment {
         distance.setText(R.string.distance);
         // spinners
         // søgefunktion i stedet for spinner?
-        String name = spinnerName.getSelectedItem().toString();
-        Double distance = Double.valueOf(spinnerDistance.getSelectedItem().toString());
     }
 }
 

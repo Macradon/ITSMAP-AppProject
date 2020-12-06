@@ -10,13 +10,30 @@ import com.au564065.plantswap.database.Converters;
 
 @Entity(tableName = "wish_table")
 public class Wish {
+    private String wishId;
+    private String ownerId;
     private Plant wishPlant;
-
     private double radius;
 
     public Wish(Plant wishPlant, double radius) {
             this.wishPlant = wishPlant;
             this.radius = radius;
+    }
+
+    public String getWishId() {
+        return wishId;
+    }
+
+    public void setWishId(String wishId) {
+        this.wishId = wishId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Plant getWishPlant() {
