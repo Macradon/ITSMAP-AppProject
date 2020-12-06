@@ -33,7 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
         if (user == null) {
             navigateToLogin();
         } else {
-            Repository.getInstance(getApplicationContext()).setCurrentUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            Repository.getInstance(getApplicationContext()).setCurrentUser(user.getUid());
         }
     }
 

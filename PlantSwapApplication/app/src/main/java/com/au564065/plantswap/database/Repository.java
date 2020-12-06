@@ -460,13 +460,14 @@ public class Repository {
                 photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        swapData.put("photo", uri);
+                        swapData.put("photo", uri.toString());
                         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
                                 .set(swapData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "onSuccess: Swap added");
+                                        readAllSwapsFromUser();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -524,9 +525,9 @@ public class Repository {
     }
 
     //Method to read all user's swaps
-    public void readAllSwapsFromUser(String userId) {
+    public void readAllSwapsFromUser() {
         firebaseDatabase.collection(DatabaseConstants.SwapCollection)
-                .whereEqualTo("ownerID", userId)
+                .whereEqualTo("ownerID", currentUser.getValue().getUserId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -552,7 +553,7 @@ public class Repository {
         swapData.put("swapWishes", swapObject.getSwapWishes());
 
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapObject.getSwapId())
-                .set(swapData)
+                .update(swapData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
