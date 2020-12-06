@@ -558,6 +558,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Swap successfully updated");
+                        readAllSwapsFromUser();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -576,6 +577,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        readAllSwapsFromUser();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
