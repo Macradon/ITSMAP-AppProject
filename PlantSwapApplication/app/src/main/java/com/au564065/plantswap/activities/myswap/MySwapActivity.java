@@ -36,11 +36,8 @@ public class MySwapActivity extends AppCompatActivity {
             viewModel.swapList = swaps;
             FragmentManager m = getSupportFragmentManager();
             m.beginTransaction()
-                    .add(R.id.mySwap_fragmentContainer, new SwapListFragment())
+                    .replace(R.id.mySwap_fragmentContainer, new SwapListFragment())
                     .commit();
         });
-    }
-    public MySwapViewModel getViewModel(){
-        return viewModel;
     }
 }

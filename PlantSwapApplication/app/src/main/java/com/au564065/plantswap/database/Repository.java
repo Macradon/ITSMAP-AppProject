@@ -467,6 +467,7 @@ public class Repository {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "onSuccess: Swap added");
+                                        readAllSwapsFromUser();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -552,7 +553,7 @@ public class Repository {
         swapData.put("swapWishes", swapObject.getSwapWishes());
 
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapObject.getSwapId())
-                .set(swapData)
+                .update(swapData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
