@@ -85,7 +85,7 @@ public class BrowseSwaps_Search_fragment extends Fragment implements BrowseSwapA
 
         FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
-                .replace(R.id.BrowsePlantLayout, new BrowsePlant_Details_fragment())
+                .replace(R.id.BrowseSwapLayout, new BrowseSwaps_Details_fragment())
                 .commit();
     }
 

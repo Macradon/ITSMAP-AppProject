@@ -4,9 +4,9 @@ import java.util.List;
 
 public class SwapOffer {
     private String swapOfferUserID;
-    private List<Plant> plantsOffered;
+    private List<String> plantsOffered;
 
-    public SwapOffer(String swapOfferUserID, List<Plant> plantsOffered) {
+    public SwapOffer(String swapOfferUserID, List<String> plantsOffered) {
         this.swapOfferUserID = swapOfferUserID;
         this.plantsOffered = plantsOffered;
     }
@@ -19,11 +19,11 @@ public class SwapOffer {
         this.swapOfferUserID = swapOfferUserID;
     }
 
-    public List<Plant> getPlantsOffered() {
+    public List<String> getPlantsOffered() {
         return plantsOffered;
     }
 
-    public void setPlantsOffered(List<Plant> plantsOffered) {
+    public void setPlantsOffered(List<String> plantsOffered) {
         this.plantsOffered = plantsOffered;
     }
 }

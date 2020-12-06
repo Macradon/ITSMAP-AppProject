@@ -20,9 +20,9 @@ import java.util.List;
 public class PlantViewModel extends AndroidViewModel {
     //insert repo
     //LiveData<List<Plant>> plantLive; //en repo funktion
-    public Repository repo;
-    public List<Plant> getClickedPlant;
-    public Plant onClickedPlant;
+    private Repository repo;
+    private List<Plant> getClickedPlant;
+    private Plant onClickedPlant;
 
     public PlantViewModel(@NonNull Application application) {
         super(application);
@@ -44,6 +44,14 @@ public class PlantViewModel extends AndroidViewModel {
 
         repo.fetchPlantFromAPI(searchText);
 
+    }
+
+    public Plant getOnClickedPlant() {
+        return onClickedPlant;
+    }
+
+    public List<Plant> GetClickedPlant() {
+        return getClickedPlant;
     }
 
     public void addToWish(int radius){

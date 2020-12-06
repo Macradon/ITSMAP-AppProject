@@ -24,7 +24,7 @@ public class BrowseSwapsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.BrowseSwapLayout,new BrowseSwaps_Search_fragment())
+                    .replace(R.id.BrowseSwapLayout,new BrowseSwaps_MakeOffer_fragment())
                     .commitNow();
         }
 

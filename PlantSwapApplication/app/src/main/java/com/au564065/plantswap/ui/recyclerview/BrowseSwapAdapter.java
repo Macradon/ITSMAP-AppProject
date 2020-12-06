@@ -20,7 +20,7 @@ import java.util.List;
 public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.SwapsHolder> implements Filterable {
 
     private List<Swap> swaps = new ArrayList<>();
-    private List<Swap> SwapsCopy;
+    public List<Swap> SwapsCopy;
 
     public interface ISwapClickListener{
         void onSwapClicked(int index);
@@ -29,7 +29,9 @@ public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.Sw
     ISwapClickListener listener;
 
     public BrowseSwapAdapter(ISwapClickListener listener){
+
         this.listener = listener;
+
     }
 
     public void updateList(List<Swap> swaps){
@@ -37,6 +39,15 @@ public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.Sw
         SwapsCopy = new ArrayList<>(swaps);
         notifyDataSetChanged();
     }
+
+    private boolean checkSwapsCopy(){
+        if(SwapsCopy != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     @NonNull
     @Override
@@ -113,9 +124,13 @@ public class BrowseSwapAdapter extends RecyclerView.Adapter<BrowseSwapAdapter.Sw
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            swaps.clear();
-            swaps.addAll((List) filterResults.values);
-            notifyDataSetChanged();
+            if(checkSwapsCopy()) {
+                swaps.clear();
+                swaps.addAll((List) filterResults.values);
+                notifyDataSetChanged();
+            }else{
+
+            }
         }
     };
 
