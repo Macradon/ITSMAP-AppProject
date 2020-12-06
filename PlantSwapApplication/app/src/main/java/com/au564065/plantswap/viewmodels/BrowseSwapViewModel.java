@@ -58,10 +58,10 @@ public class BrowseSwapViewModel extends AndroidViewModel {
     }
 
     private void getWishes(){
-        List<String> temp = Arrays.asList(onClickedSwap.getSwapWishes().split(","));
-        String temp2 = "Selected Plant";
+        List<String> temp = Arrays.asList(onClickedSwap.getSwapWishes().split(", "));
+        String temp2 = "Select Plant";
         for(int i = 0; i < temp.size() ; i++){
-            if(temp.get(i)){
+            if(temp.get(i) == temp2){
                 temp.remove(i);
             }
         }
