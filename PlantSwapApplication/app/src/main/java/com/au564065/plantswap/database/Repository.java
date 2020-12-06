@@ -379,15 +379,15 @@ public class Repository {
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
-                             WishList.setValue(wishListHolder); //postValue(wishListHolder);
+
+                             if (swap) {
+                                SwapWishList.postValue(wishListHolder);
+                             } else {
+                                WishList.postValue(wishListHolder);
+                             }
                         }
                         else {
                             Log.d(TAG, "Error getting wishes: ", task.getException());
-                            // if (swap) {
-                             //    SwapWishList.postValue(wishListHolder);
-                           //  } else {
-                            //     WishList.postValue(wishListHolder);
-                            // }
                         }
                     }
 
