@@ -23,7 +23,8 @@ public class MySwapViewModel extends AndroidViewModel {
     public MySwapViewModel(@NonNull Application application) {
         super(application);
         repo = Repository.getInstance(application);
-        swapList = repo.getSwapList();
+        repo.readAllSwapsFromUser();
+        swapList = repo.getAllSwaps();
     }
 }
 

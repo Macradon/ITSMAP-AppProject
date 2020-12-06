@@ -486,9 +486,9 @@ public class Repository {
     }
 
     //Method to read all user's swaps
-    public void readAllSwapsFromUser(String userId) {
+    public void readAllSwapsFromUser() {
         firebaseDatabase.collection(DatabaseConstants.SwapCollection)
-                .whereEqualTo("ownerID", userId)
+                .whereEqualTo("ownerID", currentUser.getValue().getUserId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

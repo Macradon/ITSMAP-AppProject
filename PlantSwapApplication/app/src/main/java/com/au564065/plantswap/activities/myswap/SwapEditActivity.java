@@ -7,13 +7,17 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.au564065.plantswap.models.Swap;
+import com.au564065.plantswap.models.Wish;
 import com.au564065.plantswap.viewmodels.SwapEditViewModel;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
@@ -56,31 +60,37 @@ public class SwapEditActivity extends AppCompatActivity {
 
         ViewModelProvider viewModelProvider= new ViewModelProvider(getViewModelStore(), ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
         viewModel = viewModelProvider.get(SwapEditViewModel.class);
-        viewModel.setSwap(getIntent().getStringExtra(SWAP_EDIT_ID));
 
         initializeViews();
+        setupObservers();
+        initializeButtons();
 
         if(!getIntent().getBooleanExtra(SWAP_EDIT_NEW, false)){
 
-            plantName.setText(viewModel.swap.getPlantName());
-
-            Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
-            btnDelete.setOnClickListener(view -> {
-                viewModel.deleteSwap();
-                Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
-                startActivity(intent);
+            viewModel.getSwap(getIntent().getStringExtra(SWAP_EDIT_ID)).observe(this, swap -> {
+                updateViews(swap);
+                viewModel.swap = swap;
             });
+            Button btnPhoto = findViewById(R.id.swap_edit_add_photo);
+            btnPhoto.setVisibility(View.INVISIBLE);
         } else {
             viewModel.isNew = true;
 
             Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
             btnDelete.setVisibility(View.INVISIBLE);
         }
+    }
 
-        initializeButtons();
-        File stuff = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        Log.d("SE_MIG1", Environment.DIRECTORY_PICTURES);
-        Log.d("SE_MIG2", stuff.getAbsolutePath());
+    private void setupObservers(){
+
+        viewModel.getWishes().observe(this, wishes -> {
+            List<String> names = Arrays.asList("Select Plant");
+
+            for (Wish wish : wishes) {
+                names.add(wish.getWishPlant().getCommonName());
+            }
+            initializeSpinners(names);
+        });
     }
 
     private void initializeButtons() {
@@ -94,23 +104,46 @@ public class SwapEditActivity extends AppCompatActivity {
             finish();
         });
 
-        Button btnSave = findViewById(R.id.swap_edit_btn_save);
-        btnSave.setOnClickListener(view -> {
-            viewModel.swap.setPlantName(plantName.getText().toString());
-            String wishString = String.format("%s,%s,%s,%s", wish1.getSelectedItem(), wish2.getSelectedItem(),wish3.getSelectedItem(), wish4.getSelectedItem());
-            // viewModel.swap.wishes = wishString;
-            viewModel.saveSwap();
+        Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
+        btnDelete.setOnClickListener(view -> {
+            viewModel.deleteSwap();
             Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
             startActivity(intent);
         });
+
+        Button btnSave = findViewById(R.id.swap_edit_btn_save);
+        btnSave.setOnClickListener(view -> {
+            if(viewModel.isNew && viewModel.photoURI != null) {
+                viewModel.swap.setPlantName(plantName.getText().toString());
+                String wishString = String.format("%s,%s,%s,%s",
+                        wish1.getSelectedItem(),
+                        wish2.getSelectedItem(),
+                        wish3.getSelectedItem(),
+                        wish4.getSelectedItem());
+                viewModel.swap.setSwapWishes(wishString);
+                viewModel.saveSwap();
+                Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
+                startActivity(intent);
+            } else {
+                View rootView = findViewById(android.R.id.content);
+                Snackbar.make(rootView, "Must add a photo", Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 
-    private void initializeViews() {
+    private void initializeViews(){
         plantName = findViewById(R.id.my_swap_edit_plant_name);
         plantPhoto = findViewById(R.id.swap_edit_photo);
+    }
 
-        List<String> list = Arrays.asList("Select Plant", "Rose", "Tulip", "Fern");
-        // get list of wishes here
+    private void updateViews(Swap swap){
+        plantName.setText(swap.getPlantName());
+     //   Glide.with(plantPhoto.getContext()).load(swap.get()).into(plantPhoto);
+    }
+
+    private void initializeSpinners(List<String> list) {
+
         ArrayAdapter<String> adapter;
 
         wish1 = findViewById(R.id.swap_edit_spinner_wish1);
@@ -163,9 +196,16 @@ public class SwapEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            plantPhoto.setImageBitmap(imageBitmap);
+            File file = new File(viewModel.photoPath);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(this.getContentResolver(), Uri.fromFile(file));
+                plantPhoto.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 
