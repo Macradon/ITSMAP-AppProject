@@ -600,6 +600,7 @@ public class Repository {
                 document.get("swapWishes").toString()
         );
         getSwap.setStatus(document.get("status").toString());
+        getSwap.setImageURL(document.get("photo").toString());
         getSwap.setSwapId(document.getId());
         getSwap.setOwnerAddressGpsCoordinates(document.get("ownerAddressGpsCoordinates").toString());
 
