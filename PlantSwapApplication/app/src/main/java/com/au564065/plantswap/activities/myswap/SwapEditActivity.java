@@ -124,8 +124,7 @@ public class SwapEditActivity extends AppCompatActivity {
         Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
         btnDelete.setOnClickListener(view -> {
             viewModel.deleteSwap();
-            Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
-            startActivity(intent);
+            finish();
         });
 
         Button btnSave = findViewById(R.id.swap_edit_btn_save);
