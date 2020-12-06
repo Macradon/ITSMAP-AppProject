@@ -384,13 +384,12 @@ public class Repository {
                                  //Make new wish with the plant object and document radius
                                  Wish wishListWish = new Wish(newWishPlant,
                                          new Double(docRef.get("radius").toString()));
-                                 wishListWish.setWishId(document.getId().toString());
+                                 wishListWish.setWishId(document.getId());
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
 
-                                WishList.setValue(wishListHolder);
-
+                             WishList.postValue(wishListHolder);
                         }
                         else {
                             Log.d(TAG, "Error getting wishes: ", task.getException());
@@ -672,7 +671,7 @@ public class Repository {
         getSwap.setStatus(document.get("status").toString());
         getSwap.setImageURL(document.get("photo").toString());
         getSwap.setSwapId(document.getId());
-        getSwap.setOwnerId(document.get("ownerId").toString());
+        getSwap.setOwnerId(document.get("ownerID").toString());
         getSwap.setOwnerAddressGpsCoordinates(document.get("ownerAddressGpsCoordinates").toString());
 
         return getSwap;

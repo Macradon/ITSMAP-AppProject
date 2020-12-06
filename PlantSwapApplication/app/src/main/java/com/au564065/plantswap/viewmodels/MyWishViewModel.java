@@ -64,7 +64,7 @@ public class MyWishViewModel extends AndroidViewModel {
 
     public void deleteWish(String wishId)
     {
-        repo.deleteWishFromUserList(wishId);
+        repo.deleteWishFromUserList(wishId, false);
     }
 
     //enter edit view

@@ -5,6 +5,7 @@ public class Wish {
     //Attributes
     private Plant wishPlant;
     private double radius;
+    private String wishId;
 
     //Constructor
     public Wish(Plant wishPlant, double radius) {
@@ -27,5 +28,13 @@ public class Wish {
 
     public void setRadius(double radius) {
         this.radius = radius;
+    }
+
+    public String getWishId() {
+        return wishId;
+    }
+
+    public void setWishId(String wishId) {
+        this.wishId = wishId;
     }
 }
