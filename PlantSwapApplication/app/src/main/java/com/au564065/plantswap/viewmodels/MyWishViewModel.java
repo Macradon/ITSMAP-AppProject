@@ -33,13 +33,13 @@ public class MyWishViewModel extends AndroidViewModel {
         repo = Repository.getInstance(application.getApplicationContext());
     }
 
-    /*//get all
+    //get all
     public LiveData<List<Wish>> getAllWishes() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = firebaseAuth.getCurrentUser().getUid();
         repo.readUserWishList(userId);
         return repo.getWishList();
-    }*/
+    }
 
     public LiveData<Wish> getWish()
     {

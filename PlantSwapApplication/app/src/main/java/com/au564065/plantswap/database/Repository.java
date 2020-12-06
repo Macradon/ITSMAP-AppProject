@@ -386,11 +386,8 @@ public class Repository {
                                  wishListHolder.add(wishListWish);
                              }
 
-                             if (swap) {
-                                SwapWishList.postValue(wishListHolder);
-                             } else {
-                                WishList.postValue(wishListHolder);
-                             }
+                                WishList.setValue(wishListHolder);
+
                         }
                         else {
                             Log.d(TAG, "Error getting wishes: ", task.getException());

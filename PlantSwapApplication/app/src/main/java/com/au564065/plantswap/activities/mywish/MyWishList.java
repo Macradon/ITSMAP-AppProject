@@ -1,5 +1,6 @@
 package com.au564065.plantswap.activities.mywish;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.activities.browseplant.BrowsePlantActivity;
 import com.au564065.plantswap.activities.browseplant.BrowsePlant_Details_fragment;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Wish;
@@ -74,14 +76,14 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         layoutMan = new LinearLayoutManager(getContext());
         listRecycler.setAdapter(adapter);
         listRecycler.setLayoutManager(layoutMan);
-        /*wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
+        wvm = new ViewModelProvider(getActivity()).get(MyWishViewModel.class);
         wvm.getAllWishes().observe(getViewLifecycleOwner(), new Observer<List<Wish>>() {
             @Override
             public void onChanged(List<Wish> wishes) {
                 adapter.updateList(wishes);
                 wvm.saveList(wishes);
             }
-        });*/
+        });
     }
 
 
@@ -105,10 +107,14 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
 
 
     public void onAddClicked() {
-        FragmentManager m = getActivity().getSupportFragmentManager();
+        Intent intent = new Intent(getActivity().getApplicationContext(), BrowsePlantActivity.class);
+        intent.putExtra("fromWishtoPlant","hello");
+        getActivity().startActivity(intent);
+
+        /*FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
                 .replace(R.id.WishPlantLayout, new AddWish())
-                .commit();
+                .commit();*/
     }
 
 }
