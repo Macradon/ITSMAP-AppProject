@@ -5,30 +5,35 @@
     <string name="main_menu_btn_my_profile">My Profile</string>
     <string name="main_menu_btn_browse_swaps">Browse all swaps</string>
     <string name="main_menu_btn_browse_plants">Browse all plants</string>
-    <string name="main_menu_btn_exit">Exit</string>
 
-    <string name="btn_back">Back</string>
-    <string name="btn_new">New</string>
 
-    <string name="title_activity_my_swap">MySwapActivity</string>
-
+    <string name="title_activity_my_swap">My Swaps</string>
     <string name="title_activity_my_wish">My Wishlist</string>
 
-    <string name="back">Go Back</string>
-    <string name="save">Save</string>
     <string name="addWish">Add new wish</string>
     <string name="addSwap">Add new swap</string>
 
     <string name="notifyMe">Notify me when</string>
     <string name="distance">Is up for swaps within</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="distance_hint">Write distance in km</string>
+    <string name="distance_text">Please input your radius of how far you are willing to go for a swap in km</string>
+    <string name="family">Family: </string>
+    <string name="genus">Genus: </string>
+    <string name="name">Name: </string>
+    <string name="scientific">Scientific name: </string>
+
+    <string name="ihave">I have: </string>
+    <string name="iwant">I want: </string>
+    <string name="plantname">Plant Name</string>
+
+    <string name="title_activity_profile">Profile</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
     <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
     <string name="title_activity_swap_edit">SwapEditActivity</string>
 
     <string name="Email">E-mail</string>
     <string name="Password">Password</string>
-    <string name="Login_text">Login to PlantSwap</string>
+    <string name="Login_text">Sign in to PlantSwap</string>
     <string name="login_txtNoUser">Not registered? Register an account:</string>
     <string name="login_btnLogin">Login</string>
     <string name="login_btnRegister">Register</string>
@@ -46,18 +51,26 @@
     <string name="register_number">Number</string>
     <string name="register_confirmPassword">Confirm</string>
     <string name="swapListItem_imageDescription">Plant Picture</string>
-    <string name="btn_save">Save</string>
+
     <string name="select_plant_to_swap">Select plant to swap</string>
     <string name="swap_edit_photos_title">Photos</string>
     <string name="swap_edit_request_title">Select plants from your wishlist you want in return</string>
-    <string name="btn_cancel">Cancel</string>
-    <string name="Delete">Delete</string>
     <string name="Update_Profile_Header">Update Profile</string>
-    <string name="Update">Update</string>
-    <string name="Search">Search</string>
-    <string name="swapOffer_deletebtn">Delete</string>
+
     <string name="btn_add_change_photo">Add/Change photo</string>
     <string name="swap_edit_plant_name_hint">Type plant name</string>
+
+    <string name="Update">Update</string>
+    <string name="Search">Search</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="Delete">Delete</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_new">New</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_offer">Offer</string>
+    <string name="main_menu_btn_exit">Exit</string>
+    <string name="btn_save">Save</string>
 
 
 </resources>

@@ -12,8 +12,7 @@
         android:layout_marginLeft="5dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="name"/>
+        android:gravity="right"/>
 
     <TextView
         android:id="@+id/show_message"
@@ -24,7 +23,6 @@
         android:padding="8dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:text="hello"
         android:gravity="right"
         android:background="@drawable/background_chat_item"/>
     

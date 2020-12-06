@@ -712,6 +712,7 @@ public class Repository {
 
         return getWish;
     }
+
     //Method to create an offer to a swap
     public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId, String swapOwnerId) {
         Map<String, Object> newOffer = new HashMap<>();
