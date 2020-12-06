@@ -84,18 +84,21 @@ public class Profile_Update_fragment extends Fragment {
     }
 
     private void setOnClickers(){
+        FragmentManager m = getActivity().getSupportFragmentManager();
 
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 vm.UpdateUserData(makeTemp()); //skal updateuser til firebase
+                m.beginTransaction()
+                        .replace(R.id.ProfileLayout, new Profile_Window_fragment())
+                        .commit();
             }
         });
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager m = getActivity().getSupportFragmentManager();
                 m.beginTransaction()
                         .replace(R.id.ProfileLayout, new Profile_Window_fragment())
                         .commit();

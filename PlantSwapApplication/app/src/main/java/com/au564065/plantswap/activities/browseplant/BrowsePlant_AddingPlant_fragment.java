@@ -71,11 +71,11 @@ public class BrowsePlant_AddingPlant_fragment extends Fragment {
     private void updateUI(){
 
         Glide.with(getActivity().getApplicationContext())
-                .load(plantVM.onClickedPlant.getImageURL())
+                .load(plantVM.getOnClickedPlant().getImageURL())
                 .centerCrop()
                 .into(img);
 
-        common.setText(plantVM.onClickedPlant.getCommonName());
+        common.setText(plantVM.getOnClickedPlant().getCommonName());
 
     }
 
@@ -103,7 +103,7 @@ public class BrowsePlant_AddingPlant_fragment extends Fragment {
                 }
                 //Toast.makeText(getActivity().getApplicationContext(),plantVM.onClickedPlant.getCommonName() + " has been added to your wishlist", Toast.LENGTH_SHORT).show();
                 if(temp != 0){
-                    Toast.makeText(getActivity().getApplicationContext(),plantVM.onClickedPlant.getCommonName() + " has been added to your wishlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(),plantVM.getOnClickedPlant().getCommonName() + " has been added to your wishlist", Toast.LENGTH_SHORT).show();
                     plantVM.addToWish(temp);
                     getActivity().finish();
                 }else{
