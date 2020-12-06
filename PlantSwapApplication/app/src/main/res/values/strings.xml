@@ -55,6 +55,7 @@
     <string name="Update_Profile_Header">Update Profile</string>
     <string name="Update">Update</string>
     <string name="Search">Search</string>
+    <string name="swapOffer_deletebtn">Delete</string>
     <string name="btn_add_change_photo">Add/Change photo</string>
     <string name="swap_edit_plant_name_hint">Type plant name</string>
 

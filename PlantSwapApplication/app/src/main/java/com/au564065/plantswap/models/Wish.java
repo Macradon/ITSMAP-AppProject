@@ -1,7 +1,7 @@
 package com.au564065.plantswap.models;
 
 public class Wish {
-    
+
     //Attributes
     private Plant wishPlant;
     private double radius;

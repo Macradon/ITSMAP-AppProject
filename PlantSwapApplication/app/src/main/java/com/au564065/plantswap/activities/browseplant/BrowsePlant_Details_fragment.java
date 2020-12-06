@@ -98,13 +98,13 @@ public class BrowsePlant_Details_fragment extends Fragment {
     private void updateUI(){
 
         Glide.with(plantImg.getContext())
-                .load(plantVM.onClickedPlant.getImageURL())
+                .load(plantVM.getOnClickedPlant().getImageURL())
                 .into(plantImg);
 
-        common.setText(plantVM.onClickedPlant.getCommonName());
-        science.setText(plantVM.onClickedPlant.getScientificName());
-        genus.setText(plantVM.onClickedPlant.getGenus());
-        family.setText(plantVM.onClickedPlant.getFamily());
+        common.setText(plantVM.getOnClickedPlant().getCommonName());
+        science.setText(plantVM.getOnClickedPlant().getScientificName());
+        genus.setText(plantVM.getOnClickedPlant().getGenus());
+        family.setText(plantVM.getOnClickedPlant().getFamily());
 
     }
 }

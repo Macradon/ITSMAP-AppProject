@@ -54,6 +54,7 @@ public class Repository {
 
     //WishList
     private MutableLiveData<List<Wish>> WishList = new MutableLiveData<>();
+    private MutableLiveData<Wish> SpecificWish = new MutableLiveData<>();
     private MutableLiveData<List<Wish>> SwapWishList = new MutableLiveData<>();
     //Swaps
     private MutableLiveData<List<Swap>> SwapList = new MutableLiveData<>();
@@ -98,6 +99,10 @@ public class Repository {
     //region Getters
     public  LiveData<List<Wish>> getWishList() {
         return WishList;
+    }
+
+    public LiveData<Wish> getWish() {
+        return SpecificWish;
     }
 
     public LiveData<List<Wish>> getSwapOwnerWishList() {
@@ -339,9 +344,9 @@ public class Repository {
     }
 
     //Method to read a user's wishes
-    public void readUserWishList(String userId, Boolean swap) {
-        Log.d(TAG, "readUserWishList: Reading wishlist from user: " + userId);
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+    public void readUserWishList(String userID) {
+        Log.d(TAG, "readUserWishList: Reading wishlist from user: " + userID);
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userID)
                 .collection(DatabaseConstants.WishCollection)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -379,15 +384,13 @@ public class Repository {
                                  //Make new wish with the plant object and document radius
                                  Wish wishListWish = new Wish(newWishPlant,
                                          new Double(docRef.get("radius").toString()));
+                                 wishListWish.setWishId(document.getId().toString());
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
 
-                             if (swap) {
-                                SwapWishList.postValue(wishListHolder);
-                             } else {
-                                WishList.postValue(wishListHolder);
-                             }
+                                WishList.setValue(wishListHolder);
+
                         }
                         else {
                             Log.d(TAG, "Error getting wishes: ", task.getException());
@@ -399,16 +402,18 @@ public class Repository {
 
     //Method to find a specific wish from a user's wish list
     public void readUserWish(String wishID) {
-        //TODO Implement this
         Log.d(TAG, "readUserWish: Reading a specific wish from user's wishlist");
-        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
+                .collection(DatabaseConstants.WishCollection).document(wishID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            // value to be parsed here
+                            SpecificWish.postValue(parseWishDocument(document));
                         } else {
                             Log.d(TAG, "onComplete: Error getting documents", task.getException());
                         }
@@ -419,7 +424,9 @@ public class Repository {
     //Method to delete wish from a user's wish list
     public void deleteWishFromUserList(String wishID, boolean userDelete) {
         Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
                 .collection(DatabaseConstants.WishCollection).document(wishID)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -435,6 +442,28 @@ public class Repository {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "onFailure: Errore deleting document", e);
+                    }
+                });
+    }
+
+    //Method to update a wish from a user's wish list
+    public void updateWishFromUserList(String wishID, Wish updatedWish) {
+        Log.d(TAG, "updateWishFromUserWishList: Updating a wish from user's wish list");
+        Map<String, Object> wishData = new HashMap<>();
+        wishData.put("radius", updatedWish.getRadius());
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
+                .collection(DatabaseConstants.WishCollection).document()
+                .update(wishData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error deleting document", e);
                     }
                 });
     }
@@ -650,12 +679,38 @@ public class Repository {
     }
     //endregion
 
-    /**
-     *
-     * SWAP OFFER METHODS
-     *
-     */
-    //region Swap Offer Methods
+    //Helper method to parse wish document
+    private Wish parseWishDocument(DocumentSnapshot document) {
+        String[] wishPlant = document.get("wishPlant").toString()
+                .replaceAll("\\{", "")
+                .replaceAll("\\}", "")
+                .replaceAll(" ", "")
+                .split(",");
+
+        //For each element, split it and use it to map to a new map
+        Map<String, String> wishPlantMap = new HashMap<>();
+        for (int i=0; i<wishPlant.length;i++) {
+            String[] wishPlantSplit = wishPlant[i].split("=");
+            wishPlantMap.put(wishPlantSplit[0],wishPlantSplit[1]);
+        }
+
+        //Take the new map and use all of its data to create the plant object
+        Plant newWishPlant = new Plant(
+                wishPlantMap.get("scientificName"),
+                wishPlantMap.get("commonName"),
+                wishPlantMap.get("imageURL"),
+                wishPlantMap.get("genus"),
+                wishPlantMap.get("family")
+        );
+        Wish getWish = new Wish(
+                newWishPlant,
+                new Double(document.get("radius").toString())
+        //Add it to the temporary holder list
+        );
+        getWish.setWishId(document.getId());
+
+        return getWish;
+    }
     //Method to create an offer to a swap
     public void createNewOfferToSwap(SwapOffer newSwapOfferObject, String swapId, String swapOwnerId) {
         Map<String, Object> newOffer = new HashMap<>();
@@ -1157,7 +1212,7 @@ public class Repository {
                         }, (error) -> {
                     Log.d(TAG, "run: This did not work", error);
                 });
-                
+
                 queue.add(stringRequest);
             }
         });

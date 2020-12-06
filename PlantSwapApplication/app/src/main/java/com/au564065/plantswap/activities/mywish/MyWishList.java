@@ -1,5 +1,6 @@
 package com.au564065.plantswap.activities.mywish;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.au564065.plantswap.R;
+import com.au564065.plantswap.activities.browseplant.BrowsePlantActivity;
 import com.au564065.plantswap.activities.browseplant.BrowsePlant_Details_fragment;
 import com.au564065.plantswap.models.Plant;
 import com.au564065.plantswap.models.Wish;
@@ -60,7 +62,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //finish();
+                onCancelClicked();
             }
         });
         return v;
@@ -85,6 +87,11 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
     }
 
 
+    public void onCancelClicked() {
+                getActivity().finish();
+            }
+
+
 
     @Override
     public void onWishClicked(int index) {
@@ -92,7 +99,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
 
         FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
-                .replace(R.id.wishList, new EditWish())
+                .replace(R.id.WishPlantLayout, new EditWish())
                 .commit();
 
 
@@ -100,10 +107,14 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
 
 
     public void onAddClicked() {
-        FragmentManager m = getActivity().getSupportFragmentManager();
+        Intent intent = new Intent(getActivity().getApplicationContext(), BrowsePlantActivity.class);
+        intent.putExtra("fromWishtoPlant","hello");
+        getActivity().startActivity(intent);
+
+        /*FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
-                .replace(R.id.wishList, new AddWish())
-                .commit();
+                .replace(R.id.WishPlantLayout, new AddWish())
+                .commit();*/
     }
 
 }
