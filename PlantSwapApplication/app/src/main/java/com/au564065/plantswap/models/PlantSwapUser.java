@@ -1,16 +1,16 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class PlantSwapUser {
 
     //Attributes
+    private String userId;
     private String name;
     private String address;
     private String zipCode;
     private String city;
     private String email;
     private String phoneNumber;
+    private String addressCoordinates;
 
     //Constructor
     public PlantSwapUser(String name, String address, String zipCode, String city, String email, String phoneNumber) {
@@ -23,6 +23,14 @@ public class PlantSwapUser {
     }
 
     //Getters and setters
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }
@@ -69,5 +77,13 @@ public class PlantSwapUser {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddressCoordinates() {
+        return addressCoordinates;
+    }
+
+    public void setAddressCoordinates(String addressCoordinates) {
+        this.addressCoordinates = addressCoordinates;
     }
 }

@@ -49,10 +49,7 @@ public class PlantViewModel extends AndroidViewModel {
     public void addToWish(double radius){
         Wish wish = new Wish(onClickedPlant, radius);
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String user = firebaseAuth.getCurrentUser().getUid();
-
-        repo.addWishToUserWishList(wish, user);
+        repo.addWishToUserWishList(wish);
     }
 
     public void setOnClickedPlant(int index){
