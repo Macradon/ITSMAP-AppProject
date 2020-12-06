@@ -427,12 +427,10 @@ public class Repository {
     //Method to update a wish from a user's wish list
     public void updateWishFromUserList(String wishID, Wish updatedWish) {
         Log.d(TAG, "updateWishFromUserWishList: Updating a wish from user's wish list");
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String userId = firebaseAuth.getCurrentUser().getUid();
         Map<String, Object> wishData = new HashMap<>();
         wishData.put("radius", updatedWish.getRadius());
-        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
-                .collection(DatabaseConstants.WishCollection).document(wishID)
+        firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
+                .collection(DatabaseConstants.WishCollection).document()
                 .update(wishData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -443,7 +441,7 @@ public class Repository {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "onFailure: Errore deleting document", e);
+                        Log.w(TAG, "onFailure: Error deleting document", e);
                     }
                 });
     }

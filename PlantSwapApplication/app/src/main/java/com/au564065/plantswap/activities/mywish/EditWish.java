@@ -127,6 +127,6 @@ public class EditWish extends Fragment {
 
     private void updateUI(){
         plantName.setText(wvm.onClickedWish.getWishPlant().getCommonName());
-        radius.setText((int) wvm.onClickedWish.getRadius());
+        radius.setText(""+ (int) wvm.onClickedWish.getRadius());
     }
 }

@@ -60,7 +60,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //finish();
+                onCancelClicked();
             }
         });
         return v;
@@ -83,6 +83,11 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
             }
         });
     }
+
+
+    public void onCancelClicked() {
+                getActivity().finish();
+            }
 
 
 
