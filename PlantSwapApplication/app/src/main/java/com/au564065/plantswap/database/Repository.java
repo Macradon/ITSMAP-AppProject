@@ -282,10 +282,8 @@ public class Repository {
      */
     //region Delete-User Chain
     public void deleteUserInCloudDatabase(String userId) {
+        Log.d(TAG, "deleteUserInCloudDatabase: Initiating delete user");
         deleteAllChatRoomsAssociatedWithUserOwner(userId);
-        deleteAllUserSwaps(userId);
-        deleteAllUserWishes(userId);
-        deletePlantSwapUser(userId);
     }
 
     private void deletePlantSwapUser(String userId) {
@@ -294,7 +292,7 @@ public class Repository {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted.");
+                        Log.d(TAG, "onSuccess: User data successfully deleted.");
 
                         FirebaseAuth.getInstance().getCurrentUser().delete();
                     }
@@ -419,7 +417,7 @@ public class Repository {
     }
 
     //Method to delete wish from a user's wish list
-    public void deleteWishFromUserList(String wishID) {
+    public void deleteWishFromUserList(String wishID, boolean userDelete) {
         Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(currentUser.getValue().getUserId())
                 .collection(DatabaseConstants.WishCollection).document(wishID)
@@ -427,7 +425,10 @@ public class Repository {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        Log.d(TAG, "onSuccess: Wish successfully deleted");
+                        if (userDelete) {
+                            deletePlantSwapUser(currentUser.getValue().getUserId());
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -440,6 +441,7 @@ public class Repository {
 
     //Method to delete all wishes from a user's wish list
     public void deleteAllUserWishes(String userId) {
+        Log.d(TAG, "deleteAllUserWishes: deleting all wishes from user " + userId);
         firebaseDatabase.collection(DatabaseConstants.UserCollection).document(userId)
                 .collection(DatabaseConstants.WishCollection)
                 .get()
@@ -448,7 +450,7 @@ public class Repository {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                deleteWishFromUserList(document.getId());
+                                deleteWishFromUserList(document.getId(), true);
                             }
                         }
                     }
@@ -601,6 +603,7 @@ public class Repository {
     //region Delete all Swaps associated with user
     //Method to delete all swaps associated with a user
     public void deleteAllUserSwaps(String userId) {
+        Log.d(TAG, "deleteAllUserSwaps: deleting all swaps from " + userId);
         deleteAllUserSwapOffers(userId);
         firebaseDatabase.collection(DatabaseConstants.SwapCollection)
                 .whereEqualTo("ownerID", userId)
@@ -627,6 +630,7 @@ public class Repository {
         for (int i=0; i<swapHolder.size(); i++) {
             deleteSwap(swapHolder.get(i).getSwapId());
         }
+        deleteAllUserWishes(currentUser.getValue().getUserId());
     }
     //endregion
 
@@ -935,16 +939,18 @@ public class Repository {
 
     //Method to delete a specific chat room
     public void deleteSpecificChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteSpecificChatRoom: Initiating delete all messages in chat");
         deleteAllMessagesInChatRoom(chatRoomId);
     }
 
     private void deleteChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteChatRoom: Deleting chat room");
         firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                        Log.d(TAG, "onSuccess: Chat Room successfully deleted");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -975,6 +981,7 @@ public class Repository {
 
     //Method to delete all chat rooms associated with User
     private void deleteAllChatRoomsAssociatedWithUserOwner(String userId) {
+        Log.d(TAG, "deleteAllChatRoomsAssociatedWithUserOwner: Deleting all chatrooms and their messages");
         List<Chatroom> chatRoomListHolder = new ArrayList<>();
         firebaseDatabase.collection(DatabaseConstants.ChatCollection)
                 .whereEqualTo("ownerId", currentUser.getValue().getUserId())
@@ -1001,6 +1008,7 @@ public class Repository {
     }
 
     private void deleteAllChatRoomsAssociatedWithUserOffer(List<Chatroom> chatRoomListHolder) {
+        Log.d(TAG, "deleteAllChatRoomsAssociatedWithUserOffer: Deleting all chatrooms and their messages");
         List<Chatroom> chatRoomListHolderElectricBoogaloo = chatRoomListHolder;
         firebaseDatabase.collection(DatabaseConstants.ChatCollection)
                 .whereEqualTo("offerId", currentUser.getValue().getUserId())
@@ -1025,6 +1033,7 @@ public class Repository {
                             for (int i=0; i<chatRoomListHolderElectricBoogaloo.size(); i++) {
                                 deleteSpecificChatRoom(chatRoomListHolderElectricBoogaloo.get(i).getChatId());
                             }
+                            deleteAllUserSwaps(currentUser.getValue().getUserId());
                         }
                     }
                 });
@@ -1082,6 +1091,7 @@ public class Repository {
     }
 
     private void deleteSpecificMessage(String chatRoomId, String messageId) {
+        Log.d(TAG, "deleteSpecificMessage: Deleting message " + messageId);
         firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
                 .collection(DatabaseConstants.MessageCollection).document(messageId)
                 .delete()
@@ -1101,6 +1111,7 @@ public class Repository {
 
     //Method to delete all messages in chat room
     private void deleteAllMessagesInChatRoom(String chatRoomId) {
+        Log.d(TAG, "deleteAllMessagesInChatRoom: deleting all messages from room " + chatRoomId);
         firebaseDatabase.collection(DatabaseConstants.ChatCollection).document(chatRoomId)
                 .collection(DatabaseConstants.MessageCollection)
                 .get()
