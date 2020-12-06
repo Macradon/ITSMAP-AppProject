@@ -62,9 +62,11 @@ public class BackgroundPlantSwapService extends LifecycleService {
             execService = Executors.newSingleThreadExecutor();
         }
 
+        /**
         if (tempInt == 1) {
             repo.deleteUserInCloudDatabase("YXGDYxESWcdhcCXMjnhJxpXoSKu2");
         }
+        **/
 
         execService.submit(new Runnable() {
             @Override
