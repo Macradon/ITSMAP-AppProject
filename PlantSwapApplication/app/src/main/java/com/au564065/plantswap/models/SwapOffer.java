@@ -2,6 +2,8 @@ package com.au564065.plantswap.models;
 
 public class SwapOffer {
     private String swapId;
+    private String swapOfferId;
+    private String swapOwnerId;
     private String swapOfferUserId;
     private String plantsOffered;
 
@@ -16,6 +18,22 @@ public class SwapOffer {
 
     public void setSwapId(String swapId) {
         this.swapId = swapId;
+    }
+
+    public String getSwapOfferId() {
+        return swapOfferId;
+    }
+
+    public void setSwapOfferId(String swapOfferId) {
+        this.swapOfferId = swapOfferId;
+    }
+
+    public String getSwapOwnerId() {
+        return swapOwnerId;
+    }
+
+    public void setSwapOwnerId(String swapOwnerId) {
+        this.swapOwnerId = swapOwnerId;
     }
 
     public String getSwapOfferUserId() {

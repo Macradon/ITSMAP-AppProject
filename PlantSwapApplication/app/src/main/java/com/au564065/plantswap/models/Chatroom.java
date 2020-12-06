@@ -4,12 +4,10 @@ import java.util.List;
 
 public class Chatroom {
     private String chatId;
-    private String chatName;
     private String ownerUserId;
     private String offerUserId;
     private String swapId;
     private String offerId;
-    private List<Message> messageList;
 
     public Chatroom(String ownerUserId, String offerUserId, String swapId, String offerId) {
         this.ownerUserId = ownerUserId;
@@ -24,14 +22,6 @@ public class Chatroom {
 
     public void setChatId(String chatId) {
         this.chatId = chatId;
-    }
-
-    public String getChatName() {
-        return chatName;
-    }
-
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
     }
 
     public String getOwnerUserId() {
@@ -64,13 +54,5 @@ public class Chatroom {
 
     public void setOfferId(String offerId) {
         this.offerId = offerId;
-    }
-
-    public List<Message> getMessageList() {
-        return messageList;
-    }
-
-    public void addMessageToMessageList(Message message) {
-        this.messageList.add(message);
     }
 }
