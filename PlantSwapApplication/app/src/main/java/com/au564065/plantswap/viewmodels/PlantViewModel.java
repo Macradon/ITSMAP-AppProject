@@ -46,7 +46,7 @@ public class PlantViewModel extends AndroidViewModel {
 
     }
 
-    public void addToWish(int radius){
+    public void addToWish(double radius){
         Wish wish = new Wish(onClickedPlant, radius);
 
         repo.addWishToUserWishList(wish);

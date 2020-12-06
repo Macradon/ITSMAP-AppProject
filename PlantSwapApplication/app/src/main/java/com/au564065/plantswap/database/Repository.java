@@ -90,8 +90,7 @@ public class Repository {
         return INSTANCE;
     }
 
-    //region Methods to get the LiveData
-    public LiveData<List<Wish>> getCurrentUserWishList() {
+    public  LiveData<List<Wish>> getWishList() {
         return WishList;
     }
 
@@ -375,23 +374,62 @@ public class Repository {
                                  Log.d(TAG, "onComplete: Plant from Wish List: " + newWishPlant.getScientificName());
 
                                  //Make new wish with the plant object and document radius
-                                 Wish wishListWish = new Wish(newWishPlant,Integer.parseInt(docRef.get("radius").toString()));
+                                 Wish wishListWish = new Wish(newWishPlant,
+                                         new Double(docRef.get("radius").toString()));
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
-                             if (swap) {
-                                 SwapWishList.postValue(wishListHolder);
-                             } else {
-                                 WishList.postValue(wishListHolder);
-                             }
+                             WishList.setValue(wishListHolder); //postValue(wishListHolder);
+                        }
+                        else {
+                            Log.d(TAG, "Error getting wishes: ", task.getException());
+                            // if (swap) {
+                             //    SwapWishList.postValue(wishListHolder);
+                           //  } else {
+                            //     WishList.postValue(wishListHolder);
+                            // }
+                        }
+                    }
+
+                });
+    }
+
+    //Method to find a specific wish from a user's wish list
+    public void readUserWish(String wishID) {
+        //TODO Implement this
+        Log.d(TAG, "readUserWish: Reading a specific wish from user's wishlist");
+        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            // value to be parsed here
+                        } else {
+                            Log.d(TAG, "onComplete: Error getting documents", task.getException());
                         }
                     }
                 });
     }
 
     //Method to delete wish from a user's wish list
-    public void deleteWishFromUserWishList() {
-        //TODO Implement this
+    public void deleteWishFromUserList(String wishID) {
+        Log.d(TAG, "deleteWishFromUserWishList: Deleting a wish from user's wish list");
+        firebaseDatabase.collection(DatabaseConstants.WishCollection).document(wishID)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: DocumentSnapshot successfully deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Errore deleting document", e);
+                    }
+                });
     }
 
     //Method to delete all wishes from a user's wish list
