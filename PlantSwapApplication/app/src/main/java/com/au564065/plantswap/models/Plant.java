@@ -20,10 +20,12 @@ public class Plant {
     private String family;
 
     //Constructor
-    public Plant(@NonNull String scientificName, String commonName, String imageURL) {
+    public Plant(@NonNull String scientificName, String commonName, String imageURL, String genus, String family) {
         this.scientificName = scientificName;
         this.commonName = commonName;
         this.imageURL = imageURL;
+        this.genus = genus;
+        this.family = family;
     }
 
     //Constructor for GsonPlant to Plant object
