@@ -100,7 +100,8 @@ public class SwapEditActivity extends AppCompatActivity {
     private void setupObservers(){
 
         viewModel.getWishes().observe(this, wishes -> {
-            List<String> names = Arrays.asList("Select Plant");
+            List<String> names = new ArrayList<>();
+            names.add("Select Plant");
 
             for (Wish wish : wishes) {
                 names.add(wish.getWishPlant().getCommonName());

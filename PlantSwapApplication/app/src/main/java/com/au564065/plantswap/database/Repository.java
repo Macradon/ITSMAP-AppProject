@@ -460,7 +460,7 @@ public class Repository {
                 photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        swapData.put("photo", uri);
+                        swapData.put("photo", uri.toString());
                         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document()
                                 .set(swapData)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
