@@ -46,7 +46,7 @@
     <string name="register_name_description">Navn</string>
     <string name="register_btn_cancel">Afbryd</string>
     <string name="register_address">Adresse</string>
-    <string name="register_ZipCode">Postnummer</string>
+    <string name="register_ZipCode">Postnr</string>
     <string name="register_city">By</string>
     <string name="register_phone">Mobil</string>
     <string name="register_number">Nummer</string>

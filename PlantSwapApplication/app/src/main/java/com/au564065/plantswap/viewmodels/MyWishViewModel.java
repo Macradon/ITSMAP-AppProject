@@ -37,7 +37,7 @@ public class MyWishViewModel extends AndroidViewModel {
     public LiveData<List<Wish>> getAllWishes() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String user = firebaseAuth.getCurrentUser().getUid();
-        repo.readUserWishList(user, false);
+        repo.readUserWishList(user);
         return repo.getWishList();
     }
 
