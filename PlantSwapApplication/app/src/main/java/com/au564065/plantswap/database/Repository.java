@@ -545,6 +545,28 @@ public class Repository {
                 });
     }
 
+    //Method to update swap in the database
+    public void updateSwap(Swap swapObject) {
+        Map<String, Object> swapData = new HashMap<>();
+        swapData.put("plantName", swapObject.getPlantName());
+        swapData.put("swapWishes", swapObject.getSwapWishes());
+
+        firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapObject.getSwapId())
+                .set(swapData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: Swap successfully updated");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: Error updating document", e);
+                    }
+                });
+    }
+
     //Method to delete swap from the database
     public void deleteSwap(String swapId) {
         firebaseDatabase.collection(DatabaseConstants.SwapCollection).document(swapId)
