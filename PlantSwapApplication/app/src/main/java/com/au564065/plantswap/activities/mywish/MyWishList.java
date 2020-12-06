@@ -60,7 +60,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //finish();
+                onCancelClicked();
             }
         });
         return v;
@@ -85,6 +85,11 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
     }
 
 
+    public void onCancelClicked() {
+                getActivity().finish();
+            }
+
+
 
     @Override
     public void onWishClicked(int index) {
@@ -92,7 +97,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
 
         FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
-                .replace(R.id.wishList, new EditWish())
+                .replace(R.id.WishPlantLayout, new EditWish())
                 .commit();
 
 
@@ -102,7 +107,7 @@ public class MyWishList extends Fragment implements MyWishAdapter.ItemClickedLis
     public void onAddClicked() {
         FragmentManager m = getActivity().getSupportFragmentManager();
         m.beginTransaction()
-                .replace(R.id.wishList, new AddWish())
+                .replace(R.id.WishPlantLayout, new AddWish())
                 .commit();
     }
 

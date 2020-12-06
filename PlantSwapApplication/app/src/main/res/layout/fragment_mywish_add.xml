@@ -9,7 +9,6 @@
         android:id="@+id/wishPlantNameText"
         android:layout_width="222dp"
         android:layout_height="36dp"
-        android:text="@string/notifyMe"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.084"
@@ -17,10 +16,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05" />
 
-    <Spinner
+    <EditText
         android:id="@+id/wishPlantNamepinner"
         android:layout_width="316dp"
         android:layout_height="47dp"
+        android:autofillHints=""
+        android:hint="Which plant are you looking for?"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.168"
@@ -32,7 +34,6 @@
         android:id="@+id/wishPlantRadiusText"
         android:layout_width="238dp"
         android:layout_height="42dp"
-        android:text="@string/distance"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"
@@ -40,10 +41,13 @@
         app:layout_constraintTop_toBottomOf="@+id/wishPlantNamepinner"
         app:layout_constraintVertical_bias="0.058" />
 
-    <Spinner
+    <EditText
         android:id="@+id/wishPlantRadiusSpinner"
         android:layout_width="311dp"
         android:layout_height="46dp"
+        android:autofillHints=""
+        android:hint="Write distance in Km"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.16"
