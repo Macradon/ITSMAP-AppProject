@@ -1,7 +1,5 @@
 package com.au564065.plantswap.models;
 
-import java.util.List;
-
 public class Swap {
 
     //Status codes
@@ -12,30 +10,35 @@ public class Swap {
     }
 
     //Attributes
-    private String ownerID;
+    private String swapId;
+    private String ownerId;
     private String ownerAddressGpsCoordinates;
     private statusCode status;
     private String plantName;
-    private List<Photo> plantPhotos;
-    private List<Plant> ownerWishes;
+    private String swapWishes;
 
     //Constructor
-    public Swap(PlantSwapUser userObject, String ownerCoordinates, String plantName, List<Photo> plantPhotos, List<Plant> plantWishes) {
-        this.ownerID = userObject.getEmail();
-        this.ownerAddressGpsCoordinates = ownerCoordinates;
+    public Swap(String plantName, String swapWishes) {
         this.status = statusCode.OPEN;
         this.plantName = plantName;
-        this.plantPhotos = plantPhotos;
-        this.ownerWishes = plantWishes;
+        this.swapWishes = swapWishes;
     }
 
     //Getters and setters
-    public String getOwnerID() {
-        return ownerID;
+    public String getSwapId() {
+        return swapId;
     }
 
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
+    public void setSwapId(String swapId) {
+        this.swapId = swapId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getOwnerAddressGpsCoordinates() {
@@ -50,8 +53,18 @@ public class Swap {
         return status;
     }
 
-    public void setStatus(statusCode status) {
-        this.status = status;
+    public void setStatus(String status) {
+        switch (status) {
+            case "OPEN":
+                this.status = statusCode.OPEN;
+                break;
+            case "IN_PROGRESS":
+                this.status = statusCode.IN_PROGRESS;
+                break;
+            case "CLOSED":
+                this.status = statusCode.CLOSED;
+                break;
+        }
     }
 
     public String getPlantName() {
@@ -62,27 +75,11 @@ public class Swap {
         this.plantName = plantName;
     }
 
-    public List<Photo> getPlantPhotos() {
-        return plantPhotos;
+    public String getSwapWishes() {
+        return swapWishes;
     }
 
-    public void setPlantPhotos(List<Photo> plantPhotos) {
-        this.plantPhotos = plantPhotos;
-    }
-
-    public List<Plant> getWishPlants() {
-        return ownerWishes;
-    }
-
-    public void setWishPlants(List<Plant> wishPlants) {
-        this.ownerWishes = wishPlants;
-    }
-
-    public List<Plant> getOwnerWishes() {
-        return ownerWishes;
-    }
-
-    public void setOwnerWishes(List<Plant> ownerWishes) {
-        this.ownerWishes = ownerWishes;
+    public void setSwapWishes(String swapWishes) {
+        this.swapWishes = swapWishes;
     }
 }
