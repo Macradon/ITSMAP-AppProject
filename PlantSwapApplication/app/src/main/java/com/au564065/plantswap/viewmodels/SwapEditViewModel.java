@@ -1,6 +1,7 @@
 package com.au564065.plantswap.viewmodels;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,6 +17,9 @@ public class SwapEditViewModel extends AndroidViewModel {
     private Repository repo;
 
     public Swap swap;
+    public String photoPath = "";
+    public Uri photoURI = null;
+    public Boolean isNew = false;
 
 
     public SwapEditViewModel(@NonNull Application application) {

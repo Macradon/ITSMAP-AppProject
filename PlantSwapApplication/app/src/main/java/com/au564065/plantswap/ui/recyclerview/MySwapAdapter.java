@@ -69,7 +69,6 @@ public class MySwapAdapter extends RecyclerView.Adapter<MySwapAdapter.ViewHolder
 
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, SwapEditActivity.class);
-                intent.putExtra(SwapEditActivity.SWAP_EDIT_NEW, false);
                 intent.putExtra(SwapEditActivity.SWAP_EDIT_ID, swapId);
                 context.startActivity(intent);
             });

@@ -1,6 +1,9 @@
 package com.au564065.plantswap.activities.myswap;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.au564065.plantswap.models.Swap;
@@ -10,9 +13,14 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,9 +28,18 @@ import android.widget.Spinner;
 
 import com.au564065.plantswap.R;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 public class SwapEditActivity extends AppCompatActivity {
     public static final String SWAP_EDIT_NEW = "com.au564065.plantswap.activities.myswap.SWAP_EDIT_NEW";
     public static final String SWAP_EDIT_ID = "com.au564065.plantswap.activities.myswap.SWAP_EDIT_ID";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private EditText plantName;
     private ImageView plantPhoto;
@@ -41,8 +58,10 @@ public class SwapEditActivity extends AppCompatActivity {
         viewModel = viewModelProvider.get(SwapEditViewModel.class);
         viewModel.setSwap(getIntent().getStringExtra(SWAP_EDIT_ID));
 
+        initializeViews();
+
         if(!getIntent().getBooleanExtra(SWAP_EDIT_NEW, false)){
-            plantName = findViewById(R.id.my_swap_edit_plant_name);
+
             plantName.setText(viewModel.swap.getPlantName());
 
             Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
@@ -52,16 +71,22 @@ public class SwapEditActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         } else {
+            viewModel.isNew = true;
 
+            Button btnDelete = findViewById(R.id.swap_edit_btn_delete);
+            btnDelete.setVisibility(View.INVISIBLE);
         }
-        initializeViews();
+
         initializeButtons();
+        File stuff = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        Log.d("SE_MIG1", Environment.DIRECTORY_PICTURES);
+        Log.d("SE_MIG2", stuff.getAbsolutePath());
     }
 
     private void initializeButtons() {
         Button btnPhoto = findViewById(R.id.swap_edit_add_photo);
         btnPhoto.setOnClickListener(view -> {
-            // TODO
+            dispatchTakePictureIntent();
         });
 
         Button btnCancel = findViewById(R.id.swap_edit_btn_cancel);
@@ -72,6 +97,8 @@ public class SwapEditActivity extends AppCompatActivity {
         Button btnSave = findViewById(R.id.swap_edit_btn_save);
         btnSave.setOnClickListener(view -> {
             viewModel.swap.setPlantName(plantName.getText().toString());
+            String wishString = String.format("%s,%s,%s,%s", wish1.getSelectedItem(), wish2.getSelectedItem(),wish3.getSelectedItem(), wish4.getSelectedItem());
+            // viewModel.swap.wishes = wishString;
             viewModel.saveSwap();
             Intent intent = new Intent(SwapEditActivity.this, MySwapActivity.class);
             startActivity(intent);
@@ -79,6 +106,87 @@ public class SwapEditActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        plantName = findViewById(R.id.my_swap_edit_plant_name);
+        plantPhoto = findViewById(R.id.swap_edit_photo);
+
+        List<String> list = Arrays.asList("Select Plant", "Rose", "Tulip", "Fern");
+        // get list of wishes here
+        ArrayAdapter<String> adapter;
+
+        wish1 = findViewById(R.id.swap_edit_spinner_wish1);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wish1.setAdapter(adapter);
+
+        wish2 = findViewById(R.id.swap_edit_spinner_wish2);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wish2.setAdapter(adapter);
+
+        wish3 = findViewById(R.id.swap_edit_spinner_wish3);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wish3.setAdapter(adapter);
+
+        wish4 = findViewById(R.id.swap_edit_spinner_wish4);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wish4.setAdapter(adapter);
 
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.au564065.plantswap.fileprovider",
+                        photoFile);
+                viewModel.photoURI = photoURI;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            plantPhoto.setImageBitmap(imageBitmap);
+        }
+    }
+
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        viewModel.photoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+
 }

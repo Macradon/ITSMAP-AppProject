@@ -125,7 +125,7 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/swap_edit_photo" />
 
             <TextView
                 android:id="@+id/swap_edit_photo_title"
@@ -161,7 +161,7 @@
                 app:layout_constraintTop_toTopOf="@+id/swap_edit_photo_title" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/swap_edit_photo"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_marginTop="24dp"

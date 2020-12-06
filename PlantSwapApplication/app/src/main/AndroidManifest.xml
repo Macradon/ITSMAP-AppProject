@@ -5,6 +5,13 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
 
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +29,7 @@
         <activity
             android:name=".activities.myswap.SwapEditActivity"
             android:label="@string/title_activity_swap_edit"
-            android:theme="@style/Theme.PlantSwap.NoActionBar"></activity>
+            android:theme="@style/Theme.PlantSwap.NoActionBar" />
         <activity android:name=".activities.login.RegisterActivity" />
         <activity android:name=".activities.login.LoginActivity" />
 
@@ -63,6 +70,19 @@
             android:name=".services.BackgroundPlantSwapService"
             android:enabled="true"
             android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.au564065.plantswap.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+
+        </provider>
+
+
     </application>
 
 </manifest>
