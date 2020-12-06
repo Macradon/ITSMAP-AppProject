@@ -11,7 +11,16 @@
     <string name="btn_new">New</string>
 
     <string name="title_activity_my_swap">MySwapActivity</string>
-    <string name="title_activity_my_wish">MyWishActivity</string>
+
+    <string name="title_activity_my_wish">My Wishlist</string>
+
+    <string name="back">Go Back</string>
+    <string name="save">Save</string>
+    <string name="addWish">Add new wish</string>
+    <string name="addSwap">Add new swap</string>
+
+    <string name="notifyMe">Notify me when</string>
+    <string name="distance">Is up for swaps within</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_browse_plant">BrowsePlantActivity</string>
     <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>

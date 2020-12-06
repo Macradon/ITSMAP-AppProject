@@ -2,6 +2,7 @@ package com.au564065.plantswap.activities.profile;
 
 import android.os.Bundle;
 
+import com.au564065.plantswap.activities.browseplant.BrowsePlant_List_fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

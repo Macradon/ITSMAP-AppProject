@@ -15,26 +15,19 @@ import com.au564065.plantswap.R;
 
 public class BrowsePlantActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_plant);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.main_menu_btn_browse_plants);
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.BrowsePlantLayout,new BrowsePlant_List_fragment())
                     .commitNow();
         }
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 }

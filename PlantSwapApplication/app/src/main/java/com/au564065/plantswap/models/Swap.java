@@ -16,6 +16,7 @@ public class Swap {
     private statusCode status;
     private String plantName;
     private String swapWishes;
+    private String imageURL;
 
     //Constructor
     public Swap(String plantName, String swapWishes) {
@@ -81,5 +82,13 @@ public class Swap {
 
     public void setSwapWishes(String swapWishes) {
         this.swapWishes = swapWishes;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }
