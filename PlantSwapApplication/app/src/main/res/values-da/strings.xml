@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PlantSwap</string>
+    <string name="main_menu_btn_my_swaps">Mine Swaps</string>
+    <string name="main_menu_btn_mt_wish_list">Min Ønskeliste</string>
+    <string name="main_menu_btn_my_profile">Min profil</string>
+    <string name="main_menu_btn_browse_swaps">Browse alle swaps</string>
+    <string name="main_menu_btn_browse_plants">Browse alle planter</string>
+
+
+    <string name="title_activity_my_swap">Mine Swaps</string>
+    <string name="title_activity_my_wish">Min Ønskeliste</string>
+
+    <string name="addWish">Tilføj nyt ønske</string>
+    <string name="addSwap">Tilføj ny swap</string>
+
+    <string name="notifyMe">Send noptifikation, når</string>
+    <string name="distance">Er slået op inden for</string>
+    <string name="distance_hint">Skriv afstand i km</string>
+    <string name="distance_text">Angiv venligst den afstand, du er villig til at køre for en swap</string>
+    <string name="family">Familie: </string>
+    <string name="genus">Slægt: </string>
+    <string name="name">Navn: </string>
+    <string name="scientific">Videnskabeligt navn: </string>
+
+    <string name="ihave">Jeg har: </string>
+    <string name="iwant">Jeg kunne tænke mig: </string>
+    <string name="plantname">Plantenavn</string>
+
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_browse_plant">BrowsePlantActivity</string>
+    <string name="title_activity_browse_swaps">BrowseSwapsActivity</string>
+    <string name="title_activity_swap_edit">SwapEditActivity</string>
+
+    <string name="Email">E-mail</string>
+    <string name="Password">Kode</string>
+    <string name="Login_text">Log in på PlantSwap</string>
+    <string name="login_txtNoUser">Endnu ikke en bruger? lav en konto:</string>
+    <string name="login_btnLogin">Log in</string>
+    <string name="login_btnRegister">Registrer</string>
+    <string name="login_txt_hint_email">Indtast e-mail</string>
+    <string name="login_txt_hint_password">Indtast kode></string>
+    <string name="login_img_description">App logo</string>
+    <string name="register_txtHeaderText">Registrer en konto</string>
+    <string name="Name">Navn</string>
+    <string name="register_name_description">Navn</string>
+    <string name="register_btn_cancel">Afbryd</string>
+    <string name="register_address">Adresse</string>
+    <string name="register_ZipCode">Postnummer</string>
+    <string name="register_city">By</string>
+    <string name="register_phone">Mobil</string>
+    <string name="register_number">Nummer</string>
+    <string name="register_confirmPassword">Bekræft</string>
+    <string name="swapListItem_imageDescription">Plante billede</string>
+
+    <string name="select_plant_to_swap">Vælg en plante for swap</string>
+    <string name="swap_edit_photos_title">Billeder</string>
+    <string name="swap_edit_request_title">Vælg planter fra ønskelisten, som du vil bytte for</string>
+    <string name="Update_Profile_Header">Opdater Profil</string>
+
+    <string name="btn_add_change_photo">Tilføj/Ændr billede</string>
+    <string name="swap_edit_plant_name_hint">Indtast plantenavn</string>
+
+    <string name="Update">Opdater</string>
+    <string name="Search">Søg</string>
+    <string name="btn_cancel">Afbryd</string>
+    <string name="Delete">Slet</string>
+    <string name="btn_back">Tilbage</string>
+    <string name="btn_new">Ny</string>
+    <string name="btn_add">Tilføj</string>
+    <string name="btn_edit">Ændr</string>
+    <string name="btn_offer">Tilbyd</string>
+    <string name="main_menu_btn_exit">Forlad</string>
+    <string name="btn_save">Gem</string>
+</resources>

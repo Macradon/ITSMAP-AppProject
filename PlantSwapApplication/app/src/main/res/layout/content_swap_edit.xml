@@ -53,6 +53,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
+                app:backgroundTint="@color/plant_grey"
                 android:text="@string/btn_cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

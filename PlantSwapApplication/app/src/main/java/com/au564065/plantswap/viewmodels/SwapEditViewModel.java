@@ -55,7 +55,7 @@ public class SwapEditViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Wish>> getWishes() {
-            repo.readUserWishList(repo.getCurrentUser().getValue().getUserId(), false);
+            repo.readUserWishList(repo.getCurrentUser().getValue().getUserId());
             return  repo.getWishList();
     }
 }

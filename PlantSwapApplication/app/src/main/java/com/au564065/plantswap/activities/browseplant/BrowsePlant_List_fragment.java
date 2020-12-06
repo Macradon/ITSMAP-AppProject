@@ -31,7 +31,7 @@ public class BrowsePlant_List_fragment extends Fragment implements PlantAdapter.
     private RecyclerView plantCycler;
     private PlantAdapter adapter;
     private RecyclerView.LayoutManager layoutMan;
-    private Button searchBtn;
+    private Button searchBtn, exitBtn;
     private EditText searchTxt;
 
     @Override
@@ -49,6 +49,7 @@ public class BrowsePlant_List_fragment extends Fragment implements PlantAdapter.
         plantCycler = v.findViewById(R.id.browsePlantCycler);
         searchBtn = v.findViewById(R.id.BrowsePlant_SearchButton);
         searchTxt = v.findViewById(R.id.BrowsePlant_TextField);
+        exitBtn = v.findViewById(R.id.Browse_Plants_BackButton);
 
         return v;
     }
@@ -87,11 +88,21 @@ public class BrowsePlant_List_fragment extends Fragment implements PlantAdapter.
 
     }
 
+    public void onCancelClicked() {
+        getActivity().finish();
+    }
+
     public void setClickers(){
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 plantVM.SearchPlant(searchTxt.getText().toString());
+            }
+        });
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCancelClicked();
             }
         });
     }

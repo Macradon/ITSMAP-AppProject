@@ -25,5 +25,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/swapListItemPhoto"
         app:layout_constraintStart_toEndOf="@+id/swapListItemPhoto"
         app:layout_constraintTop_toTopOf="@+id/swapListItemPhoto"
-        tools:text="Plant Name" />
+        tools:text="@string/plantname" />
 </androidx.constraintlayout.widget.ConstraintLayout>

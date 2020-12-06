@@ -381,16 +381,16 @@ public class Repository {
                                  //Make new wish with the plant object and document radius
                                  Wish wishListWish = new Wish(newWishPlant,
                                          new Double(docRef.get("radius").toString()));
-                                 wishListWish.setWishId(document.getId().toString());
+                                 wishListWish.setWishId(document.getId());
                                  //Add it to the temporary holder list
                                  wishListHolder.add(wishListWish);
                              }
 
-                      //       if (swap) {
-                     //           SwapWishList.postValue(wishListHolder);
-                     //        } else {
-                     //           WishList.postValue(wishListHolder);
-                    //         }
+/*                             if (swap) {
+                                SwapWishList.postValue(wishListHolder);
+                             } else {
+                                WishList.postValue(wishListHolder);
+                             }*/
                              WishList.setValue(wishListHolder);
                         }
                         else {
