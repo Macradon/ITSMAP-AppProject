@@ -333,6 +333,7 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Wish added");
+                        readUserWish(currentUser.getValue().getUserId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
