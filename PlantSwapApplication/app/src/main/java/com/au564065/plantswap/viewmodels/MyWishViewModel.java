@@ -41,22 +41,36 @@ public class MyWishViewModel extends AndroidViewModel {
         return repo.getWishList();
     }*/
 
-    public void saveList(List<Wish> wishes){
+    public LiveData<Wish> getWish()
+    {
+        repo.readUserWish(onClickedWish.getWishId());
+        return repo.getWish();
+    }
+
+    public void saveList(List<Wish> wishes)
+    {
         getClickedWish = wishes;
     }
 
-    public void updateWish()
+    public void updateWish(String wishId, Wish wish)
     {
-
+        repo.updateWishFromUserList(wishId, wish);
     }
 
-    public void deleteWish()
-    {
+    public void addWish(Plant plant, double radius){
+        Wish wish = new Wish(plant, radius);
+        repo.addWishToUserWishList(wish);
+    }
 
+    public void deleteWish(String wishId)
+    {
+        repo.deleteWishFromUserList(wishId);
     }
 
     //enter edit view
-    public void OnClicked(int index){
+    public void OnClicked(int index)
+    {
         onClickedWish = getClickedWish.get(index);
+        repo.readUserWish(onClickedWish.getWishId());
     }
 }
