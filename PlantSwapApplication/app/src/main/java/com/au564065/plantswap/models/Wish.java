@@ -1,24 +1,18 @@
 package com.au564065.plantswap.models;
 
-import androidx.annotation.NonNull;
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.au564065.plantswap.database.Converters;
-
-@Entity(tableName = "wish_table")
 public class Wish {
+    
+    //Attributes
     private Plant wishPlant;
-
     private double radius;
 
+    //Constructor
     public Wish(Plant wishPlant, double radius) {
             this.wishPlant = wishPlant;
             this.radius = radius;
     }
 
+    //Getters and setters
     public Plant getWishPlant() {
             return wishPlant;
         }
