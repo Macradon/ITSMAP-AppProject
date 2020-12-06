@@ -96,15 +96,15 @@ public class EditWish extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               int temp;
+               double temp;
                try {
-                   temp = Integer.parseInt(radius.getText().toString());
+                   temp = Double.parseDouble(radius.getText().toString());
                } catch (NumberFormatException e) {
                    temp = 0;
                }
                if (temp != 0) {
                    Toast.makeText(getActivity().getApplicationContext(), wvm.onClickedWish.getWishPlant().getCommonName() + " has been updated", Toast.LENGTH_SHORT).show();
-                   wvm.updateWish(wvm.onClickedWish.getWishId(), wvm.onClickedWish);
+                   wvm.updateWish(wvm.onClickedWish.getWishId(), new Wish(wvm.onClickedWish.getWishPlant(), temp));
                    m.beginTransaction()
                            .replace(R.id.WishPlantLayout, new MyWishList())
                            .commit();
