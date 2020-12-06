@@ -54,34 +54,6 @@ public class BrowseSwapViewModel extends AndroidViewModel {
         return count;
     }
 
-    private void getWishes(){
-        List<String> temp = Arrays.asList(onClickedSwap.getSwapWishes().split(", "));
-        String temp2 = "Select Plant";
-        for(int i = 0; i < temp.size() ; i++){
-            if(temp.get(i) == temp2){
-                temp.remove(i);
-            }
-        }
-        wishes = temp;
-    }
-
-    private void getCommaSep(){
-        List<String> temp = wishes;
-        StringBuilder sb = new StringBuilder();
-        for(String s: temp){
-            sb.append(s).append(",");
-        }
-        String result = sb.deleteCharAt(sb.length()-1).toString();
-        commaSep = result;
-    }
-
-    public String comma(){
-        return commaSep;
-    }
-
-    public List<String> Wishes(){
-        return wishes;
-    }
     public void addMoreSpinners(){
         count.setValue(count.getValue()+1);
     }
