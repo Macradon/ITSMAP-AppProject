@@ -70,6 +70,22 @@ public class SwapEditActivity extends AppCompatActivity {
             viewModel.getSwap(getIntent().getStringExtra(SWAP_EDIT_ID)).observe(this, swap -> {
                 updateViews(swap);
                 viewModel.swap = swap;
+                String[] wishes = swap.getSwapWishes().split(",");
+                ArrayAdapter<String> adapter;
+
+                adapter = (ArrayAdapter<String>) wish1.getAdapter();
+                wish1.setSelection(adapter.getPosition(wishes[0]));
+
+                adapter = (ArrayAdapter<String>) wish2.getAdapter();
+                wish1.setSelection(adapter.getPosition(wishes[1]));
+
+                adapter = (ArrayAdapter<String>) wish3.getAdapter();
+                wish1.setSelection(adapter.getPosition(wishes[2]));
+
+                adapter = (ArrayAdapter<String>) wish4.getAdapter();
+                wish1.setSelection(adapter.getPosition(wishes[3]));
+
+
             });
             Button btnPhoto = findViewById(R.id.swap_edit_add_photo);
             btnPhoto.setVisibility(View.INVISIBLE);

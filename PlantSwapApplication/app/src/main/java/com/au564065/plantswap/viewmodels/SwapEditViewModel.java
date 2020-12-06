@@ -27,11 +27,12 @@ public class SwapEditViewModel extends AndroidViewModel {
     public String photoPath = "";
     public Uri photoURI = null;
     public Boolean isNew = false;
+    public List<String> wishOptions = null;
 
     public SwapEditViewModel(@NonNull Application application) {
         super(application);
         repo = Repository.getInstance(application);
-
+        swap = new Swap("", "");
     }
 
     public LiveData<Swap> getSwap(String swapId) {
@@ -40,8 +41,14 @@ public class SwapEditViewModel extends AndroidViewModel {
     }
 
     public void saveSwap() {
-        repo.createNewSwap(swap, photoURI);
+        if(isNew) {
+            repo.createNewSwap(swap, photoURI);
+        } else {
+            repo.updateSwap(swap);
+        }
     }
+
+
 
     public void deleteSwap() {
         repo.deleteSwap(swap.getSwapId());
@@ -49,6 +56,6 @@ public class SwapEditViewModel extends AndroidViewModel {
 
     public LiveData<List<Wish>> getWishes() {
             repo.readUserWishList(repo.getCurrentUser().getValue().getUserId(), false);
-            return  repo.getCurrentUserWishList();
+            return  repo.getWishList();
     }
 }
