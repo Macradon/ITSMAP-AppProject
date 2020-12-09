@@ -333,10 +333,8 @@ public class Repository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Wish added");
-                        readUserWish(currentUser.getValue().getUserId());
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "onFailure: Error  writing document", e);
@@ -380,7 +378,6 @@ public class Repository {
                                          wishPlantMap.get("genus"),
                                          wishPlantMap.get("family")
                                  );
-                                 Log.d(TAG, "onComplete: Plant from Wish List: " + newWishPlant.getScientificName());
 
                                  //Make new wish with the plant object and document radius
                                  Wish wishListWish = new Wish(newWishPlant,
@@ -682,6 +679,7 @@ public class Repository {
 
     //Helper method to parse wish document
     private Wish parseWishDocument(DocumentSnapshot document) {
+        Log.d(TAG, "parseWishDocument: Parsing document");
         String[] wishPlant = document.get("wishPlant").toString()
                 .replaceAll("\\{", "")
                 .replaceAll("\\}", "")
