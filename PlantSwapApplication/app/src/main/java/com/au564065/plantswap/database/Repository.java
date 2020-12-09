@@ -393,7 +393,6 @@ public class Repository {
                             Log.d(TAG, "Error getting wishes: ", task.getException());
                         }
                     }
-
                 });
     }
 
@@ -410,7 +409,7 @@ public class Repository {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            SpecificWish.postValue(parseWishDocument(document));
+                            readUserWishList(userId);
                         } else {
                             Log.d(TAG, "onComplete: Error getting documents", task.getException());
                         }
